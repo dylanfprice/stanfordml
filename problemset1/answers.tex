@@ -1,0 +1,126 @@
+\documentclass[11pt]{article}
+
+\usepackage{mathtools}
+\usepackage[latin1]{inputenc}
+\usepackage[margin=0.5in]{geometry}
+
+\everymath{\displaystyle}
+\setlength\parindent{0pt}
+
+\begin{document}
+\title{Stanford CS 229, Public Course, Problem Set 1}
+\date{\today}
+\author{Dylan Price}
+\maketitle 
+
+% custom commands
+\newcommand{\pder}[2]{\frac{\partial#1}{\partial#2}}
+\newcommand{\thetaT}[0]{\theta^{T}}
+\newcommand{\ith}[1]{#1^{(i)}}
+\newcommand{\xith}[0]{\ith{x}}
+\newcommand{\yith}[0]{\ith{y}}
+\newcommand{\sumitom}[0]{\sum_{i=1}^{m}}
+
+
+\section{}
+
+\subsection*{a)}
+
+Find the Hessian of the cost function $J(\theta) = \frac{1}{2} \sumitom (\thetaT \xith - \yith)^{2}$
+
+We know that $H_{jk} = \frac{\partial^{2}J(\theta)}{\partial\theta_{j}\theta_{k}}$ \\
+
+First find $\frac{\partial J(\theta)}{\partial\theta_{k}}$,
+
+\begin{align*}
+  \pder{J(\theta)}{\theta_{k}} &= \frac{1}{2} \sumitom \pder{}{\theta_{k}} (\thetaT \xith - \yith)^{2} \\
+  &= \frac{1}{2} \sumitom 2 (\thetaT \xith - \yith)(\ith{x_{k}}) \\
+  &= \sumitom (\thetaT \xith - \yith)(\ith{x_{k}})
+\end{align*}
+
+Now find $\frac{\partial^{2}J(\theta)}{\partial\theta_{j}\theta_{k}}$, \\
+
+\begin{align*}
+  \frac{\partial^{2}J(\theta)}{\partial\theta_{j}\theta_{k}} &= \pder{}{\theta_{j}} ( \pder{J(\theta)}{\theta_{k}} ) \\
+  &= \sumitom \pder{}{\theta_{j}} ((\thetaT \xith - \yith)(\ith{x_{k}})) \\
+  &= \sumitom \ith{x_{j}} \ith{x_{k}} \text{ for } 1 \leq j \leq n \text{ and } 1 \leq k \leq n
+\end{align*}
+
+Therefore
+\begin{align*}
+  H &= 
+  \begin{bmatrix}
+    \sumitom \ith{x_{1}} \ith{x_{1}} & \sumitom \ith{x_{2}} \ith{x_{1}} & \cdots & \sumitom \ith{x_{n}} \ith{x_{1}} \\
+    \sumitom \ith{x_{1}} \ith{x_{2}} & \sumitom \ith{x_{2}} \ith{x_{2}} & \cdots & \sumitom \ith{x_{n}} \ith{x_{2}} \\
+    \vdots                           & \vdots                           & \ddots & \vdots \\
+    \sumitom \ith{x_{1}} \ith{x_{n}} & \sumitom \ith{x_{2}} \ith{x_{n}} & \cdots & \sumitom \ith{x_{n}} \ith{x_{n}} 
+  \end{bmatrix}
+  \\ &=
+  \begin{bmatrix}
+    x_{1}^{(1)} & \cdots & x_{1}^{(n)} \\
+    \vdots      & \ddots & \vdots \\
+    x_{m}^{(1)} & \cdots & x_{m}^{(n)}
+  \end{bmatrix}
+  \begin{bmatrix}
+    x_{1}^{(1)} & \cdots & x_{m}^{(1)} \\
+    \vdots      & \ddots & \vdots \\
+    x_{1}^{(n)} & \cdots & x_{m}^{(n)}
+  \end{bmatrix}
+  \\ &= X^{T} X
+\end{align*}
+
+\subsection*{b)}
+
+Show that the first iteration of Newton's method gives us $\theta^{*} = (X^{T} X)^{-1} X^{T} \vec{y}$, the solution to our least squares problem. \\
+
+One iteration of Newton's Method: \\
+$\theta := \theta - H^{-1} \nabla_{\theta} J(\theta)$ \\
+Therefore,
+
+\begin{align*}
+  \theta^{*} &= 
+  \theta - (X^{T} X)^{-1}
+  \begin{bmatrix}
+    \pder{J(\theta)}{\theta_{1}} \\
+    \vdots \\
+    \pder{J(\theta)}{\theta_{m}}
+  \end{bmatrix}
+  \\ &= 
+  \theta - (X^{T} X)^{-1}
+  \begin{bmatrix}
+    \sumitom ( \ith{x_{1}} \thetaT \xith - \ith{x_{1}} \yith ) \\
+    \vdots \\
+    \sumitom ( \ith{x_{m}} \thetaT \xith - \ith{x_{m}} \yith )
+  \end{bmatrix}
+  \\ \text{let $\theta = \vec{0}$ (initialize $\theta$)}
+  \\ &= 
+  - (X^{T} X)^{-1}
+  \begin{bmatrix}
+    \sumitom ( - \ith{x_{1}} \yith ) \\
+    \vdots \\
+    \sumitom ( - \ith{x_{m}} \yith )
+  \end{bmatrix}
+  \\ &=
+  (X^{T} X)^{-1}
+  \begin{bmatrix}
+    \sumitom ( \ith{x_{1}} \yith ) \\
+    \vdots \\
+    \sumitom ( \ith{x_{m}} \yith )
+  \end{bmatrix}
+  \\ &=
+  (X^{T} X)^{-1} X^{T} \vec{y}
+\end{align*}
+  
+
+
+\section*{2}
+
+\subsection*{a}
+See q2/ folder
+
+\subsection*{b}
+At low values of $\tau$, the classification boundaries are clustered around the positive training examples. As you increase $\tau$, these boundaries begin to merge into bigger areas, i.e. the classification boundaries look less 'local' to the positive training examples. At high values of $\tau$, the classification boundary is essentially a straight line dividing positive and negative classes. \\
+
+The decision boundary of unweighted logistic regression would look like the plots with the highest values of $\tau$. This is because as $\tau$ approaches infinity, the weight function $w^{(i)}$ goes to 1 for every training example, making the regression unweighted (that is, every training example gets the same weight).
+
+\end{document}
