@@ -1,43 +1,53 @@
-function y = lwlr(X_train, y_train, x, tau)
+function y = lwlr(X_train, y_train, x_query, tau)
 
-warning ("off", "Octave:broadcast");
+X = [ones(rows(X_train), 1) X_train]
+x = [1; x_query]
 
-min_delta = 0.0001;
-lambda = 0.0001;
+% how close to zero we let the gradient get
+threshold = 1e-9
+lambda = 0.0001
 
-% set x_0 = 1 for all training examples
-X_train = [ones(rows(X_train), 1), X_train];
+% number training examples
+m = rows(X) 
+% number parameters
+n = length(x)
 
-% set x_0 = 1
-x = [1; x];
+theta = zeros(n, 1)
 
-m = rows(X_train); % number training examples
-n = columns(X_train); % number parameters
+% tau_coefficient = (-1 / (2 * tau ^ 2))
+% distances_from_x = x' - X
+% norm_distances = sqrt(sum(abs(distances_from_x) .^ 2, 2))
+% w = exp(tau_coefficient .* norm_distances .^ 2)
+w = exp( ...
+    (-1 / (2 * tau ^ 2)) ...
+    .* sqrt(sum(abs(x' - X) .^ 2, 2)) ...
+    .^ 2 ...
+)
 
-% calculate weights
-w = exp(((sum(abs(x' - X_train), 2)).^2) .* (-1 / (2*(tau^2))));
+do
+    predicted = h_theta(X', theta)
 
-% initialize all n thetas to zero
-theta = zeros(1, n)';
+    % z = w .* (y_train - predicted)
+    % gradient = X' * z - lambda .* theta
+    gradient = X' * (w .* (y_train - predicted)) - lambda .* theta
 
+    % D = diag(-1 .* w .* predicted .* (1 .- predicted))
+    % hessian = X' * D * X - lambda .* eye(n)
+    hessian = ...
+        (X' * diag(-1 .* w .* predicted .* (1 .- predicted)) * X) ...
+        - (lambda .* eye(n))
 
-% loop til convergence:
-delta = 1;
+    theta = theta - (hessian \ gradient)
 
-while delta > min_delta
-  h_theta = (1 ./ (1 + exp(-theta' * X_train')))';
+until (abs(gradient) < threshold)
 
-  z = w .* (y_train - h_theta);
+prediction = h_theta(x, theta)
+y = prediction > 0.5
 
-  D = diag(-w .* h_theta .* (1 - h_theta));
-  H = X_train' * D * X_train - lambda * eye(n);
+endfunction
 
-  grad_l_theta = X_train' * z - lambda * theta;
+function predicted = h_theta(x, theta)
 
-  new_theta = theta - inv(H) * grad_l_theta;
+predicted = transpose(1 ./ (1 + exp(-1 .* theta' * x)))
 
-  delta = abs(new_theta - theta);
-  theta = new_theta;
-endwhile
-
-y = (1 ./ (1 + exp(-theta' * x))) > 0.5;
+endfunction
