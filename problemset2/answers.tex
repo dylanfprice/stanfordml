@@ -1,0 +1,89 @@
+\documentclass[11pt]{article}
+
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage[latin1]{inputenc}
+\usepackage[margin=0.5in]{geometry}
+
+\everymath{\displaystyle}
+\setlength\parindent{0pt}
+
+\begin{document}
+\title{Stanford CS 229, Public Course, Problem Set 2}
+\date{\today}
+\author{Dylan Price}
+\maketitle 
+
+% custom commands
+\newcommand{\half}[0]{\frac{1}{2}}
+\newcommand{\thetaT}[0]{\theta^{T}}
+\newcommand{\ith}[1]{#1^{(i)}}
+\newcommand{\xith}[0]{\ith{x}}
+\newcommand{\yith}[0]{\ith{y}}
+\newcommand{\sumitom}[0]{\sum_{i=1}^{m}}
+\newcommand{\xnew}[0]{x_{new}}
+
+\section{}
+
+\subsection*{a)}
+
+Find a closed-form expreesion for the value of $\theta$ which minimizes the ridge regression cost function:
+
+$J(\theta) = \half \sumitom (\thetaT \xith - \yith)^{2} + \frac{\lambda}{2}\|\theta\|^{2}$ \\ \\
+
+First, put $J(\theta)$ into matrix notation
+\begin{align*}
+  J(\theta) &= \half \sumitom (\thetaT \xith - \yith)^{2} + \frac{\lambda}{2}\|\theta\|^{2} \\
+            &= \half \sumitom (\thetaT \xith - \yith)(\thetaT \xith - \yith) + \frac{\lambda}{2}\|\theta\|^{2} \\
+            &= \half (X \theta - \vec{y})(X \theta - \vec{y}) + \frac{\lambda}{2} \thetaT \theta \\
+            & \text{(where $X$ is the design matrix and $\vec{y}$ is the vector of target values)} \\
+            &= \half ((X \theta)^{T} X \theta - (X \theta)^{T} \vec{y} - \vec{y}^{T} X \theta + \vec{y}^{T} \vec{y})) + \frac{\lambda}{2} \thetaT \theta \\
+            &= (\half \thetaT X^{T} X \theta - \half \thetaT X^{T} \vec{y} - \half \vec{y}^{T} X \theta + \half \vec{y}^{T} \vec{y}) + \frac{\lambda}{2} \thetaT \theta \\
+\end{align*}
+
+
+Now find the gradient
+\begin{align*}
+  \nabla_{\theta} J(\theta) &= X^{T} X \theta - \half X^{T} \vec{y} - \half X^{T} \vec{y} + \lambda \theta \\
+  &= X^{T} X \theta - X^{T} \vec{y} + \lambda \theta \\
+\end{align*}
+
+Set the gradient equal to $0$ and solve for $\theta$
+\begin{align*}
+  X^{T} X \theta - X^{T} \vec{y} + \lambda \theta &= 0 \\
+  X^{T} X \theta + \lambda \theta &= X^{T} \vec{y} \\
+  (X^{T} X + \lambda I) \theta &= X^{T} \vec{y} \\
+  \theta &= (X^{T} X + \lambda I)^{-1} X^{T} \vec{y} \\
+\end{align*}
+
+\subsection*{b)}
+
+Suppose that we want to use kernels to implicitly represent our feature vectors in a high-dimensional (possibly infinite dimensional) space. 
+
+Making a prediction on a new input $\xnew$ would now be done by computing $\thetaT \phi(\xnew)$.
+
+Show how we can use the "kernel trick" to obtain a closed form for the prediction on the new input without ever explicitly computing $\phi(\xnew)$.
+
+\begin{align*}
+  h_{\theta}(\xnew) &= \thetaT \xnew \\
+             &= ((X^{T} X + \lambda I)^{-1} X^{T} \vec{y})^{T} \xnew \\
+             &= ((X X^{T} + \lambda I)^{-1} \vec{y})^{T} X \xnew \\
+             &= \vec{y}^{T} (X X^{T} + \lambda I)^{-T} X \xnew \\
+\end{align*}
+
+Now we replace $\xith$ with $\phi(\xith)$ for $i = 1...m$,\\
+define the kernel function $K(x, z) = \phi(x) \phi(z)$ \\
+and kernel matrix $K \in \mathbb{R}^{m x m}$ such that $K_{ij} = K(\xith, x^{(j)})$
+
+\begin{align*}
+  h_{\theta}(\xnew) &= \vec{y}^{T} (K + \lambda I)^{-T} \sumitom K(\xith, \xnew) \\
+\end{align*}
+\section*{2}
+
+\subsection*{a}
+
+blah blah
+
+\subsection*{b}
+
+\end{document}
