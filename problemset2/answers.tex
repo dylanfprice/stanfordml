@@ -16,6 +16,7 @@
 
 % custom commands
 \newcommand{\half}[0]{\frac{1}{2}}
+\newcommand{\pder}[2]{\frac{\partial#1}{\partial#2}}
 \newcommand{\thetaT}[0]{\theta^{T}}
 \newcommand{\ith}[1]{#1^{(i)}}
 \newcommand{\xith}[0]{\ith{x}}
@@ -78,12 +79,49 @@ and kernel matrix $K \in \mathbb{R}^{m x m}$ such that $K_{ij} = K(\xith, x^{(j)
 \begin{align*}
   h_{\theta}(\xnew) &= \vec{y}^{T} (K + \lambda I)^{-T} \sumitom K(\xith, \xnew) \\
 \end{align*}
+
 \section*{2}
+
+\begin{align*}
+  \underset{w,b,\xi}{\text{min}} &\quad \half \|w\|^{2} + \frac{C}{2} \sumitom \xi_{i}^{2} \\
+  \text{subject to} &\quad \yith (w^{T} \xith + b) \geq 1 - \xi_i, i = 1,...,m \\
+\end{align*}
 
 \subsection*{a}
 
-blah blah
+Notice that we have dropped the $\xi_{i} \geq 0$ constraint in the $\ell_2$ problem. Show that these non-negativity constraints can be removed. That is, show that the optimal value of the objective will be the same whether or not these constraints are present. \\
+
+Let $\xi_i$ be a negative error in $\xi_0,...,\xi_m$. Since $\xi_i^{2}$ is positive, $\xi_i$ will contribute the same amount to the objective as $-\xi_i$. Therefore the minimization of the objective does not depend on the sign of $\xi_i$ and the $\xi_i \geq 0$ constraint is irrelevant.
 
 \subsection*{b}
+
+What is the Lagrangian of the $\ell_2$ soft margin SVM optimization problem?
+
+Let
+\begin{align*}
+  f(w)   &= \half \|w\|^{2} + \frac{C}{2} \sumitom \xi_i^2 \\
+  g_i(w) &= -\yith (w^T \xith + b) + 1 - \xi_i \\
+\end{align*}
+
+Our optimization problem is
+\begin{align*}
+  \text{min}        &\quad f(w) \\
+  \text{subject to} &\quad g_i(w) \geq 0, i = 1,...,m \\
+\end{align*}
+
+The Lagrangian is
+\begin{align*}
+  \mathcal{L}(w,b,\alpha,\xi) &= f(w) + \sumitom \alpha_i g_i(w) \\
+  &= \half \|w\|^2 + \frac{C}{2} \sumitom \xi_i^2 + \sumitom \alpha_i (-\yith (w^T \xith + b) + 1 - \xi_i) \\
+  &= \half w^T w + \frac{C}{2} \xi^T \xi + \sumitom \alpha_i (-\yith w^T \xith - \yith b + 1 - \xi_i) \\
+\end{align*}
+
+\subsection*{c}
+
+Minimize the Lagrangian with respect to $w$, $b$, and $\xi$ by taking the following gradients: $\nabla_w \mathcal{L}$, $\pder{\mathcal{L}}{b}$, and $\nabla_{\xi} \mathcal{L}$, and then setting them equal to $0$. Here $\xi = |\xi_1,\xi_2,...,\xi_m|^{T}$.
+
+\subsection*{d}
+
+What is the dual of the $\ell_2$ soft margin SVM optimization problem?
 
 \end{document}
