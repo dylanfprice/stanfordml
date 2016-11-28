@@ -73,7 +73,7 @@ Show how we can use the "kernel trick" to obtain a closed form for the predictio
 \end{align*}
 
 Now we replace $\xith$ with $\phi(\xith)$ for $i = 1...m$,\\
-define the kernel function $K(x, z) = \phi(x) \phi(z)$ \\
+define kernel function $K(x, z) = \phi(x) \phi(z)$ \\
 and kernel matrix $K \in \mathbb{R}^{m x m}$ such that $K_{ij} = K(\xith, x^{(j)})$
 
 \begin{align*}
@@ -114,14 +114,78 @@ The Lagrangian is
   \mathcal{L}(w,b,\alpha,\xi) &= f(w) + \sumitom \alpha_i g_i(w) \\
   &= \half \|w\|^2 + \frac{C}{2} \sumitom \xi_i^2 + \sumitom \alpha_i (-\yith (w^T \xith + b) + 1 - \xi_i) \\
   &= \half w^T w + \frac{C}{2} \xi^T \xi + \sumitom \alpha_i (-\yith w^T \xith - \yith b + 1 - \xi_i) \\
+  &= \half w^T w + \frac{C}{2} \xi^T \xi - \sumitom \alpha_i \yith w^T \xith - \sumitom \alpha_i \yith b + \sumitom \alpha_i - \sumitom \alpha_i \xi_i \\
 \end{align*}
 
 \subsection*{c}
 
-Minimize the Lagrangian with respect to $w$, $b$, and $\xi$ by taking the following gradients: $\nabla_w \mathcal{L}$, $\pder{\mathcal{L}}{b}$, and $\nabla_{\xi} \mathcal{L}$, and then setting them equal to $0$. Here $\xi = |\xi_1,\xi_2,...,\xi_m|^{T}$.
+Minimize the Lagrangian with respect to $w$, $b$, and $\xi$ by taking the following gradients: $\nabla_w \mathcal{L}$, $\pder{\mathcal{L}}{b}$, and $\nabla_{\xi} \mathcal{L}$, and then setting them equal to $0$. Here $\xi = |\xi_1,\xi_2,...,\xi_m|^{T}$. \\
 
+First find $\nabla_w \mathcal{L}$
+\begin{align*}
+  \nabla_w \mathcal{L} &= w + \sumitom -\alpha_i \yith \xith \\
+                       &= w - \sumitom \alpha_i \yith \xith \\
+\end{align*}
+
+Set equal to 0
+\begin{align*}
+                     0 &= w - \sumitom \alpha_i \yith \xith \\
+                     w &= \sumitom \alpha_i \yith \xith \\
+\end{align*}
+
+Next find $\pder{\mathcal{L}}{b}$
+\begin{align*}
+  \pder{\mathcal{L}}{b} &= \sumitom -\alpha_i \yith \\
+\end{align*}
+
+Set equal to 0
+\begin{align*}
+  0 &= \sumitom -\alpha_i \yith \\
+  0 &= \sumitom \alpha_i \yith \\
+\end{align*}
+
+Find $\nabla_{\xi} \mathcal{L}$
+\begin{align*}
+  \nabla_{\xi} \mathcal{L} &= C \xi - \alpha \\
+\end{align*}
+
+Set equal to 0
+\begin{align*}
+  0   &= C \xi - \alpha \\
+  \xi &= \frac{1}{C} \alpha \\
+\end{align*}
+
+Plug these results back into the Lagrangian
+\begin{align*}
+  \mathcal{L}(w,b,\alpha,\xi) &= \half w^T w + \frac{C}{2} \xi^T \xi - \sumitom \alpha_i \yith w^T \xith - \sumitom \alpha_i \yith b + \sumitom \alpha_i - \sumitom \alpha_i \xi_i \\
+  \underset{w,b,\xi}{min} \quad \mathcal{L} &= \half (\sumitom \alpha_i \yith \xith)^T (\sumitom \alpha_i \yith \xith) + \frac{C}{2} (\frac{1}{C} \alpha)^T (\frac{1}{C} \alpha) \\
+                                            &\quad - \sumitom \alpha_i \yith (\sum_{j=1}^{m} \alpha_j y^{(j)} x^{(j)})^T \xith - \sumitom \alpha_i \yith b + \sumitom \alpha_i - \sumitom \alpha_i (\frac{1}{C} \alpha_i) \\
+                                            &= \half \sumitom \sum_{j=1}^{m} \alpha_i \alpha_j \yith y^{(j)} (\xith)^T x^{(j)} + \frac{1}{2C} \alpha^T \alpha \\
+                                            &\quad - \sumitom \sum_{j=1}^{m} \alpha_i \alpha_j \yith y^{(j)} (\xith)^T x^{(j)} - \sumitom \alpha_i \yith b + \sumitom \alpha_i - \sumitom \frac{1}{C} \alpha_i^2 \\ 
+                                            &= \half \sumitom \sum_{j=1}^{m} \alpha_i \alpha_j \yith y^{(j)} (\xith)^T x^{(j)} + \frac{1}{2C} \sumitom \alpha_i^2 \\
+                                            &\quad - \sumitom \sum_{j=1}^{m} \alpha_i \alpha_j \yith y^{(j)} (\xith)^T x^{(j)} - \sumitom \alpha_i \yith b + \sumitom \alpha_i - \frac{1}{C} \sumitom \alpha_i^2 \\ 
+                                            &= -\half \sumitom \sum_{j=1}^{m} \alpha_i \alpha_j \yith y^{(j)} (\xith)^T x^{(j)} - b \sumitom \alpha_i \yith + \sumitom \alpha_i - \frac{1}{2C} \sumitom \alpha_i^2 \\
+                                            &\text{From above we know that $0 = \sumitom \alpha_i \yith$ when the Lagrangian is minimized, so we end with} \\
+  \underset{w,b,\xi}{min} \quad \mathcal{L} &= -\half \sumitom \sum_{j=1}^{m} \alpha_i \alpha_j \yith y^{(j)} (\xith)^T x^{(j)} + \sumitom \alpha_i - \frac{1}{2C} \sumitom \alpha_i^2 \\
+\end{align*}
 \subsection*{d}
 
 What is the dual of the $\ell_2$ soft margin SVM optimization problem?
+
+\begin{align*}
+  \underset{\alpha}{max} &\quad \theta_D \\
+  \text{subject to}      &\quad \sumitom \alpha_i \yith = 0 \\
+                         &\quad \alpha_i \geq 0, i=1,...,m \\
+                         \\
+  \text{where}           &\quad \theta_D = \underset{w,b,\xi}{min} \quad \mathcal{L} \text{, which we found above} \\
+\end{align*}
+
+\section*{3}
+
+\subsection*{a}
+
+\section*{4}
+
+\section*{5}
 
 \end{document}
