@@ -87,13 +87,13 @@ and kernel matrix $K \in \mathbb{R}^{m x m}$ such that $K_{ij} = K(\xith, x^{(j)
   \text{subject to} &\quad \yith (w^{T} \xith + b) \geq 1 - \xi_i, i = 1,...,m \\
 \end{align*}
 
-\subsection*{a}
+\subsection*{a)}
 
 Notice that we have dropped the $\xi_{i} \geq 0$ constraint in the $\ell_2$ problem. Show that these non-negativity constraints can be removed. That is, show that the optimal value of the objective will be the same whether or not these constraints are present. \\
 
 Let $\xi_i$ be a negative error in $\xi_0,...,\xi_m$. Since $\xi_i^{2}$ is positive, $\xi_i$ will contribute the same amount to the objective as $-\xi_i$. Therefore the minimization of the objective does not depend on the sign of $\xi_i$ and the $\xi_i \geq 0$ constraint is irrelevant.
 
-\subsection*{b}
+\subsection*{b)}
 
 What is the Lagrangian of the $\ell_2$ soft margin SVM optimization problem?
 
@@ -117,7 +117,7 @@ The Lagrangian is
   &= \half w^T w + \frac{C}{2} \xi^T \xi - \sumitom \alpha_i \yith w^T \xith - \sumitom \alpha_i \yith b + \sumitom \alpha_i - \sumitom \alpha_i \xi_i \\
 \end{align*}
 
-\subsection*{c}
+\subsection*{c)}
 
 Minimize the Lagrangian with respect to $w$, $b$, and $\xi$ by taking the following gradients: $\nabla_w \mathcal{L}$, $\pder{\mathcal{L}}{b}$, and $\nabla_{\xi} \mathcal{L}$, and then setting them equal to $0$. Here $\xi = |\xi_1,\xi_2,...,\xi_m|^{T}$. \\
 
@@ -168,7 +168,7 @@ Plug these results back into the Lagrangian
                                             &\text{From above we know that $0 = \sumitom \alpha_i \yith$ when the Lagrangian is minimized, so we end with} \\
   \underset{w,b,\xi}{min} \quad \mathcal{L} &= -\half \sumitom \sum_{j=1}^{m} \alpha_i \alpha_j \yith y^{(j)} (\xith)^T x^{(j)} + \sumitom \alpha_i - \frac{1}{2C} \sumitom \alpha_i^2 \\
 \end{align*}
-\subsection*{d}
+\subsection*{d)}
 
 What is the dual of the $\ell_2$ soft margin SVM optimization problem?
 
@@ -182,8 +182,34 @@ What is the dual of the $\ell_2$ soft margin SVM optimization problem?
 
 \section*{3}
 
-\subsection*{a}
+\subsection*{a)}
 
+$f(x) = \sumitom \alpha_i \yith K(\xith,x) + b  \quad ; \quad  K(x,z) = exp(\frac{-||x-z||^2}{\tau^2})$
+
+Find values for the set of parameters $\{\alpha_1,...,\alpha_m,b\}$ and Gaussian kernel width $\tau$ such that $\xith$ is correctly classified for all $i = 1,...,m$. \\\\
+
+Let $\alpha_i = 1, b = 0$ for $i = 1,...,m$
+
+$f(x) = \sumitom \yith e^{\frac{-||\xith - x||^2}{\tau^2}}$
+
+Find $\tau$ such that $|f(\xith) - \yith| < 1$ for all $i$.
+
+\begin{align*}
+    |f(\xith) - \yith| &= |\sum_{j=1}^{m} y^{(j)} e^{\frac{-||x^{(j)} - \xith||^2}{\tau^2}|} - y^{(i)}| \\
+                       &= |y^{(m)}e^{\frac{-||x^{(m)} - \xith||^2}{\tau^2}} + \sum_{j=1}^{m-1} y^{(j)} e^{\frac{-||x^{(j)} - \xith||^2}{\tau^2}|} - y^{(i)}|
+\end{align*}
+Let $i = m$, so $\xith = x^{(m)}$ and $\yith = y^{(m)}$
+\begin{align*}
+    &= |y^{(m)}e^0 + \sum_{j=1}^{m-1} y^{(j)} e^{\frac{-||x^{(j)} - \xith||^2}{\tau^2}|} - y^{(i)}| \\
+    &= |\sum_{j=1}^{m-1} y^{(j)} e^{\frac{-||x^{(j)} - \xith||^2}{\tau^2}|}| \\
+\end{align*}
+We are given that $||x^{(j)} - \xith|| \geq \epsilon$, therefore $||x^{(j)} - \xith|| = c_j \epsilon$ for some $c_j \geq 1$.
+
+Let $||x^{(j)} - \xith||^2 = c_j \epsilon^2$ (since $c_j^2$ is still a constant we will still call it $c_j$).
+\begin{align*}
+    |\sum_{j=1}^{m-1} y^{(j)} e^{\frac{-||x^{(j)} - \xith||^2}{\tau^2}|}| 
+     &= |\sum_{j=1}^{m-1} y^{(j)} e^{\frac{-||x^{(j)} - \xith||^2}{\tau^2}|}| \\
+\end{align*}
 \section*{4}
 
 \section*{5}
