@@ -261,9 +261,14 @@ We predict $y=1$ when
 $P(y=1|x) \geq P(y=0|x)$ \\
 $P(y=1|x) - P(y=1|x) \geq 0$ \\
 
+$\frac{P(x|y=1)P(y=1)}{\sum_{a \in Val(y)} P(x|y=a)P(y=a)} - \frac{P(x|y=0)P(y=0)}{\sum_{a \in Val(y)} P(x|y=a)P(y=a)} \geq 0 \\\\\\$
+$\frac{\phi_y \prod_{j=1}^n (\phi_{j|y=1})^{x_j} (1 - \phi_{j|y=1})^{1-x_j} - (1 - \phi_y) \prod_{j=1}^n (\phi_{j|y=0})^{x_j} (1 - \phi_{j|y=0})^{1 - x_j}}{\phi_y \prod_{j=1}^n (\phi_{j|y=1})^{x_j}(1 - \phi_{j|y=1})^{1-x_j} + (1 - \phi_y) \prod_{j=1}^n (\phi_{j|y=0})^{x_j}(1-\phi_{j|y=0})^{1-x_j}} \geq 0 \\\\\\$ 
+$\phi_y \prod_{j=1}^n (\phi_{j|y=1})^{x_j} (1 - \phi_{j|y=1})^{1-x_j} \geq (1 - \phi_y) \prod_{j=1}^n (\phi_{j|y=0})^{x_j} (1 - \phi_{j|y=0})^{1 - x_j} \\$
+$\log \phi_y + \sum_{j=1}^n x_j \log \phi_{j|y=1} + \sum_{j=1}^n (1-x_j) \log (1 - \phi_{j|y=1}) \geq \log (1 - \phi_y) + \sum_{j=1}^n x_j \log \phi_{j|y=0} + \sum_{j=1}^n (1-x_j) \log (1 - \phi_{j|y=0})$
 \begin{align*}
-    \frac{P(x|y=1)P(y=1)}{\sum_{a \in Val(y)} P(x|y=a)P(y=a)} - \frac{P(x|y=0)P(y=0)}{\sum_{a \in Val(y)} P(x|y=a)P(y=a)} &\geq 0 \\
-    \frac{\phi_y \prod_{j=1}^n (\phi_{j|y=1})^{x_j} (1 - \phi_{j|y=1})^{1-x_j} - (1 - \phi_y) \prod_{j=1}^n (\phi_{j|y=0})^{x_j} (1 - \phi_{j|y=0})^{1 - x_j}}{} &\geq 0 \\
+    \log \phi_y - \log (1 - \phi_y) &+ \sum_{j=1}^n x_j \log \phi_{j|y=1} + \sum_{j=1}^n \log (1 - \phi_{j|y=1}) - \sum_{j=1}^n x_j \log (1 - \phi_{j|y=1}) \\
+                                    &- \sum_{j=1}^n x_j \log \phi_{j|y=0} - \sum_{j=1}^n \log (1 - \phi_{j|y=0}) + \sum_{j=1}^n x_j \log (1 - \phi_{j|y=0}) \geq 0 \\
 \end{align*}
+
 \end{document}
 
