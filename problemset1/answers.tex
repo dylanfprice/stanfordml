@@ -1,6 +1,7 @@
 \documentclass[11pt]{article}
 
 \usepackage{mathtools}
+\usepackage{amssymb}
 \usepackage[latin1]{inputenc}
 \usepackage[margin=0.5in]{geometry}
 
@@ -256,19 +257,85 @@ We can also drop $\sum_{j=1}^n$ from the second term because we are taking the g
 
 \subsection*{c)}
 
-We predict $y=1$ when 
+We predict $y=1$ when $P(y=1|x) \geq P(y=0|x)$ \\
 
 $P(y=1|x) \geq P(y=0|x)$ \\
+
 $P(y=1|x) - P(y=1|x) \geq 0$ \\
 
+By Bayes Rule: \\
+
 $\frac{P(x|y=1)P(y=1)}{\sum_{a \in Val(y)} P(x|y=a)P(y=a)} - \frac{P(x|y=0)P(y=0)}{\sum_{a \in Val(y)} P(x|y=a)P(y=a)} \geq 0 \\\\\\$
+
+Substituting in the equations from the beginning of the problem (and combining the denominator): \\
+
 $\frac{\phi_y \prod_{j=1}^n (\phi_{j|y=1})^{x_j} (1 - \phi_{j|y=1})^{1-x_j} - (1 - \phi_y) \prod_{j=1}^n (\phi_{j|y=0})^{x_j} (1 - \phi_{j|y=0})^{1 - x_j}}{\phi_y \prod_{j=1}^n (\phi_{j|y=1})^{x_j}(1 - \phi_{j|y=1})^{1-x_j} + (1 - \phi_y) \prod_{j=1}^n (\phi_{j|y=0})^{x_j}(1-\phi_{j|y=0})^{1-x_j}} \geq 0 \\\\\\$ 
+
+$\phi_y \prod_{j=1}^n (\phi_{j|y=1})^{x_j} (1 - \phi_{j|y=1})^{1-x_j} - (1 - \phi_y) \prod_{j=1}^n (\phi_{j|y=0})^{x_j} (1 - \phi_{j|y=0})^{1 - x_j} \geq 0 \\$ 
+
 $\phi_y \prod_{j=1}^n (\phi_{j|y=1})^{x_j} (1 - \phi_{j|y=1})^{1-x_j} \geq (1 - \phi_y) \prod_{j=1}^n (\phi_{j|y=0})^{x_j} (1 - \phi_{j|y=0})^{1 - x_j} \\$
+
 $\log \phi_y + \sum_{j=1}^n x_j \log \phi_{j|y=1} + \sum_{j=1}^n (1-x_j) \log (1 - \phi_{j|y=1}) \geq \log (1 - \phi_y) + \sum_{j=1}^n x_j \log \phi_{j|y=0} + \sum_{j=1}^n (1-x_j) \log (1 - \phi_{j|y=0})$
+
 \begin{align*}
     \log \phi_y - \log (1 - \phi_y) &+ \sum_{j=1}^n x_j \log \phi_{j|y=1} + \sum_{j=1}^n \log (1 - \phi_{j|y=1}) - \sum_{j=1}^n x_j \log (1 - \phi_{j|y=1}) \\
                                     &- \sum_{j=1}^n x_j \log \phi_{j|y=0} - \sum_{j=1}^n \log (1 - \phi_{j|y=0}) + \sum_{j=1}^n x_j \log (1 - \phi_{j|y=0}) \geq 0 \\
+    \log \phi_y - \log (1 - \phi_y) &+ \sum_{j=1}^n \log (1 - \phi_{j|y=1}) - \sum_{j=1}^n \log (1 - \phi_{j|y=0}) \\
+                                    &+ \sum_{j=1}^n x_j [ \log \phi_{j|y=1} - \log (1 - \phi_{j|y=1}) - \log \phi_{j|y=0} + \log ( 1 - \phi_{j|y=0})] \geq 0 \\
 \end{align*}
+define $\theta \in \mathbb{R}^{n+1}$ as 
+$
+\begin{bmatrix}
+    \theta_0 \\
+    \theta_1 \\
+    \vdots \\
+    \theta_n
+\end{bmatrix}
+$ \\
+
+let $\theta_0 = \log \phi_y - \log (1 - \phi_y) + \sum_{j=1}^n \log (1-\phi_{j|y=1}) - \sum_{j=1}^n \log (1-\phi_{j|y=0})$ \\
+let $\theta_1 = \log \phi_{1|y=1} - \log (1-\phi_{1|y=1}) - \log \phi_{1|y=0} + \log (1 - \phi_{1|y=0})$ \\
+let $\theta_2 = \log \phi_{2|y=1} - \log (1-\phi_{2|y=1}) - \log \phi_{2|y=0} + \log (1 - \phi_{2|y=0})$ \\
+... \\
+let $\theta_n = \log \phi_{n|y=1} - \log (1-\phi_{n|y=1}) - \log \phi_{n|y=0} + \log (1 - \phi_{n|y=0})$ \\
+
+then the above inequality can be rewritten as \\
+
+$\theta_0 + \theta_1 x_1 + \theta_2 x_2 + ... + \theta_n x_n \geq 0$ \\
+
+$\thetaT \begin{bmatrix} 1 \\ x \\ \end{bmatrix} \geq 0$ \\
+
+\section*{5}
+
+\subsection*{a)}
+
+\begin{align*}
+    P(y;\phi) &= (1-\phi)^{y-1} \phi \\
+              &= \exp(\log[(1-\phi)^{y-1} \phi]) \\
+              &= \exp ( (y-1) \log(1-\phi) + \log\phi ) \\
+              &= \exp ( \log(1-\phi) y - \log(1-\phi) + \log \phi ) \\
+              &= \exp ( \log(1-\phi) y - (\log(1-\phi) - \log \phi ) \\
+              &= \exp ( \log(1-\phi) y - \log(\frac{1-\phi}{\phi}) ) \\
+\end{align*}
+
+We can see this is exponential family with \\
+$\eta = \log(1-\phi)$ \\
+$T(y) = y$ \\
+$a(\eta) = \log(\frac{1-\phi}{\phi})$ \\
+$b(y) = 1$ \\
+
+Solving $\eta = \log(1-\phi)$ for $\phi$ and substituting into $a(\eta)$, we can find $a(\eta)$ in terms of $\eta$:
+\begin{align*}
+    \eta       &= \log(1-\phi) \\
+    e^{\eta}   &= 1-\phi \\
+    \phi       &= 1 - e^{\eta} \\
+    \\
+    a(\eta) &= \log \frac{1-(1-e^\eta)}{1-e^\eta} \\
+    a(\eta) &= \log \frac{e^\eta}{1-e^\eta} \\
+\end{align*}
+
+
+
 
 \end{document}
 
