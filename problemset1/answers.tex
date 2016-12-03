@@ -334,8 +334,35 @@ Solving $\eta = \log(1-\phi)$ for $\phi$ and substituting into $a(\eta)$, we can
     a(\eta) &= \log \frac{e^\eta}{1-e^\eta} \\
 \end{align*}
 
+\subsection*{b)}
 
+\begin{align*}
+    g(\eta) &= E[T(y);\eta] \\
+            &= E[y] \\
+            &= \frac{1}{\phi} \\
+            &= \frac{1}{1-e^\eta} \\
+\end{align*}
 
+\subsection*{c)}
+
+Since $\eta$ is linearly related to $x$, $\eta = \thetaT x$ for some $\theta \in \mathbb{R}^n$ and $\phi = 1 - e^{\thetaT x}$.
+\begin{align*}
+    P(\yith|\xith;\phi)        &= \exp(\log(1-\phi)\yith - \log(\frac{1-\phi}{\phi})) \\
+    P(\yith|\xith;\theta)      &= \exp(\log(1 - (1-e^{\thetaT \xith}))\yith - \log(\frac{1-(1-e^{\thetaT \xith})}{1 - e^{\thetaT \xith}})) \\
+    P(\yith|\xith;\theta)      &= \exp(\log(e^{\thetaT \xith})\yith - \log(\frac{e^{\thetaT \xith}}{1 - e^{\thetaT \xith}})) \\
+    \log P(\yith|\xith;\theta) &= \log(e^{\thetaT \xith})\yith - \log(\frac{e^{\thetaT \xith}}{1 - e^{\thetaT \xith}}) \\
+                               &= \thetaT \xith \yith - ( \log e^{\thetaT \xith} - \log (1 - e^{\thetaT \xith})) \\
+                               &= \thetaT \xith \yith - \thetaT \xith + \log (1 - e^{\thetaT \xith}) \\
+\end{align*}
+
+\begin{align*}
+    \pder{}{\theta_j} \log P(\yith|\xith;\theta) &= \xith_j \yith - \xith_j - \frac{\xith_j e^{\thetaT \xith}}{1 - e^{\thetaT \xith}} \\
+        &= \xith_j \yith - \frac{\xith_j(1-e^{\thetaT \xith}) + \xith_j e^{\thetaT \xith}}{1 - e^{\thetaT \xith}} \\
+        &= \xith_j \yith - \frac{\xith_j}{1 - e^{\thetaT \xith}} \\
+        &= (\yith - \frac{1}{1-e^{\thetaT \xith}}) \xith_j \\
+\end{align*}
+
+So the stochastic gradient ascent update rule is $\theta_j := \theta_j + \alpha (\yith - \frac{1}{1 - e^{\thetaT \xith}}) \xith_j$ \\
 
 \end{document}
 
