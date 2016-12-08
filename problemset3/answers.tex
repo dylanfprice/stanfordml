@@ -16,7 +16,7 @@
 \maketitle 
 
 % custom commands
-\newcommand{\hhat}[1]{\hat{h}_#1}
+\newcommand{\hhat}[1][]{\hat{h}_#1}
 \newcommand{\CvtError}[0]{\hat{\varepsilon}_{S_{cv}}}
 \newcommand{\GError}[0]{\varepsilon}
 
@@ -51,5 +51,29 @@ Let $\frac{\delta}{2} = 2k\exp(-2 \gamma^2 \beta m)$. Then
 Therefore,
 
 $P\Bigg(\forall \hhat{i} \in \{\hhat{1}...\hhat{k}\}. |\GError(\hhat{i}) - \CvtError(\hhat{i})| \le \sqrt{\frac{1}{2 \beta m} \log \frac{4k}{\delta}}\Bigg) \geq 1 - \frac{\delta}{2}$
+
+\subsection*{b)}
+
+From part (a), we have that 
+
+$P(|\GError(\hhat{i}) - \CvtError(\hhat{i})| \le \gamma) \geq 1 - \frac{\delta}{2}$, where $\gamma = \sqrt{\frac{1}{2 \beta m} \log \frac{4k}{\delta}}$
+
+Because $\hhat{} \in \{\hhat{1}...\hhat{k}\}$
+
+$P(|\GError(\hhat{}) - \CvtError(\hhat{})| \le \gamma) \geq 1 - \frac{\delta}{2}$ \\
+
+Let $h^* = \arg \min_{\hhat{i} \in \{\hhat{1}...\hhat{k}\}} \GError(\hhat{i})$
+
+Then with probability at least $1 - \frac{\delta}{2}$ \begin{align*}
+    \GError(\hhat{}) &\le \CvtError(\hhat{}) + \gamma \\
+                     &\le \CvtError(h^*) + \gamma & \text{By the definition of $\hhat{}$ it has the lowest $\CvtError$ of any $\hhat{i} \in \{\hhat{1}...\hhat{k}\}$} \\
+                     &\le \GError(h^*) + 2 \gamma & \text{By the uniform convergence result proved in part (a)} \\
+                     &= \min_{i=1,...,k} \GError(\hhat{i}) + 2 \gamma & \text{By the definition of $h^*$} \\
+                     &= \min_{i=1,...,k} \GError(\hhat{i}) + 2 \sqrt{\frac{1}{2 \beta m} \log \frac{4k}{\delta}} \\
+                     &= \min_{i=1,...,k} \GError(\hhat{i}) + \sqrt{\frac{2}{\beta m} \log \frac{4k}{\delta}} \\
+\end{align*}
+
+\subsection*{c)}
+
 
 \end{document}
