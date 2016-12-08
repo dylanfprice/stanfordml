@@ -15,4 +15,41 @@
 \author{Dylan Price}
 \maketitle 
 
+% custom commands
+\newcommand{\hhat}[1]{\hat{h}_#1}
+\newcommand{\CvtError}[0]{\hat{\varepsilon}_{S_{cv}}}
+\newcommand{\GError}[0]{\varepsilon}
+
+\section*{1}
+
+\subsection*{a)}
+By the Hoeffding inequality, we know that \\
+
+$P(|\GError(\hhat{i}) - \CvtError(\hhat{i})| > \gamma) \le 2\exp(-2 \gamma^2 \beta m) $ \\
+
+Let $A_i$ denote the event that $|\GError(\hhat{i}) - \CvtError(\hhat{i})| > \gamma$. Then \\
+\begin{align*}
+    P(\exists \hhat{i} \in \{\hhat{1}...\hhat{k}\}. |\GError(\hhat{i}) - \CvtError(\hhat{i})| > \gamma) 
+        &= P(A_1 \cup ... \cup A_k) \\
+        &\le \sum_k P(A_i) \\
+        &\le \sum_k 2\exp(-2 \gamma^2 \beta m) \\
+        &= 2k \exp(-2 \gamma^2 \beta m)
+\end{align*}
+Therefore, \begin{align*}
+    &P(\neg \exists \hhat{i} \in \{\hhat{1}...\hhat{k}\}. |\GError(\hhat{i}) - \CvtError(\hhat{i})| > \gamma) \\
+    &= P(\forall \hhat{i} \in \{\hhat{1}...\hhat{k}\}. |\GError(\hhat{i}) - \CvtError(\hhat{i})| \le \gamma) \\
+    &\geq 1 - 2k\exp(-2 \gamma^2 \beta m)
+\end{align*}
+Let $\frac{\delta}{2} = 2k\exp(-2 \gamma^2 \beta m)$. Then
+\begin{align*}
+                          \frac{\delta}{4k} &= \exp(-2 \gamma^2 \beta m) \\
+                          \frac{4k}{\delta} &= \exp(2 \gamma^2 \beta m) \\
+                     \log \frac{4k}{\delta} &= 2 \gamma^2 \beta m \\
+ \frac{1}{2 \beta m} \log \frac{4k}{\delta} &= \gamma^2 \\
+                                     \gamma &= \sqrt{\frac{1}{2 \beta m} \log \frac{4k}{\delta}}
+\end{align*}
+Therefore,
+
+$P\Bigg(\forall \hhat{i} \in \{\hhat{1}...\hhat{k}\}. |\GError(\hhat{i}) - \CvtError(\hhat{i})| \le \sqrt{\frac{1}{2 \beta m} \log \frac{4k}{\delta}}\Bigg) \geq 1 - \frac{\delta}{2}$
+
 \end{document}
