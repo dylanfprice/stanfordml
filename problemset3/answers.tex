@@ -75,5 +75,92 @@ Then with probability at least $1 - \frac{\delta}{2}$ \begin{align*}
 
 \subsection*{c)}
 
+\section*{2}
+
+\setlength\unitlength{2pt}
+
+\subsection*{a)}
+
+$h(x) = 1\{a < x\},\quad a \in \mathbb{R}$
+
+$h(x)$ can shatter a set of 1 point:
+
+\begin{picture}(100,20)
+    \put(0,10){\line(1,0){100}}
+    \put(24,0){a}
+    \put(25,5){\line(0,1){10}}
+    \put(50,10){\circle*{3}}
+\end{picture}
+\begin{picture}(100,20)(-50,0)
+    \put(0,10){\line(1,0){100}}
+    \put(50,10){\circle{3}}
+    \put(74,0){a}
+    \put(75,5){\line(0,1){10}}
+\end{picture}
+
+$h(x)$ cannot shatter any set of 2 points because in the labeling situation shown below, no choice of $a$ will successfully label both the points:
+
+\begin{picture}(100,20)
+    \put(0,10){\line(1,0){100}}
+    \put(25,10){\circle*{3}}
+    \put(75,10){\circle{3}}
+\end{picture}
+
+Therefore $VC(h(x)) = 1$
+
+\subsection*{b)}
+
+$h(x) = 1\{a < x < b\}, \quad a,b \in \mathbb{R}$
+
+$h(x)$ can shatter a set of 2 points:
+
+\begin{picture}(100,20)
+    \put(0,10){\line(1,0){100}}
+    \put(9,0){a}
+    \put(10,5){\line(0,1){10}}
+    \put(25,10){\circle*{3}}
+    \put(75,10){\circle*{3}}
+    \put(89,0){b}
+    \put(90,5){\line(0,1){10}}
+\end{picture}
+\begin{picture}(100,20)(-50,0)
+    \put(0,10){\line(1,0){100}}
+    \put(0,0){a}
+    \put(1,5){\line(0,1){10}}
+    \put(9,0){b}
+    \put(10,5){\line(0,1){10}}
+    \put(25,10){\circle{3}}
+    \put(75,10){\circle{3}}
+\end{picture}
+\\
+\begin{picture}(100,20)
+    \put(0,10){\line(1,0){100}}
+    \put(9,0){a}
+    \put(10,5){\line(0,1){10}}
+    \put(25,10){\circle*{3}}
+    \put(75,10){\circle{3}}
+    \put(49,0){b}
+    \put(50,5){\line(0,1){10}}
+\end{picture}
+\begin{picture}(100,20)(-50,0)
+    \put(0,10){\line(1,0){100}}
+    \put(25,10){\circle{3}}
+    \put(49,0){a}
+    \put(50,5){\line(0,1){10}}
+    \put(75,10){\circle*{3}}
+    \put(89,0){b}
+    \put(90,5){\line(0,1){10}}
+\end{picture}
+
+$h(x)$ cannot shatter any set of 3 points because in the labeling situation shown below, no choice of $a$ and $b$ will successfully label all the points:
+
+\begin{picture}(100,20)
+    \put(0,10){\line(1,0){100}}
+    \put(25,10){\circle*{3}}
+    \put(50,10){\circle{3}}
+    \put(75,10){\circle*{3}}
+\end{picture}
+
+Therefore, $VC(h(x)) = 2$
 
 \end{document}
