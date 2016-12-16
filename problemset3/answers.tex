@@ -81,7 +81,7 @@ Then with probability at least $1 - \frac{\delta}{2}$ \begin{align*}
 
 \subsection*{a)}
 
-$h(x) = 1\{a < x\},\quad a \in \mathbb{R}$
+$h(x) = 1\{a < x\},\quad a \in \mathbb{R}$ \\
 
 $h(x)$ can shatter a set of 1 point:
 
@@ -98,7 +98,7 @@ $h(x)$ can shatter a set of 1 point:
     \put(75,5){\line(0,1){10}}
 \end{picture}
 
-$h(x)$ cannot shatter any set of 2 points because in the labeling situation shown below, no choice of $a$ will successfully label both the points:
+There is no set of 2 points that $h(x)$ can shatter because in the labeling situation shown below, no choice of $a$ will successfully label both the points:
 
 \begin{picture}(100,20)
     \put(0,10){\line(1,0){100}}
@@ -110,7 +110,7 @@ Therefore $VC(h(x)) = 1$
 
 \subsection*{b)}
 
-$h(x) = 1\{a < x < b\}, \quad a,b \in \mathbb{R}$
+$h(x) = 1\{a < x < b\}, \quad a,b \in \mathbb{R}$ \\
 
 $h(x)$ can shatter a set of 2 points:
 
@@ -152,7 +152,7 @@ $h(x)$ can shatter a set of 2 points:
     \put(90,5){\line(0,1){10}}
 \end{picture}
 
-$h(x)$ cannot shatter any set of 3 points because in the labeling situation shown below, no choice of $a$ and $b$ will successfully label all the points:
+There is no set of 3 points that $h(x)$ can shatter because in the labeling situation shown below, no choice of $a$ and $b$ will successfully label all the points:
 
 \begin{picture}(100,20)
     \put(0,10){\line(1,0){100}}
@@ -162,5 +162,35 @@ $h(x)$ cannot shatter any set of 3 points because in the labeling situation show
 \end{picture}
 
 Therefore, $VC(h(x)) = 2$
+
+\subsection*{c)}
+$h(x) = 1\{a \sin x > 0\}, \quad a \in \mathbb{R}$ \\
+
+$h(x)$ can shatter a set of 1 point by manipulating the sign of $a$. This will ensure that $h(x)$ can evaluate to a 1 or a 0 no matter where the point lies. \\
+
+There is no set of 2 points that $h(x)$ can shatter. $h(x)$ divides the input space into $\pi$-wide sections which alternate evaluating to 1 or 0. E.g. with $a = 1$, $x \in (0,\pi)$ will evaluate to 1, $x \in [\pi,2\pi]$ will evaluate to 0, $x \in (2\pi,3\pi)$ will evaluate to 1, etc. Because of this, with any set of two points there is a labeling which $h(x)$ cannot achieve. There are two cases to consider: the two points both lie within sections that evaluate the same (i.e. both 1 or both 0) or they lie within sections that evaluate differently. In the first case, if the points are labeled differently $h(x)$ will not be able to achieve the labeling because no matter how you manipulate $a$ both points will evaluate to 1 or both points will evaluate to 0. Similarly in the second case, if the points are labeled the same $h(x)$ will not be able to achieve the labeling because no matter how you manipulate $a$ one point will evaluate to 1 and the other point will evaluate to 0. \\
+
+Therefore $VC(h(x)) = 1$
+
+\subsection*{d)}
+$h(x) = 1\{\sin(x+1) > 0\}, \quad a \in \mathbb{R}$ \\
+
+$h(x)$ can shatter a set of 1 point:
+\begin{align*}
+    x = \{0\} &\quad \text{label } \{1\},\quad a = \frac{\pi}{2} \\
+              &\quad \text{label } \{0\},\quad a = 0 \\
+\end{align*}
+
+$h(x)$ can shatter a set of 2 points:
+\begin{align*}
+    x = \{0,\frac{\pi}{2}\} &\quad \text{label } \{0,0\},\quad a = -\frac{\pi}{2} \\
+                            &\quad \text{label } \{0,1\},\quad a = 0 \\
+                            &\quad \text{label } \{1,0\},\quad a = \frac{\pi}{2} \\
+                            &\quad \text{label } \{1,1\},\quad a = \frac{\pi}{4} \\
+\end{align*}
+
+There is no set of 3 points which $h(x)$ can shatter because the points must span a distance of $\pi$ to realize the labeling $\{0,1,0\}$, but in that case they cannot realize the labeling $\{1,1,1\}$. \\
+
+Therefore $VC(h(x)) = 2$
 
 \end{document}
