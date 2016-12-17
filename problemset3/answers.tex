@@ -207,19 +207,19 @@ Therefore $VC(h(x)) = 2$
 
 Find $\pder{}{\theta_i} J(\theta)$ when $s_i = 1$:
 \begin{align*}
-\pder{}{\theta_i} J(\theta) = \frac{1}{2} ( \bar{\theta}^T X^T X_i + X_i^T X \bar{\theta} + 2 X_i^T X_i \theta_i - X_i^T \vec{y} - \vec{y} X_i) + \lambda \\
+\pder{}{\theta_i} J(\theta) = \frac{1}{2} ( \bar{\theta}^T X^T X_i + X_i^T X \bar{\theta} + 2 X_i^T X_i \theta_i - 2 X_i^T \vec{y}) + \lambda \\
 \end{align*}
 Set equal to 0:
 \begin{align*}
-                       0 &= \frac{1}{2} ( \bar{\theta}^T X^T X_i + X_i^T X \bar{\theta} + 2 X_i^T X_i \theta_i - X_i^T \vec{y} - \vec{y} X_i) + \lambda \\
-    - X_i^T X_i \theta_i &= \frac{1}{2} \bar{\theta}^T X^T X_i + \frac{1}{2} X_i^T X \bar{\theta} - \frac{1}{2} X_i^T \vec{y} - \frac{1}{2} \vec{y} X_i + \lambda \\
-                \theta_i &= \frac{-1}{X_i^T X_i} (\frac{1}{2} \bar{\theta}^T X^T X_i + \frac{1}{2} X_i^T X \bar{\theta} - \frac{1}{2} X_i^T \vec{y} - \frac{1}{2} \vec{y} X_i + \lambda)
+                       0 &= \frac{1}{2} ( \bar{\theta}^T X^T X_i + X_i^T X \bar{\theta} + 2 X_i^T X_i \theta_i - 2 X_i^T \vec{y}) + \lambda \\
+    - X_i^T X_i \theta_i &= \frac{1}{2} \bar{\theta}^T X^T X_i + \frac{1}{2} X_i^T X \bar{\theta} - X_i^T \vec{y} + \lambda \\
+                \theta_i &= \frac{-1}{X_i^T X_i} (\frac{1}{2} \bar{\theta}^T X^T X_i + \frac{1}{2} X_i^T X \bar{\theta} - X_i^T \vec{y} + \lambda)
 \end{align*}
 
-When $s_i = 1$, $\theta_i = \max\bigg(0,\quad \frac{-1}{X_i^T X_i} (\frac{1}{2} \bar{\theta}^T X^T X_i + \frac{1}{2} X_i^T X \bar{\theta} - \frac{1}{2} X_i^T \vec{y} - \frac{1}{2} \vec{y} X_i + \lambda)\bigg)$ \\
+When $s_i = 1$, $\theta_i = \max\bigg(0,\quad \frac{-1}{X_i^T X_i} (\frac{1}{2} \bar{\theta}^T X^T X_i + \frac{1}{2} X_i^T X \bar{\theta} - X_i^T \vec{y} + \lambda)\bigg)$ \\
 
 Following the same process for $s_i = -1$, we find \\
 
-when $s_i = -1$, $\theta_i = \min\bigg(0, \quad \frac{-1}{X_i^T X_i} (\frac{1}{2} \bar{\theta}^T X^T X_i + \frac{1}{2} X_i^T X \bar{\theta} - \frac{1}{2} X_i^T \vec{y} - \frac{1}{2} \vec{y} X_i - \lambda) \bigg)$ \\
+when $s_i = -1$, $\theta_i = \min\bigg(0, \quad \frac{-1}{X_i^T X_i} (\frac{1}{2} \bar{\theta}^T X^T X_i + \frac{1}{2} X_i^T X \bar{\theta} - X_i^T \vec{y} - \lambda) \bigg)$ \\
 
 \end{document}
