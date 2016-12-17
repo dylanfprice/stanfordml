@@ -19,6 +19,7 @@
 \newcommand{\hhat}[1][]{\hat{h}_#1}
 \newcommand{\CvtError}[0]{\hat{\varepsilon}_{S_{cv}}}
 \newcommand{\GError}[0]{\varepsilon}
+\newcommand{\pder}[2]{\frac{\partial#1}{\partial#2}}
 
 \section*{1}
 
@@ -192,5 +193,33 @@ $h(x)$ can shatter a set of 2 points:
 There is no set of 3 points which $h(x)$ can shatter because the points must span a distance of $\pi$ to realize the labeling $\{0,1,0\}$, but in that case they cannot realize the labeling $\{1,1,1\}$. \\
 
 Therefore $VC(h(x)) = 2$
+
+\section*{3}
+
+\subsection*{a)}
+
+\begin{align*}
+    J(\theta) &= \frac{1}{2} || X \bar{\theta} + X_i \theta_i - \vec{y}||^2_2 + \lambda ||\bar{\theta} ||_1 + \lambda s_i \theta_i \\
+              &= \frac{1}{2} (X \bar{\theta} + X_i \theta_i - \vec{y})^T (X \bar{\theta} + X_i \theta_i - \vec{y}) + \lambda ||\bar{\theta}||_1 + \lambda s_i \theta_i \\
+              &= \frac{1}{2} (\bar{\theta}^T X^T + X_i^T \theta_i - \vec{y}^T)(X \bar{\theta} + X_i \theta_i - \vec{y}) + \lambda ||\bar{\theta}||_1 + \lambda s_i \theta_i \\
+              &= \frac{1}{2} (\bar{\theta}^T X^T X \bar{\theta} + \bar{\theta}^T X^T X_i \theta_i - \bar{\theta}^T X^T \vec{y} + X_i^T \theta_i X \bar{\theta} + X_i^T \theta_i X_i \theta_i - X_i^T \theta_i \vec{y} - \vec{y}^T X \bar{\theta} - \vec{y} X_i \theta_i + \vec{y}^T \vec{y}) + \lambda || \bar{\theta} ||_1 + \lambda s_i \theta_i \\
+\end{align*}
+
+Find $\pder{}{\theta_i} J(\theta)$ when $s_i = 1$:
+\begin{align*}
+\pder{}{\theta_i} J(\theta) = \frac{1}{2} ( \bar{\theta}^T X^T X_i + X_i^T X \bar{\theta} + 2 X_i^T X_i \theta_i - X_i^T \vec{y} - \vec{y} X_i) + \lambda \\
+\end{align*}
+Set equal to 0:
+\begin{align*}
+                       0 &= \frac{1}{2} ( \bar{\theta}^T X^T X_i + X_i^T X \bar{\theta} + 2 X_i^T X_i \theta_i - X_i^T \vec{y} - \vec{y} X_i) + \lambda \\
+    - X_i^T X_i \theta_i &= \frac{1}{2} \bar{\theta}^T X^T X_i + \frac{1}{2} X_i^T X \bar{\theta} - \frac{1}{2} X_i^T \vec{y} - \frac{1}{2} \vec{y} X_i + \lambda \\
+                \theta_i &= \frac{-1}{X_i^T X_i} (\frac{1}{2} \bar{\theta}^T X^T X_i + \frac{1}{2} X_i^T X \bar{\theta} - \frac{1}{2} X_i^T \vec{y} - \frac{1}{2} \vec{y} X_i + \lambda)
+\end{align*}
+
+When $s_i = 1$, $\theta_i = \max\bigg(0,\quad \frac{-1}{X_i^T X_i} (\frac{1}{2} \bar{\theta}^T X^T X_i + \frac{1}{2} X_i^T X \bar{\theta} - \frac{1}{2} X_i^T \vec{y} - \frac{1}{2} \vec{y} X_i + \lambda)\bigg)$ \\
+
+Following the same process for $s_i = -1$, we find \\
+
+when $s_i = -1$, $\theta_i = \min\bigg(0, \quad \frac{-1}{X_i^T X_i} (\frac{1}{2} \bar{\theta}^T X^T X_i + \frac{1}{2} X_i^T X \bar{\theta} - \frac{1}{2} X_i^T \vec{y} - \frac{1}{2} \vec{y} X_i - \lambda) \bigg)$ \\
 
 \end{document}
