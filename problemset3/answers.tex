@@ -222,4 +222,160 @@ Following the same process for $s_i = -1$, we find \\
 
 when $s_i = -1$, $\theta_i = \min\bigg(0, \quad \frac{-1}{X_i^T X_i} (\frac{1}{2} \bar{\theta}^T X^T X_i + \frac{1}{2} X_i^T X \bar{\theta} - X_i^T \vec{y} - \lambda) \bigg)$ \\
 
+\subsection*{b)}
+
+See q3/l1ls.m
+
+\subsection*{c)}
+
+Following are the thetas arrived at by the coordinate descent algorithm from part (b), vertical dots indicate areas of contiguous 0s. 
+
+\begin{align*}
+    \lambda = .001, \quad
+    [\text{index, } \theta] = 
+    \begin{bmatrix}
+        1  &      0.67077 \\
+        2  &      0.81233 \\
+        3  &     -0.82544 \\
+        4  &     -0.81632 \\
+        5  &     -0.93817 \\
+        6  &     -0.00437 \\
+            & \vdots \\
+        12  &    -0.00632 \\
+        13  &    -0.00213 \\
+        14  &     0.00000 \\
+        15  &    -0.03042 \\
+            & \vdots \\
+        33  &     0.00349 \\
+        34  &    -0.01144 \\
+            & \vdots \\
+        39  &     0.00203 \\
+            & \vdots \\
+        48  &     0.01879 \\
+            & \vdots \\
+        51  &     0.00512 \\
+            & \vdots \\
+        71  &     0.00002 \\
+        72  &     0.00000 \\
+        73  &     0.00033 \\
+        74  &    -0.02040 \\
+            & \vdots \\
+        77  &     0.00023 \\
+            & \vdots \\
+        81  &     0.00059 \\
+        82  &     0.01227 \\
+        83  &    -0.01478 \\
+            & \vdots \\
+        86  &    -0.00727 \\
+            & \vdots \\
+        91  &     0.00026 \\
+            & \vdots \\
+        94  &    -0.00046 \\
+            & \vdots \\
+    \end{bmatrix}
+    \quad\quad
+    \lambda = .01, \quad
+    [\text{index, } \theta] = 
+    \begin{bmatrix}
+        1  &       0.66890 \\
+        2  &       0.81693 \\
+        3  &      -0.81803 \\
+        4  &      -0.81682 \\
+        5  &      -0.94517 \\
+        6  &      -0.00377 \\
+            & \vdots  \\
+        12  &     -0.00393 \\
+        13  &     -0.00015 \\
+        14  &      0.00000 \\
+        15  &     -0.03132 \\
+            & \vdots \\
+        34  &     -0.00887 \\
+            & \vdots \\
+        39  &      0.00176 \\
+            & \vdots \\
+        48  &      0.01794 \\
+            & \vdots \\
+        71  &      0.00093 \\
+            & \vdots \\
+        74  &     -0.02258 \\
+            & \vdots \\
+        81  &      0.00188 \\
+        82  &      0.01066 \\
+        83  &     -0.01606 \\
+            & \vdots \\
+        86  &     -0.00284 \\
+        87  &      0.00000 \\
+            & \vdots \\
+        95  &      0.00194 \\
+            & \vdots \\
+    \end{bmatrix}
+\end{align*}
+\begin{align*}
+    \lambda = .1, \quad
+    [\text{index, } \theta] =
+    \begin{bmatrix}
+        1   &   0.65289 \\
+        2   &   0.81030 \\
+        3   &  -0.80756 \\
+        4   &  -0.80795 \\
+        5   &  -0.95211 \\
+            &   \vdots \\
+        12  &  -0.00537 \\
+        13  &  -0.00216 \\
+        14  &   0.00000 \\
+        15  &  -0.02394 \\
+            &   \vdots \\
+        18  &   0.00292 \\
+            &   \vdots  \\
+        34  &  -0.00294 \\
+            &   \vdots  \\
+        48  &   0.00484 \\
+            &   \vdots \\
+        74  &  -0.01429 \\
+            &   \vdots \\
+        83  &  -0.00298 \\
+            &   \vdots \\
+        86  &  -0.00261 \\
+            &   \vdots \\
+    \end{bmatrix}
+    \quad\quad
+    \lambda = 1, \quad
+    \theta =
+    \begin{bmatrix}
+       0.49876 \\
+       0.65611 \\
+      -0.79058 \\
+      -0.65564 \\
+      -0.89192 \\
+       \vdots  \\
+    \end{bmatrix}
+\end{align*}
+\begin{align*}
+    \lambda = 10, \quad
+    \theta = 
+    \begin{bmatrix}
+       0.00000 \\
+       0.00000 \\
+      -0.41080 \\
+       0.00000 \\
+      -0.07083 \\
+       \vdots  \\
+    \end{bmatrix}
+\end{align*}
+
+For comparison, 
+\begin{align*}
+    \theta_{\text{true}} = 
+    \begin{bmatrix}
+         0.68372018 \\
+         0.84110202 \\
+        -0.83028605 \\
+        -0.85031124 \\
+        -0.93904984 \\
+        \vdots \\
+    \end{bmatrix}
+\end{align*}
+
+As $\lambda$ is increased, the $\theta$ output by the algorithm becomes more sparse. This algorithm could be used for feature selection because most of the values in $\theta$ are set to zero, meaning those features are effectively ignored. By tuning $\lambda$ you can control approximately how many features are kept by the algorithm.
+
 \end{document}
