@@ -232,4 +232,61 @@ The result I expected is that both algorithms would improve as the number of tra
 
 \section*{5}
 
+\subsection*{a)}
+
+We know that
+
+$\exists h^* \in \mathcal{H} \quad.\quad \varepsilon(h^*) = 0$\\
+
+Given $\hat{h} \in \mathcal{H} \quad.\quad \hat{\varepsilon}(\hat{h}) = 0$, prove that with probability $1 - \delta$, $\varepsilon(\hat{h}) \le \frac{1}{m} \log \frac{k}{\delta}$ \\\\
+
+Consider a hypothesis $h_i \in \mathcal{H}$ such that $\varepsilon(h_i) > \gamma$ \\
+Let $(x, y)$ be a sample drawn from the same distribution as the training data,\\
+and let $Z$ be a random variable where $Z = 1\{h_i(x) \ne y \}$ \\
+
+Then $P(Z) > \gamma$ and $P(\neg Z) \le 1 - \gamma$ \\
+
+Let $Z_j$ be the value of random variable $Z$ evaluated against the $j^{\text{th}}$ training example, i.e. $Z_j = 1\{h_i(x^{(j)}) \ne y^{(j)}\}$ \\
+
+Then the probability that our hypothesis $h_i$ makes no mistakes on the training data is:\\ 
+$P\big((\varepsilon(h_i) > \gamma) \land (\neg Z_1 \land \neg Z_2 \land ... \land \neg Z_m)\big) \le (1 - \gamma)^m$ \\
+
+No mistakes on the training data equates to zero training error, therefore:\\
+$P\big((\varepsilon(h_i) > \gamma) \land (\hat{\varepsilon}(h_i) = 0)\big) \le (1 - \gamma)^m$ \\
+
+And the probability that the above holds for any one hypothesis in $\mathcal{H}$ is: \begin{align*}
+    P\big(\exists h_i \in \mathcal{H} . (\varepsilon(h_i) > \gamma) \land (\hat{\varepsilon}(h_i) = 0)\big) &\le k(1 - \gamma)^m &\text{(by the union bound)} \\
+                                                                                      &\le ke^{- \gamma m} &\text{(by the inequality given in the problem)} \\
+\end{align*}
+Let $\delta = ke^{-\gamma m}$. Then \begin{align*}
+    \frac{\delta}{k} &= e^{-\gamma m} \\
+    \log \frac{\delta}{k} &= -\gamma m \\
+    \gamma &= - \frac{1}{m} \log \frac{\delta}{k} \\
+    \gamma &= \frac{1}{m} \log \frac{k}{\delta} \\
+\end{align*}
+Then \begin{align*}
+    P\big(\exists h_i \in \mathcal{H} . (\varepsilon(h_i) > \gamma) \land (\hat{\varepsilon}(h_i) = 0)\big) &\le \delta &\text{(by the definition of $\delta$ above)} \\
+    P\big(\exists h_i \in \mathcal{H} . (\varepsilon(h_i) > \frac{1}{m} \log \frac{k}{\delta}) \land (\hat{\varepsilon}(h_i) = 0)\big) &\le \delta &\text{(substitute in the value of $\gamma$)} \\
+    P\big(\neg \exists h_i \in \mathcal{H} . (\varepsilon(h_i) > \frac{1}{m} \log \frac{k}{\delta}) \land (\hat{\varepsilon}(h_i) = 0)\big) &> 1 - \delta &\text{(subtract both sides from 1)} \\
+    P\big(\forall h_i \in \mathcal{H} . (\varepsilon(h_i) \le \frac{1}{m} \log \frac{k}{\delta}) \lor (\hat{\varepsilon}(h_i) \ne 0)\big) &> 1 - \delta & \\
+\end{align*}
+
+Since $\hat{h} \in \mathcal{H}$, then with probability $> 1 - \delta$,\\
+$(\varepsilon(\hat{h}) \le \frac{1}{m} \log \frac{k}{\delta}) \lor (\hat{\varepsilon}(\hat{h}) \ne 0)$ \\
+
+And since we know that $\hat{\varepsilon}(\hat{h}) = 0$, then with probability $> 1 - \delta$,\\
+$\varepsilon(\hat{h}) \le \frac{1}{m} \log \frac{k}{\delta}$ \\
+
+\subsection*{b)}
+From part (a) we know that \\
+$\gamma = \frac{1}{m} \log \frac{k}{\delta}$ \\
+
+Solving for $m$ we get \\
+$m = \frac{1}{\gamma} \log \frac{k}{\delta}$ \\
+
+So for fixed $\delta$ and $\gamma$, in order for $\varepsilon(\hat{h}) \le \gamma$ to hold with probability $\ge 1 - \delta$, it suffices that \\
+$m \ge \frac{1}{\gamma} \log \frac{k}{\delta}$ \\
+
+
+
 \end{document}
