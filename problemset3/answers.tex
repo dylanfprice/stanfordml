@@ -420,4 +420,27 @@ Because we assume $\alpha$ is small enough to not decrease the objective functio
                          &\ge \sum_i \sum_{z^{(i)}} Q_i^{(t)}(z^{(i)}) \log \frac{p(x^{(i)},z^{(i)};\theta^{(t)})}{Q_i^{(t)}(z^{(i)})} \quad\text{(because of our gradient ascent step as noted above)}\\
                          &= \ell(\theta^{(t)}) \quad\text{(because $Q_i^{(t)}$ was chosen to make Jensen's inequality hold with equality at $\theta^{(t)}$ as noted above)}
 \end{align*}
+
+\subsection*{b)}
+
+To show that the update steps are the same we need to show that\\
+$\nabla_\theta \sum_i \log \sum_{z^{(i)}} p(x^{(i)},z^{(i)};\theta) = \nabla_\theta \sum_i \sum_{z^{(i)}} Q_i(z^{(i)}) \log \frac{p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}$ \\
+
+We start with taking the gradient of the first term:\\
+\begin{align*}
+    \nabla_\theta \sum_i \log \sum_{z^{(i)}} p(x^{(i)},z^{(i)};\theta)\\
+     &= \sum_i \frac{1}{\sum_{z^{(i)}} p(x^{(i)},z^{(i)};\theta)} \pder{}{\theta} \sum_{z^{(i)}} p(x^{(i)},z^{(i)};\theta)\\
+     &= \sum_i \frac{1}{p(x^{(i)};\theta)} \pder{}{\theta} p(x^{(i)};\theta)
+\end{align*}
+And then the gradient of the second term:\\
+\begin{align*}
+    \nabla_\theta \sum_i \sum_{z^{(i)}} Q_i(z^{(i)}) \log \frac{p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}\\
+    &= \sum_i \sum_{z^{(i)}} Q_i(z^{(i)}) \bigg( \frac{Q_i(z^{(i)})}{p(x^{(i)},z^{(i)};\theta)} \bigg) \pder{}{\theta} \frac{p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}\\
+    &\text{But we have defined $Q_i(z^{(i)}) = p(z^{(i)}|x^{(i)};\theta) = \frac{p(x^{(i)},z^{(i)};\theta)}{p(x^{(i)};\theta)}$, therefore}\\
+    &= \sum_i \sum_{z^{(i)}} \frac{p(x^{(i)},z^{(i)};\theta)}{p(x^{(i)};\theta)} \frac{p(x^{(i)},z^{(i)};\theta)}{p(x^{(i)};\theta)} \frac{1}{p(x^{(i)},z^{(i)};\theta)} \pder{}{\theta} p(x^{(i)},z^{(i)};\theta) \frac{p(x^{(i)};\theta)}{p(x^{(i)},z^{(i)};\theta)}\\
+    &= \sum_i \sum_{z^{(i)}} \frac{p(x^{(i)},z^{(i)};\theta)}{p(x^{(i)};\theta) p(x^{(i)};\theta)} \pder{}{\theta} p(x^{(i)};\theta)\\
+    &= \sum_i \frac{1}{p(x^{(i)})} \pder{}{\theta} p(x^{(i)};\theta)
+\end{align*}
+
+Thus the gradient of both terms is the same and the update functions yield the exact same update.
 \end{document}
