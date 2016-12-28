@@ -399,5 +399,25 @@ See q4/k\_means.m for code
 \includegraphics[width=0.5\textwidth]{q4/k4_3.png}
 \includegraphics[width=0.5\textwidth]{q4/k4_4.png}
 
+\section*{5}
 
+\subsection*{a)}
+
+Prove that $\ell(\theta^{(t+1)}) \ge \ell(\theta^{(t)})$ \\
+
+
+Because we chose $Q_i(z^{(i)}) := p(z^{(i)}|x^{(i)};\theta^{(t)})$ in the E-step,\\
+
+$\ell(\theta^{(t)}) = \sum_i \sum_{z^{(i)}} Q_i^{(t)}(z^{(i)}) \log \frac{p(x^{(i)},z^{(i)};\theta^{(t)})}{Q_i^{(t)}(z^{(i)})}$\\
+
+The parameters $\theta^{(t+1)}$ are obtained by the gradient ascent update step\\
+
+$\theta^{(t+1)} = \theta^{(t)} + \alpha \nabla_\theta \sum_i \sum_{z^{(i)}} Q_i^{(t)}(z^{(i)}) \log \frac{p(x^{(i)},z^{(i)};\theta^{(t)})}{Q_i^{(t)}(z^{(i)})}$\\
+
+Because we assume $\alpha$ is small enough to not decrease the objective function, $\theta^{(t+1)}$ will result in a greater than or equal value of the objective function. Using similar logic as in the lecture notes:\\
+\begin{align*}
+    \ell(\theta^{(t+1)}) &\ge \sum_i \sum_{z^{(i)}} Q_i^{(t)}(z^{(i)}) \log \frac{p(x^{(i)},z^{(i)};\theta^{(t+1)})}{Q_i^{(t)}(z^{(i)})} \quad\text{(by Jensen's inequality)}\\
+                         &\ge \sum_i \sum_{z^{(i)}} Q_i^{(t)}(z^{(i)}) \log \frac{p(x^{(i)},z^{(i)};\theta^{(t)})}{Q_i^{(t)}(z^{(i)})} \quad\text{(because of our gradient ascent step as noted above)}\\
+                         &= \ell(\theta^{(t)}) \quad\text{(because $Q_i^{(t)}$ was chosen to make Jensen's inequality hold with equality at $\theta^{(t)}$ as noted above)}
+\end{align*}
 \end{document}
