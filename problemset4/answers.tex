@@ -1,0 +1,105 @@
+\documentclass[11pt]{article}
+
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage[latin1]{inputenc}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{graphicx}
+
+\everymath{\displaystyle}
+\setlength\parindent{0pt}
+
+\begin{document}
+\title{Stanford CS 229, Public Course, Problem Set 4}
+\date{\today}
+\author{Dylan Price}
+\maketitle 
+
+% custom commands
+\newcommand{\xith}[0]{x^{(i)}}
+\newcommand{\yith}[0]{y^{(i)}}
+\newcommand{\zith}[0]{z^{(i)}}
+
+\section*{1}
+
+\subsection*{a)}
+Given training set $\{(x^{(1)},y^{(1)},z^{(1)}),...,(x^{(m)},y^{(m)},z^{(m)})\}$, write the log-likelihood of the parameters and derive the maximum likelihood estimate for $\phi$, $\theta_0$, and $\theta_1$. \\
+
+First we write the likelihood for a single point $(\xith, \yith, \zith)$:\\
+\begin{align*}
+L(\xith,\yith,\zith) = g(\phi^T \xith)^{\zith} (1 - g(\phi^T \xith))^{1 - \zith} \frac{1}{\sqrt{2 \pi} \sigma} \exp{\frac{-(\yith - \theta_{\zith}^T \xith)^2}{2 \sigma^2}} \\
+\end{align*}
+Then the log-likelihood of the parameters is:
+\begin{align*}
+    \ell(\phi,\theta_{\zith}) &= \log \prod_{i=1}^m L(\xith,\yith,\zith) \\
+                              &= \sum_{i=1}^m \log\big[g(\phi^T \xith)^{\zith} (1 - g(\phi^T \xith))^{1 - \zith}\big] + \log\big[\frac{1}{\sqrt{2 \pi} \sigma} \exp{\frac{-(\yith - \theta_{\zith}^T \xith)^2}{2 \sigma^2}}\big] \\
+                              &= \sum_{i=1}^m \zith \log g(\phi^T \xith) + (1 - \zith) \log (1 - g(\phi^T \xith)) + \log\big[\frac{1}{\sqrt{2 \pi} \sigma} \exp{\frac{-(\yith - \theta_{\zith}^T \xith)^2}{2 \sigma^2}}\big] \\
+                              &= \sum_{i=1}^m \zith \log g(\phi^T \xith) + (1 - \zith) \log (1 - g(\phi^T \xith)) + \log (\frac{1}{\sqrt{2 \pi} \sigma}) +  \frac{-(\yith - \theta_{\zith}^T \xith)^2}{2 \sigma^2} \\
+                              &= \sum_{i=1}^m \zith \log g(\phi^T \xith) + (1 - \zith) \log (1 - g(\phi^T \xith)) + \log (\frac{1}{\sqrt{2 \pi} \sigma}) \\
+                              &\quad\quad\quad - 1\{\zith = 0\} \frac{(\yith - \theta_0^T \xith)^2}{2 \sigma^2} - 1\{\zith = 1\} \frac{(\yith - \theta_1^T \xith)^2}{2 \sigma^2} \\
+\end{align*}
+Now take the gradient with respect to $\theta_0$ and set equal to $0$:
+\begin{align*}
+    \nabla_{\theta_0} \ell(\phi,\theta_0,\theta_1) &= \nabla_{\theta_0} \sum_{i=1}^m -1\{\zith = 0\} \frac{(\yith - \theta_0^T \xith)^2}{2 \sigma^2} \\ 
+                                                   &= - \sum_{i=1}^m 1\{\zith = 0\} \frac{-2 \yith \xith + 2 \xith \theta_0^T \xith}{2 \sigma^2} \\
+                                        \text{set} &= 0 \\
+                                                 0 &= \sum_{i=1}^m 1\{\zith = 0\} (-\yith \xith + \xith \theta_0^T \xith) \\
+    \sum_{i=1}^m 1\{\zith = 0\} \xith \theta_0^T \xith &= \sum_{i=1}^m 1\{\zith = 0\} \yith \xith \\
+\end{align*}
+Let $X_{z = 0}$ and $\vec{y}_{z=0}$ be equal to the design matrices except that all entries where $z = 1$ are $0$. Then the above is equivalent to:
+\begin{align*}
+    X_{z=0}^T X_{z=0} \theta_0 &= X_{z=0}^T \vec{y}_{z=0} \\
+                      \theta_0 &= (X_{z=0}^T X_{z=0})^{-1} X_{z=0}^T \vec{y}_{z=0} \\
+                      &\text{and similarly,} \\
+                      \theta_1 &= (X_{z=1}^T X_{z=1})^{-1} X_{z=1}^T \vec{y}_{z=1} \\
+\end{align*}
+Now find the gradient and hessian of $\ell(\phi,\theta_0,\theta_1)$ with respect to $\phi$:
+\begin{align*}
+    \nabla_\phi \ell(\phi,\theta_0,\theta_1) &= \nabla_\phi \sum_{i=1}^m \zith \log g(\phi^T \xith) + (1 - \zith) \log (1 - g(\phi^T \xith)) \\
+                                             &= \sum_{i=1}^m \frac{\zith}{g(\phi^T \xith)} \xith g(\phi^T \xith) (1 - g(\phi^T \xith)) + \frac{1 - \zith}{1 - g(\phi^T \xith)} -\xith g(\phi^T \xith)(1 - g(\phi^T \xith)) \\
+                                             &= \sum_{i=1}^m \xith \big[ \zith (1 - g(\phi^T \xith)) - (1 - \zith) g(\phi^T \xith) \big] \\
+                                             &= \sum_{i=1}^m \xith \big[ \zith - \zith g(\phi^T \xith) - g(\phi^T \xith) + \zith g(\phi^T \xith) \big] \\
+                                             &= \sum_{i=1}^m \xith \big[ \zith - g(\phi^T \xith) \big] \\
+  \nabla_\phi^2 \ell(\phi,\theta_0,\theta_1) &= \sum_{i=1}^m - g(\phi^T \xith)(1 - g(\phi^T \xith)) \xith {\xith}^T \\
+\end{align*}
+
+\subsection*{b)}
+$\ell(\phi,\theta_0,\theta_1)$ is the same as part (a):
+\begin{align*}
+    \ell(\phi,\theta_0,\theta_1) = \sum_{i=1}^m \log p(\yith|\xith,\zith) p(\zith|\xith) \\
+\end{align*}
+\textbf{E-step}\\
+We want $Q_i(\zith)$ to be proportional to $p(\yith|\xith,\zith) p(\zith|\xith)$ so that Jensen's inequality holds with equality. \\
+Therefore let $Q_i(\zith) = p(\yith|\xith,\zith) p(\zith|\xith)$. During the E-step, we calculate $Q_i(\zith = 0)$ and $Q_i(\zith = 1)$ for all $i$, using the formulas given in the problem statement and our current estimate of the parameters.\\
+
+\textbf{M-step}\\
+$\phi,\theta_0,\theta_1 := \arg \max_{\phi,\theta_0,\theta_1} \sum_{i=1}^m \sum_{\zith=0}^{1} Q_i(\zith) \log \frac{p(\yith|\xith,\zith)p(\zith|\xith)}{Q_i(\zith)}$\\
+Find the closed-form solution for $\theta_0$ by taking the gradient with respect to $\theta_0$ and setting equal to $0$.
+\begin{align*}
+    &\nabla_{\theta_0} \sum_{i=1}^m \sum_{\zith=0}^{1} Q_i(\zith) \log \frac{p(\yith|\xith,\zith;\theta_{\zith})p(\zith|\xith;\phi)}{Q_i(\zith)} \\
+    &\text{Let $1\{\text{guess } \zith = 0\}$ be equivalent to $1\{Q_i(\zith = 0) > Q_i(\zith = 1)\}$} \\
+    &= \nabla_{\theta_0} \sum_{i=1}^m 1\{\text{guess } \zith = 0\} Q_i(\zith = 0) \log \frac{p(\yith|\xith,\zith=0;\theta_0) p(\zith=0|\xith;\phi)}{Q_i(\zith=0)} \\
+    &= \nabla_{\theta_0} \sum_{i=1}^m 1\{\text{guess } \zith = 0\} Q_i(\zith = 0) \big[ \log p(\yith|\xith,\zith=0;\theta_0) + \log p(\zith=0|\xith;\phi) - \log Q_i(\zith=0) \big] \\
+    &= \nabla_{\theta_0} \sum_{i=1}^m 1\{\text{guess } \zith = 0\} Q_i(\zith=0) \log p(\yith|\xith,\zith=0;\theta_0) \\
+    &= \nabla_{\theta_0} \sum_{i=1}^m 1\{\text{guess } \zith = 0\} Q_i(\zith=0) \log \big( \frac{1}{\sqrt{2 \pi} \sigma} \exp{\frac{-(\yith-\theta_0^T \xith)^2}{2 \sigma^2}}\big) \\
+    &= \nabla_{\theta_0} \sum_{i=1}^m 1\{\text{guess } \zith = 0\} Q_i(\zith=0) \log \frac{1}{\sqrt{2 \pi} \sigma} - Q_i(\zith=0) \frac{(\yith-\theta_0^T \xith)^2}{2 \sigma^2} \\
+    &= \nabla_{\theta_0} \sum_{i=1}^m - 1\{\text{guess } \zith = 0\} Q_i(\zith=0) \frac{(\yith-\theta_0^T \xith)^2}{2 \sigma^2} \\
+    &= \sum_{i=1}^m - 1\{\text{guess } \zith = 0\} Q_i(\zith=0) \frac{-\yith \xith + \xith \theta_0^T \xith}{2 \sigma^2} \\
+\end{align*}
+Set $= 0$ \\
+\begin{align*}
+    0 &= \sum_{i=1}^m - 1\{\text{guess } \zith = 0\} Q_i(\zith=0) \frac{-\yith \xith + \xith \theta_0^T \xith}{2 \sigma^2} \\
+    \sum_{i=1}^m 1\{\text{guess } \zith = 0\} \frac{Q_i(\zith = 0)}{2 \sigma^2} \xith \theta_0^T \xith &= \sum_{i=1}^m 1\{\text{guess } \zith = 0\} \frac{Q_i(\zith = 0)}{2 \sigma^2} \yith \xith \\
+\end{align*}
+Let $X_0$ and $\vec{y}_0$ be the design matrices where the elements are non-zero if $Q_i(\zith = 0) > Q_i(\zith = 1)$.\\
+Let $Q = \text{diag}(\frac{Q_0(z^{(0)}=0)}{2 \sigma^2},\frac{Q_1(z^{(1)}=0)}{2 \sigma^2},...,\frac{Q_m(z^{(m)}=0)}{2 \sigma^2})$.\\
+Then the above can be written as:
+\begin{align*}
+    X_0^T Q X_0 \theta_0 &= X_0^T Q \vec{y}_0 \\
+                \theta_0 &= (X_0^T Q X_0)^{-1} X_0^T Q \vec{y}_0 \\
+                &\text{and similarly,}\\
+                \theta_1 &= (X_1^T Q X_1)^{-1} X_1^T Q \vec{y}_1 \\
+\end{align*}
+
+\end{document}
+
