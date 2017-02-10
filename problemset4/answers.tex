@@ -27,7 +27,8 @@ Given training set $\{(x^{(1)},y^{(1)},z^{(1)}),...,(x^{(m)},y^{(m)},z^{(m)})\}$
 
 First we write the likelihood for a single point $(\xith, \yith, \zith)$:\\
 \begin{align*}
-L(\xith,\yith,\zith) = g(\phi^T \xith)^{\zith} (1 - g(\phi^T \xith))^{1 - \zith} \frac{1}{\sqrt{2 \pi} \sigma} \exp{\frac{-(\yith - \theta_{\zith}^T \xith)^2}{2 \sigma^2}} \\
+    %TODO: Make L look pretty
+    L(\xith,\yith,\zith) = g(\phi^T \xith)^{\zith} (1 - g(\phi^T \xith))^{1 - \zith} \frac{1}{\sqrt{2 \pi} \sigma} \exp{\frac{-(\yith - \theta_{\zith}^T \xith)^2}{2 \sigma^2}} \\ 
 \end{align*}
 Then the log-likelihood of the parameters is:
 \begin{align*}
@@ -57,9 +58,9 @@ Now find the gradient and hessian of $\ell(\phi,\theta_0,\theta_1)$ with respect
 \begin{align*}
     \nabla_\phi \ell(\phi,\theta_0,\theta_1) &= \nabla_\phi \sum_{i=1}^m \zith \log g(\phi^T \xith) + (1 - \zith) \log (1 - g(\phi^T \xith)) \\
                                              &= \sum_{i=1}^m \frac{\zith}{g(\phi^T \xith)} \xith g(\phi^T \xith) (1 - g(\phi^T \xith)) + \frac{1 - \zith}{1 - g(\phi^T \xith)} -\xith g(\phi^T \xith)(1 - g(\phi^T \xith)) \\
-                                             &= \sum_{i=1}^m \xith \big[ \zith (1 - g(\phi^T \xith)) - (1 - \zith) g(\phi^T \xith) \big] \\
-                                             &= \sum_{i=1}^m \xith \big[ \zith - \zith g(\phi^T \xith) - g(\phi^T \xith) + \zith g(\phi^T \xith) \big] \\
-                                             &= \sum_{i=1}^m \xith \big[ \zith - g(\phi^T \xith) \big] \\
+                                             &= \sum_{i=1}^m \big[ \zith (1 - g(\phi^T \xith)) - (1 - \zith) g(\phi^T \xith) \big] \xith \\
+                                             &= \sum_{i=1}^m \big[ \zith - \zith g(\phi^T \xith) - g(\phi^T \xith) + \zith g(\phi^T \xith) \big] \xith \\
+                                             &= \sum_{i=1}^m \big[ \zith - g(\phi^T \xith) \big] \xith \\
   \nabla_\phi^2 \ell(\phi,\theta_0,\theta_1) &= \sum_{i=1}^m - g(\phi^T \xith)(1 - g(\phi^T \xith)) \xith {\xith}^T \\
 \end{align*}
 
@@ -100,6 +101,122 @@ Then the above can be written as:
                 &\text{and similarly,}\\
                 \theta_1 &= (X_1^T Q X_1)^{-1} X_1^T Q \vec{y}_1 \\
 \end{align*}
+
+Find the gradient and hessian for $\phi$ in order to numerically optimize the parameter.
+\begin{align*}
+    &\nabla_\phi \sum_{i=1}^m \sum_{\zith=0}^{1} Q_i(\zith) \log \frac{p(\yith|\xith,\zith;\theta_{\zith})p(\zith|\xith;\phi)}{Q_i(\zith)} \\
+    &= \nabla_\phi \sum_{i=1}^m \sum_{\zith=0}^{1} Q_i(\zith) \big[ \log p(\yith|\xith,\zith;\theta_{\zith}) + \log p(\zith|\xith;\phi) - \log Q_i(\zith) \big] \\
+    &= \nabla_\phi \sum_{i=1}^m \sum_{\zith=0}^{1} Q_i(\zith) \log p(\zith|\xith;\phi) \\
+    &= \nabla_\phi \sum_{i=1}^m \sum_{\zith=0}^{1} Q_i(\zith) \log \big[ g(\phi^T \xith)^{\zith} (1 - g(\phi^T \xith))^{1-\zith} \big] \\
+    &= \nabla_\phi \sum_{i=1}^m \sum_{\zith=0}^{1} Q_i(\zith) \big[ \zith \log g(\phi^T \xith) + (1 - \zith) \log (1 - g(\phi^T \xith)) \big] \\
+    &= \nabla_\phi \sum_{i=1}^m Q_i(\zith=1) \log g(\phi^T \xith) + Q_i(\zith=0) \log (1 - g(\phi^T \xith)) \\
+    &= \nabla_\phi \sum_{i=1}^m Q_i(\zith=1) \log g(\phi^T \xith) + (1 - Q_i(\zith=1)) \log (1 - g(\phi^T \xith)) \\
+    &\text{similarly to part (a) this becomes} \\
+    &= \sum_{i=1}^m (Q_i(\zith=1) - g(\phi^T \xith)) \xith \\
+    &\text{and} \\
+    \nabla_\phi^2 &= \sum_{i=1}^m -g(\phi^T \xith)(1-g(\phi^T \xith)) \xith {\xith}^T \\
+\end{align*}
+
+\section*{2}
+
+\subsection*{a)}
+
+First determine the joint distribution over $(x, z)$.
+\\\\
+% TODO: make tilde show up
+$(x,z) ~\text{ drawn from } \mathcal{N}(\mu_{xz}, \Sigma_{xz})$
+
+$
+\mu_{xz} = 
+\begin{bmatrix}
+    \mu_x \\
+    \mu_z \\
+\end{bmatrix}
+\Sigma_{xz} = 
+\begin{bmatrix}
+    \Sigma_{xx} & \Sigma_{xz} \\
+    \Sigma_{zx} & \Sigma_{zz} \\
+\end{bmatrix}
+$
+\\\\\\
+% TODO: make tilde show up
+We know $x|z \text{ drawn from } \mathcal{N}(Uz,\sigma^2 I)$, so we can define $x$ as $x = Uz + \epsilon$ where $\epsilon \text{ drawn from } \mathcal{N}(0, \sigma^2 I)$.\\
+Then $E[x] = E[Uz + \epsilon] = UE[z] + E[\epsilon] = 0$. Therefore $\mu_x = 0$. \\
+
+We know $z \text{ drawn from } \mathcal{N}(0,I)$, therefore $\mu_z = 0$. \\
+
+\begin{align*}
+    \Sigma_{xx} &= E[(x-E[x])(x-E[x])^T]  \\
+                &= E[xx^T] \\
+                &= E[(Uz + \epsilon)(Uz + \epsilon)^T] \\
+                &= E[(Uz + \epsilon)(z^T U^T + \epsilon^T)] \\
+                &= E[Uzz^TU^T + \epsilon z^TU^T + Uz\epsilon^T + \epsilon\epsilon^T] \\
+                % TODO: check if it's legit to say E[\epsilon z^T] = E[\epsilon] E[z]
+                &= UE[zz^T]U^T + E[\epsilon] E[z^T] U^T + U E[z] E[\epsilon^T] + E[\epsilon\epsilon^T] \\
+                &= UIU^T + \sigma^2 I \\
+                &= UU^T + \sigma^2 I \\
+                \\
+    \Sigma_{xz} &= E[(x-E[x])(z - E[z])^T] \\
+                &= E[xz^T] \\
+                &= E[(Uz + \epsilon)z^T] \\
+                &= E[Uzz^T + \epsilon z^T] \\
+                &= U E[zz^T] + E[\epsilon z^T] \\
+                &= UI + E[\epsilon]E[z^T] \\
+                % TODO: check if it's legit to say E[\epsilon z^T] = E[\epsilon] E[z]
+                &= U \\
+                \\
+    \Sigma_{zx} &= \Sigma_{xz}^T = U^T
+                \\
+    \Sigma_{zz} &= I \\
+\end{align*}
+
+So,
+% TODO: make tilde show up
+$(x,z) \text{ drawn from } \mathcal{N}(\mu_{xz},\Sigma_{xz})$ where \\\\
+$
+\mu_{xz} = 
+\begin{bmatrix}
+    0 \\
+    0 \\
+\end{bmatrix}
+\Sigma_{xz} = 
+\begin{bmatrix}
+    UU^T + \sigma^2 I & U \\
+    U^T               & I \\
+\end{bmatrix}
+$
+\\\\\\
+Now determine the conditional distribution of $z|x$.\\
+
+% TODO: make tilde show up
+$z|x \text{ drawn from } \mathcal{N}(\mu_{z|x},\Sigma_{z|x})$\\
+
+By the rules for manipulating Gaussians from the lecture notes:
+\begin{align*}
+    \mu_{z|x} &= \mu_z + \Sigma_{zx} \Sigma_{xx}^{-1} (x - \mu_x) \\
+              &= 0 + U^T(UU^T + \sigma^2 I)^{-1} x \\
+              &= U^T x (\sigma^2 I + U^T U)^{-1} &\text{(by the identity in the problemset)} \\
+              \\
+ \Sigma_{z|x} &= \Sigma_{zz} - \Sigma_{zx} \Sigma_{xx}^{-1} \Sigma_{xz} \\
+              &= I - U^T (UU^T + \sigma^2 I)^{-1} U \\
+              &= I - U^T U (\sigma^2 I + U^T U)^{-1} &\text{(by the identity in the problemset)} \\
+\end{align*}
+
+\subsection*{b)}
+
+\textbf{E-step}\\
+% TODO: make tilde show up
+Compute $Q_i(\zith) = p(\zith|\xith; U)$ for all $i$,\\
+where $Q_i(\zith) \text{ drawn from } \mathcal{N}(U^T \xith (\sigma^2 I + U^T U)^{-1}, I - U^T U (\sigma^2 I + U^T U)^{-1})$
+
+\textbf{M-step}\\
+%TODO: look up how to do integrals
+$U := \arg \max_U \sum_{i=1}^m \text{ integral } Q_i(\zith) \log \frac{p(\xith,\zith; U)}{Q_i(\zith)} d \zith$\\
+% TODO: make tilde show up
+where $p(\xith,\zith;U) \text{ drawn from } \mathcal{N}(\mu_{xz},\Sigma_{xz})$
+
+
+
 
 \end{document}
 
