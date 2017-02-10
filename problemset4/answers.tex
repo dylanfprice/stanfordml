@@ -123,8 +123,7 @@ Find the gradient and hessian for $\phi$ in order to numerically optimize the pa
 
 First determine the joint distribution over $(x, z)$.
 \\\\
-% TODO: make tilde show up
-$(x,z) ~\text{ drawn from } \mathcal{N}(\mu_{xz}, \Sigma_{xz})$
+$(x,z) \sim \mathcal{N}(\mu_{xz}, \Sigma_{xz})$
 
 $
 \mu_{xz} = 
@@ -139,11 +138,10 @@ $
 \end{bmatrix}
 $
 \\\\\\
-% TODO: make tilde show up
-We know $x|z \text{ drawn from } \mathcal{N}(Uz,\sigma^2 I)$, so we can define $x$ as $x = Uz + \epsilon$ where $\epsilon \text{ drawn from } \mathcal{N}(0, \sigma^2 I)$.\\
+We know $x|z \sim \mathcal{N}(Uz,\sigma^2 I)$, so we can define $x$ as $x = Uz + \epsilon$ where $\epsilon \sim \mathcal{N}(0, \sigma^2 I)$.\\
 Then $E[x] = E[Uz + \epsilon] = UE[z] + E[\epsilon] = 0$. Therefore $\mu_x = 0$. \\
 
-We know $z \text{ drawn from } \mathcal{N}(0,I)$, therefore $\mu_z = 0$. \\
+We know $z \sim \mathcal{N}(0,I)$, therefore $\mu_z = 0$. \\
 
 \begin{align*}
     \Sigma_{xx} &= E[(x-E[x])(x-E[x])^T]  \\
@@ -171,8 +169,7 @@ We know $z \text{ drawn from } \mathcal{N}(0,I)$, therefore $\mu_z = 0$. \\
 \end{align*}
 
 So,
-% TODO: make tilde show up
-$(x,z) \text{ drawn from } \mathcal{N}(\mu_{xz},\Sigma_{xz})$ where \\\\
+$(x,z) \sim \mathcal{N}(\mu_{xz},\Sigma_{xz})$ where \\\\
 $
 \mu_{xz} = 
 \begin{bmatrix}
@@ -188,8 +185,7 @@ $
 \\\\\\
 Now determine the conditional distribution of $z|x$.\\
 
-% TODO: make tilde show up
-$z|x \text{ drawn from } \mathcal{N}(\mu_{z|x},\Sigma_{z|x})$\\
+$z|x \sim \mathcal{N}(\mu_{z|x},\Sigma_{z|x})$\\
 
 By the rules for manipulating Gaussians from the lecture notes:
 \begin{align*}
@@ -205,15 +201,13 @@ By the rules for manipulating Gaussians from the lecture notes:
 \subsection*{b)}
 
 \textbf{E-step}\\
-% TODO: make tilde show up
 Compute $Q_i(\zith) = p(\zith|\xith; U)$ for all $i$,\\
-where $Q_i(\zith) \text{ drawn from } \mathcal{N}(U^T \xith (\sigma^2 I + U^T U)^{-1}, I - U^T U (\sigma^2 I + U^T U)^{-1})$
+where $Q_i(\zith) \sim \mathcal{N}(U^T \xith (\sigma^2 I + U^T U)^{-1}, I - U^T U (\sigma^2 I + U^T U)^{-1})$
 
 \textbf{M-step}\\
 %TODO: look up how to do integrals
 $U := \arg \max_U \sum_{i=1}^m \text{ integral } Q_i(\zith) \log \frac{p(\xith,\zith; U)}{Q_i(\zith)} d \zith$\\
-% TODO: make tilde show up
-where $p(\xith,\zith;U) \text{ drawn from } \mathcal{N}(\mu_{xz},\Sigma_{xz})$
+where $p(\xith,\zith;U) \sim \mathcal{N}(\mu_{xz},\Sigma_{xz})$
 
 
 
