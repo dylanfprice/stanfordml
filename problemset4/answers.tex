@@ -28,6 +28,8 @@ Given training set $\{(x^{(1)},y^{(1)},z^{(1)}),...,(x^{(m)},y^{(m)},z^{(m)})\}$
 First we write the likelihood for a single point $(\xith, \yith, \zith)$:\\
 \begin{align*}
     %TODO: Make L look pretty
+    % \usepackage{mathrsfs}
+    % $\mathscr{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$
     L(\xith,\yith,\zith) = g(\phi^T \xith)^{\zith} (1 - g(\phi^T \xith))^{1 - \zith} \frac{1}{\sqrt{2 \pi} \sigma} \exp{\frac{-(\yith - \theta_{\zith}^T \xith)^2}{2 \sigma^2}} \\ 
 \end{align*}
 Then the log-likelihood of the parameters is:
@@ -202,14 +204,125 @@ By the rules for manipulating Gaussians from the lecture notes:
 
 \textbf{E-step}\\
 Compute $Q_i(\zith) = p(\zith|\xith; U)$ for all $i$,\\
-where $Q_i(\zith) \sim \mathcal{N}(U^T \xith (\sigma^2 I + U^T U)^{-1}, I - U^T U (\sigma^2 I + U^T U)^{-1})$
-
+where $Q_i(\zith) \sim \mathcal{N}\big(U^T \xith (\sigma^2 I + U^T U)^{-1}, I - U^T U (\sigma^2 I + U^T U)^{-1}\big)$
+\\\\ 
 \textbf{M-step}\\
-%TODO: look up how to do integrals
-$U := \arg \max_U \sum_{i=1}^m \text{ integral } Q_i(\zith) \log \frac{p(\xith,\zith; U)}{Q_i(\zith)} d \zith$\\
-where $p(\xith,\zith;U) \sim \mathcal{N}(\mu_{xz},\Sigma_{xz})$
+$U := \arg \max_U \sum_{i=1}^m \int_{\zith} Q_i(\zith) \log \frac{p(\xith,\zith; U)}{Q_i(\zith)} d \zith$\\
 
+where $p(\xith,\zith;U) \sim \mathcal{N}(\mu_{xz},\Sigma_{xz})$\\
 
+To compute the above, take the gradient with respect to $U$ and set equal to $0$.
+\begin{align*}
+    &\nabla_U \sum_{i=1}^m \int_{\zith} Q_i(\zith) \log \frac{p(\xith,\zith; U)}{Q_i(\zith)} d \zith \\
+    &= \nabla_U \sum_{i=1}^m E_{\zith \sim Q_i}\big[ \log p(\xith,\zith; U) - \log Q_i(\zith) \big] \\
+    &= \nabla_U \sum_{i=1}^m E_{\zith \sim Q_i}\big[ \log p(\xith|\zith; U) p(\zith) - \log Q_i(\zith) \big] \\
+    &= \nabla_U \sum_{i=1}^m E_{\zith \sim Q_i}\big[ \log p(\xith|\zith; U) + \log p(\zith) - \log Q_i(\zith) \big] \\
+    &= \nabla_U \sum_{i=1}^m E_{\zith \sim Q_i}\big[ \log p(\xith|\zith; U) \big] \\
+\end{align*}
+Now substitute in $p(\xith|\zith; U)$.
+\begin{align*}
+    &= \nabla_U \sum_{i=1}^m E_{\zith \sim Q_i}
+        \big[ \log \frac{1}{(2 \pi)^{\frac{n}{2}}|\Sigma_{\xith|\zith}|^{\frac{1}{2}}} 
+              \exp \big(-\frac{1}{2}(\xith - \mu_{\xith|\zith})^T \Sigma_{\xith|\zith}^{-1} (\xith - \mu_{\xith|\zith}) \big) \big] \\
+    &= \nabla_U \sum_{i=1}^m E_{\zith \sim Q_i}
+        \big[ \log \frac{1}{(2 \pi)^{\frac{n}{2}}|\sigma^2 I|^{\frac{1}{2}}} 
+              \exp \big(-\frac{1}{2}(\xith - U\zith)^T (\sigma^2 I)^{-1} (\xith - U\zith) \big) \big] \\
+    &= \nabla_U \sum_{i=1}^m E_{\zith \sim Q_i}
+        \big[ \log \frac{1}{(2 \pi)^{\frac{n}{2}}|\sigma^2 I|^{\frac{1}{2}}} 
+              -\frac{1}{2}(\xith - U\zith)^T (\sigma^2 I)^{-1} (\xith - U\zith) \big] \\
+    &= \nabla_U \sum_{i=1}^m E_{\zith \sim Q_i}
+        \big[ -\frac{1}{2}(\xith - U\zith)^T (\sigma^2 I)^{-1} (\xith - U\zith) \big] \\
+    &= \nabla_U \sum_{i=1}^m E_{\zith \sim Q_i}
+        \big[ -\frac{1}{2}({\xith}^T - {\zith}^T U^T) (\frac{1}{\sigma^2}I) (\xith - U\zith) \big] \\
+    &= \nabla_U \sum_{i=1}^m E_{\zith \sim Q_i}
+        \big[ -\frac{1}{2}({\xith}^T - {\zith}^T U^T) (\frac{1}{\sigma^2} \xith - \frac{1}{\sigma^2} U\zith) \big] \\
+    &= \nabla_U \sum_{i=1}^m E_{\zith \sim Q_i}
+        \big[ -\frac{1}{2}(\frac{1}{\sigma^2} {\xith}^T \xith - \frac{1}{\sigma^2} {\xith}^T U \zith - \frac{1}{\sigma^2} {\zith}^T U^T \xith + \frac{1}{\sigma^2} {\zith}^T U^T U \zith) \big] \\
+    &= \nabla_U \sum_{i=1}^m E_{\zith \sim Q_i}
+        \big[ -\frac{1}{2 \sigma^2}({\xith}^T \xith - {\xith}^T U \zith - {\zith}^T U^T \xith + {\zith}^T U^T U \zith) \big] \\
+    &= \nabla_U \sum_{i=1}^m E_{\zith \sim Q_i}
+        \big[ -\frac{1}{2 \sigma^2}({\xith}^T \xith - 2 {\zith}^T U^T \xith + {\zith}^T U^T U \zith) \big] \\
+    &= \sum_{i=1}^m E_{\zith \sim Q_i}
+        \big[ -\frac{1}{2 \sigma^2} \nabla_U ({\xith}^T \xith - 2 {\zith}^T U^T \xith + {\zith}^T U^T U \zith) \big] \\
+    &= \sum_{i=1}^m E_{\zith \sim Q_i}
+        \big[ -\frac{1}{2 \sigma^2} (-2 \xith {\zith}^T + 2 U \zith {\zith}^T) \big] \\
+    &= \frac{1}{\sigma^2} \sum_{i=1}^m E_{\zith \sim Q_i}
+        \big[\xith {\zith}^T - U \zith {\zith}^T \big] \\
+\end{align*}
+Set equal to $0$.
+\begin{align*}
+    0 &= \frac{1}{\sigma^2} \sum_{i=1}^m E_{\zith \sim Q_i} \big[\xith {\zith}^T \big] - E_{\zith \sim Q_i} \big[ U \zith {\zith}^T \big] \\
+    \sum_{i=1}^m \xith E_{\zith \sim Q_i}\big[{\zith}^T\big] &= U \sum_{i=1}^m E_{\zith \sim Q_i} \big[ \zith {\zith}^T \big] \\
+    U &= \big(\sum_{i=1}^m \xith E_{\zith \sim Q_i} \big[ {\zith}^T \big] \big) \big(\sum_{i=1}^m E_{\zith \sim Q_i} \big[\zith {\zith}^T \big] \big)^{-1} \\
+\end{align*}
+
+Since $Q_i(\zith) = p(\zith|\xith; U)$, \\
+$E_{\zith \sim Q_i} \big[ {\zith}^T \big] = \mu_{\zith|\xith}^T$ \\
+and \\
+%TODO: look up why the following is true
+$E_{\zith \sim Q_i} \big[\zith {\zith}^T \big] = \Sigma_{\zith|\xith} + \mu_{\zith|\xith} \mu_{\zith|\xith}^T$ \\
+
+So our update computation for $U$ is:\\
+$U = (\sum_{i=1}^m \xith \mu_{\zith|\xith})(\sum_{i=1}^m \Sigma_{\zith|\xith} + \mu_{\zith|\xith} \mu_{\zith|\xith}^T)^{-1}$ \\
+
+\subsection*{c)}
+First we show that the E-step can be expressed as $w = \frac{XU}{U^T U}$.
+
+Recall that 
+\begin{align*}
+    Q(\zith) &\sim \mathcal{N}\big(\mu_{\zith|\xith}, \Sigma_{\zith|\xith} \big) \\
+             &\sim \mathcal{N}\big(U^T \xith (\sigma^2 I + U^T U)^{-1}, I - U^T U (\sigma^2 I + U^T U) \big) \\
+\end{align*}
+% TODO: look up proper ->
+As $\sigma^2 -> 0$,
+\begin{align*}
+    \mu_{\zith|\xith}    &= U^T \xith (U^T U)^{-1} \\
+    \Sigma_{\zith|\xith} &= I - U^T U (U^T U)^{-1} \\
+                         &= I - U^T U U^{-1} U^{-T} \\
+                         &= I - I \\
+                         &= 0 \\
+\end{align*}
+Therefore $Q_i(\zith) = \mu_{\zith|\xith} = \frac{U^T \xith}{U^T U}$. \\
+Define $w \in \mathbb{R}^m$ such that $w_i = Q_i(\zith) = \mu_{\zith|\xith}$. Then $w = \frac{XU}{U^T U}$. \\
+\\\\
+Now we show that the M-step can be expressed as $U = \frac{X^T w}{w^T w}$. \\
+Recall that 
+\begin{align*}
+    U &= (\sum_{i=1}^m \xith \mu_{\zith|\xith})(\sum_{i=1}^m \Sigma_{\zith|\xith} + \mu_{\zith|\xith} \mu_{\zith|\xith}^T)^{-1} \\
+      &= (\sum_{i=1}^m \xith w)(\sum_{i=1}^m \Sigma_{\zith|\xith} + w_i w_i^T)^{-1} \\
+\end{align*}
+% TODO: look up proper ->
+As $\sigma^2 -> 0$,
+\begin{align*}
+    U &= (\sum_{i=1}^m \xith w)(\sum_{i=1}^m w_i w_i^T)^{-1} \\
+      &= (X^T w)(w^T w)^{-1} \\
+      &= \frac{X^T w}{w^T w} \\
+\end{align*}
+
+If the algorithm has converged, then $U$ will converge to some $U^*$ and $w$ will converge to some $w^*$, and we will have that \\
+$w^* = \frac{XU^*}{U^{*T}U^*}$ and $U^* = \frac{X^T w^*}{w^{*T} w^*}$\\
+
+Plugging $w^*$ into the equation for $U^*$, we have
+\begin{align*}
+    U^* &= \frac{X^T \frac{XU^*}{U^{*T} U^*}}{(\frac{XU^*}{U^{*T}U^*})^T (\frac{XU^*}{U^{*T}U^*})} \\
+        &= X^T X U^* (U^{*T} U^*)^{-1} \big[ (X U^* (U^{*T} U^*)^{-1})^T (X U^* (U^{*T} U^*)^{-1}) \big]^{-1} \\
+        &\text{let $a = U^{*T} U^*$ (where $a \in \mathbb{R}$ since we are assuming $U \in \mathbb{R}^n$ in the problem statement)} \\
+        &= X^T X U^* (\frac{1}{a}) \big[ (X U^* (\frac{1}{a}))^T (X U^* (\frac{1}{a})) \big]^{-1} \\
+        &= \frac{1}{a} X^T X U^* \big[ \frac{1}{a^2} U^{*T} X^T X U^* \big]^{-1} \\
+        &= \frac{1}{a} X^T X U^* a^2 \big[ U^{*T} X^T X U^* \big]^{-1} \\
+        &= a X^T X U^* \big[ U^{*T} X^T X U^* \big]^{-1} \\
+        &\text{But $U^{*T} X^T X U^* \in \mathbb{R}$, so} \\
+        &= X^T X U^* \frac{a}{U^{*T} X^T X U^*} \\
+        &= X^T X U^* \frac{U^{*T} U^*}{U^{*T} X^T X U^*} \\
+        &= \frac{1}{m} X^T X U^* \frac{m U^{*T} U^*}{U^{*T} X^T X U^*} \\
+\end{align*}
+So we have
+\begin{align*}
+    U^* &= \frac{1}{m} X^T X U^* \frac{m U^{*T} U^*}{U^{*T} X^T X U^*} \\
+    (\frac{U^{*T} X^T X U^*}{m U^{*T} U^*}) U^* &= (\frac{1}{m} X^T X) U^* \\
+    \text{Let } \lambda &= \frac{U^{*T} X^T X U^*}{m U^{*T} U^*}\\
+    \lambda U^* &= \Sigma U^* \\
+\end{align*}
 
 
 \end{document}
