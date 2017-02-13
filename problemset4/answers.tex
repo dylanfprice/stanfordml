@@ -19,6 +19,8 @@
 \newcommand{\xith}[0]{x^{(i)}}
 \newcommand{\yith}[0]{y^{(i)}}
 \newcommand{\zith}[0]{z^{(i)}}
+%TODO: proper s'
+\newcommand{\sums}[0]{\sum_{s' \in \mathbb{S}}}
 
 \section*{1}
 
@@ -323,6 +325,38 @@ So we have
     \text{Let } \lambda &= \frac{U^{*T} X^T X U^*}{m U^{*T} U^*}\\
     \lambda U^* &= \Sigma U^* \\
 \end{align*}
+
+\section*{3}
+See the q3/ folder.
+
+\section*{4}
+\subsection*{a)}
+%TODO: proper s'
+Let $s \in \mathbb{S}$ be any state in $\mathbb{S}$.\\
+Let $s' \sim P_{s \pi(s)}$ be a random variable drawn from the $P_{s \pi(s)}$ distribution.\\
+Since $V_1(s) \le V_2(s) \quad \forall s \in \mathbb{S}$,\quad$V_1(s') \le V_2(s')$, and we have
+\begin{align*}
+    V_1(s') &\le V_2(s') \\
+    E_{s' \sim P_{s \pi(s)}}[V_1(s')] &\le E_{s' \sim P_{s \pi(s)}}[V_2(s')] \\
+    \gamma E_{s' \sim P_{s \pi(s)}}[V_1(s')] &\le \gamma E_{s' \sim P_{s \pi(s)}}[V_2(s')] \\
+    R(s) + \gamma E_{s' \sim P_{s \pi(s)}}[V_1(s')] &\le R(s) + \gamma E_{s' \sim P_{s \pi(s)}}[V_2(s')] \\
+    B(V_1)(s) &\le B(V_2)(s) \quad \forall s \in \mathbb{S} \\
+\end{align*}
+
+\subsection*{b)}
+\begin{align*}
+    % TODO: infinity symbol
+    ||B^{\pi}(v) - V^{\pi}||_{\inf} &= ||R(s) + \gamma \sums P_{s \pi(s)}(s') V(s') - (R(s) + \gamma \sums P_{s \pi(s)}(s') V^{\pi}(s')) ||_{\inf} \\
+                                    &= ||\gamma \sums P_{s \pi(s)}(s') V(s') - P_{s \pi(s)}(s') V^{\pi}(s') ||_{\inf} \\
+                                    &= ||\gamma \sums P_{s \pi(s)}(s') (V(s') - V^{\pi}(s')) ||_{\inf} \\
+                                    &= \max_{s' \in \mathbb{S}} \big[ \gamma \sums P_{s \pi(s)}(s') (V(s') - V^{\pi}(s')) \big] \\
+                                    &= \gamma \max_{s' \in \mathbb{S}} \big[ \sums P_{s \pi(s)}(s') (V(s') - V^{\pi}(s')) \big] \\
+                                    &= \gamma \max_{s' \in \mathbb{S}} \big[ E_{s' \sim P_{s \pi(s)}}[V(s') - V^{\pi}(s')] \big] \\
+                                    &\le \gamma \max_{s' \in \mathbb{S}} \big[ \max_{s' \in \mathbb{S}}[V(s') - V^{\pi}(s')] \big] \\
+                                    &= \gamma \max_{s' \in \mathbb{S}} \big[ V(s') - V^{\pi}(s') \big] \\
+                                    &= \gamma || V - V^{\pi} ||_{\inf} \\
+\end{align*}
+Therefore $||B^{\pi}(v) - V^{\pi}||_{\inf} \le \gamma || V - V^{\pi} ||_{\inf}$. \\
 
 
 \end{document}
