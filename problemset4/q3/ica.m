@@ -3,7 +3,10 @@ function W = ica(X)
     [n, m] = size(X)
     W = zeros(n, n)
     %do
-    %    old_W = W(:, :)
+        old_W = W(:, :)
+        order = randperm(m)
+        X_shuffled = X(:, order)
+        
     %until (converged(W, old_W))
 endfunction
 
