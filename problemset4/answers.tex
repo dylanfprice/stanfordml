@@ -150,7 +150,6 @@ We know $z \sim \mathcal{N}(0,I)$, therefore $\mu_z = 0$. \\
                 &= E[(Uz + \epsilon)(Uz + \epsilon)^T] \\
                 &= E[(Uz + \epsilon)(z^T U^T + \epsilon^T)] \\
                 &= E[Uzz^TU^T + \epsilon z^TU^T + Uz\epsilon^T + \epsilon\epsilon^T] \\
-                % TODO: check if it's legit to say E[\epsilon z^T] = E[\epsilon] E[z]
                 &= UE[zz^T]U^T + E[\epsilon] E[z^T] U^T + U E[z] E[\epsilon^T] + E[\epsilon\epsilon^T] \\
                 &= UIU^T + \sigma^2 I \\
                 &= UU^T + \sigma^2 I \\
@@ -161,7 +160,6 @@ We know $z \sim \mathcal{N}(0,I)$, therefore $\mu_z = 0$. \\
                 &= E[Uzz^T + \epsilon z^T] \\
                 &= U E[zz^T] + E[\epsilon z^T] \\
                 &= UI + E[\epsilon]E[z^T] \\
-                % TODO: check if it's legit to say E[\epsilon z^T] = E[\epsilon] E[z]
                 &= U \\
                 \\
     \Sigma_{zx} &= \Sigma_{xz}^T = U^T
@@ -258,7 +256,6 @@ Set equal to $0$.
 Since $Q_i(\zith) = p(\zith|\xith; U)$, \\
 $E_{\zith \sim Q_i} \big[ {\zith}^T \big] = \mu_{\zith|\xith}^T$ \\
 and \\
-%TODO: look up why the following is true
 $E_{\zith \sim Q_i} \big[\zith {\zith}^T \big] = \Sigma_{\zith|\xith} + \mu_{\zith|\xith} \mu_{\zith|\xith}^T$ \\
 
 So our update computation for $U$ is:\\
