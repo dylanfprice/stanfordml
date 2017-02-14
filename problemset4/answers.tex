@@ -345,18 +345,17 @@ Since $V_1(s) \le V_2(s) \quad \forall s \in \mathbb{S}$,\quad$V_1(s') \le V_2(s
 
 \subsection*{b)}
 \begin{align*}
-    % TODO: infinity symbol
-    ||B^{\pi}(v) - V^{\pi}||_{\inf} &= ||R(s) + \gamma \sums P_{s \pi(s)}(s') V(s') - (R(s) + \gamma \sums P_{s \pi(s)}(s') V^{\pi}(s')) ||_{\inf} \\
-                                    &= ||\gamma \sums P_{s \pi(s)}(s') V(s') - P_{s \pi(s)}(s') V^{\pi}(s') ||_{\inf} \\
-                                    &= ||\gamma \sums P_{s \pi(s)}(s') (V(s') - V^{\pi}(s')) ||_{\inf} \\
+    ||B^{\pi}(v) - V^{\pi}||_{\infty} &= ||R(s) + \gamma \sums P_{s \pi(s)}(s') V(s') - (R(s) + \gamma \sums P_{s \pi(s)}(s') V^{\pi}(s')) ||_{\infty} \\
+                                    &= ||\gamma \sums P_{s \pi(s)}(s') V(s') - P_{s \pi(s)}(s') V^{\pi}(s') ||_{\infty} \\
+                                    &= ||\gamma \sums P_{s \pi(s)}(s') (V(s') - V^{\pi}(s')) ||_{\infty} \\
                                     &= \max_{s' \in \mathbb{S}} \big[ \gamma \sums P_{s \pi(s)}(s') (V(s') - V^{\pi}(s')) \big] \\
                                     &= \gamma \max_{s' \in \mathbb{S}} \big[ \sums P_{s \pi(s)}(s') (V(s') - V^{\pi}(s')) \big] \\
                                     &= \gamma \max_{s' \in \mathbb{S}} \big[ E_{s' \sim P_{s \pi(s)}}[V(s') - V^{\pi}(s')] \big] \\
                                     &\le \gamma \max_{s' \in \mathbb{S}} \big[ \max_{s' \in \mathbb{S}}[V(s') - V^{\pi}(s')] \big] \\
                                     &= \gamma \max_{s' \in \mathbb{S}} \big[ V(s') - V^{\pi}(s') \big] \\
-                                    &= \gamma || V - V^{\pi} ||_{\inf} \\
+                                    &= \gamma || V - V^{\pi} ||_{\infty} \\
 \end{align*}
-Therefore $||B^{\pi}(v) - V^{\pi}||_{\inf} \le \gamma || V - V^{\pi} ||_{\inf}$. \\
+Therefore $||B^{\pi}(v) - V^{\pi}||_{\infty} \le \gamma || V - V^{\pi} ||_{\infty}$. \\
 
 
 \end{document}
