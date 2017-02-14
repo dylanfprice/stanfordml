@@ -1,6 +1,7 @@
 \documentclass[11pt]{article}
 
 \usepackage{mathtools}
+\usepackage{mathrsfs}
 \usepackage{amssymb}
 \usepackage[latin1]{inputenc}
 \usepackage[margin=0.5in]{geometry}
@@ -19,7 +20,6 @@
 \newcommand{\xith}[0]{x^{(i)}}
 \newcommand{\yith}[0]{y^{(i)}}
 \newcommand{\zith}[0]{z^{(i)}}
-%TODO: proper s'
 \newcommand{\sums}[0]{\sum_{s' \in \mathbb{S}}}
 
 \section*{1}
@@ -29,10 +29,7 @@ Given training set $\{(x^{(1)},y^{(1)},z^{(1)}),...,(x^{(m)},y^{(m)},z^{(m)})\}$
 
 First we write the likelihood for a single point $(\xith, \yith, \zith)$:\\
 \begin{align*}
-    %TODO: Make L look pretty
-    % \usepackage{mathrsfs}
-    % $\mathscr{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$
-    L(\xith,\yith,\zith) = g(\phi^T \xith)^{\zith} (1 - g(\phi^T \xith))^{1 - \zith} \frac{1}{\sqrt{2 \pi} \sigma} \exp{\frac{-(\yith - \theta_{\zith}^T \xith)^2}{2 \sigma^2}} \\ 
+    \mathscr{L}(\xith,\yith,\zith) = g(\phi^T \xith)^{\zith} (1 - g(\phi^T \xith))^{1 - \zith} \frac{1}{\sqrt{2 \pi} \sigma} \exp{\frac{-(\yith - \theta_{\zith}^T \xith)^2}{2 \sigma^2}} \\ 
 \end{align*}
 Then the log-likelihood of the parameters is:
 \begin{align*}
@@ -275,8 +272,7 @@ Recall that
     Q(\zith) &\sim \mathcal{N}\big(\mu_{\zith|\xith}, \Sigma_{\zith|\xith} \big) \\
              &\sim \mathcal{N}\big(U^T \xith (\sigma^2 I + U^T U)^{-1}, I - U^T U (\sigma^2 I + U^T U) \big) \\
 \end{align*}
-% TODO: look up proper ->
-As $\sigma^2 -> 0$,
+As $\sigma^2 \to 0$,
 \begin{align*}
     \mu_{\zith|\xith}    &= U^T \xith (U^T U)^{-1} \\
     \Sigma_{\zith|\xith} &= I - U^T U (U^T U)^{-1} \\
@@ -293,8 +289,7 @@ Recall that
     U &= (\sum_{i=1}^m \xith \mu_{\zith|\xith})(\sum_{i=1}^m \Sigma_{\zith|\xith} + \mu_{\zith|\xith} \mu_{\zith|\xith}^T)^{-1} \\
       &= (\sum_{i=1}^m \xith w)(\sum_{i=1}^m \Sigma_{\zith|\xith} + w_i w_i^T)^{-1} \\
 \end{align*}
-% TODO: look up proper ->
-As $\sigma^2 -> 0$,
+As $\sigma^2 \to 0$,
 \begin{align*}
     U &= (\sum_{i=1}^m \xith w)(\sum_{i=1}^m w_i w_i^T)^{-1} \\
       &= (X^T w)(w^T w)^{-1} \\
@@ -331,7 +326,6 @@ See the q3/ folder.
 
 \section*{4}
 \subsection*{a)}
-%TODO: proper s'
 Let $s \in \mathbb{S}$ be any state in $\mathbb{S}$.\\
 Let $s' \sim P_{s \pi(s)}$ be a random variable drawn from the $P_{s \pi(s)}$ distribution.\\
 Since $V_1(s) \le V_2(s) \quad \forall s \in \mathbb{S}$,\quad$V_1(s') \le V_2(s')$, and we have
