@@ -1,3 +1,7 @@
 function U = pca(X)
 
-%%% YOUR CODE HERE
+X = X'
+
+[u, s, v] = svd(X)
+
+U = v
