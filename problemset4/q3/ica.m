@@ -38,9 +38,7 @@ endfunction
 
 function converged = is_converged(W, old_W)
 
-    delta = abs(W - old_W)
-    %converged = delta < .00001
-    converged = delta < .001
+    converged = all(all(abs(W - old_W) < .0001))
 
 endfunction
 
