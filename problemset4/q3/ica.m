@@ -31,7 +31,7 @@ endfunction
 function new_W = update_W(W, X)
 
     alpha = 0.0005
-    new_W = W + alpha * ((1 - 2 * sigmoid(W * X')) * X + inv(W'))
+    new_W = W + (alpha * ((1 - 2 * sigmoid(W * X')) * X + inv(W')))
 
 endfunction
 
