@@ -11,8 +11,7 @@ function W = ica(X)
         for i = 1:num_chunks
             stop = i * chunk_size
             start = stop - (chunk_size - 1)
-            X_chunk = X_shuffled(start:min(stop, m), :)
-            W = update_W(W, X_chunk)
+            W = update_W(W, X_shuffled(start:min(stop, m), :))
             if (is_converged(W, old_W))
                 break
             endif
