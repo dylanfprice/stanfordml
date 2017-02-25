@@ -1,8 +1,5 @@
 function W = ica(X)
 
-    count = 1
-    begin = time
-
     X = X'
     [m, n] = size(X)
     W = eye(n, n)
@@ -20,10 +17,7 @@ function W = ica(X)
                 break
             endif
         endfor
-        count += 1
     until (is_converged(W, old_W))
-
-    printf("took: %d  count: %d\n", time - begin, count)
 
 endfunction
 
