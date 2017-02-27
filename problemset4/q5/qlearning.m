@@ -13,7 +13,7 @@ state_top = num_states
 rewards = -1 * ones(num_states, 1)
 rewards(state_top) = 0
 
-for i=1:episodes
+for i = 1:episodes
   [x, state, absorb] =  mountain_car([0.0 -pi/6], 0)
 
   while (state != state_top)
@@ -27,7 +27,7 @@ for i=1:episodes
     absorb = new_absorb
   endwhile
 
-end
+endfor
 
 endfunction
 
