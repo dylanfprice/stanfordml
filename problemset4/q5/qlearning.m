@@ -4,9 +4,8 @@ function [q, steps_per_episode] = qlearning(episodes)
 alpha = 0.05
 gamma = 0.99
 num_states = 100
-num_actions = 2
 actions = [-1, 1]
-q = zeros(num_states, num_actions)
+q = zeros(num_states, length(actions))
 
 steps_per_episode = zeros(episodes, 1)
 state_top = num_states
