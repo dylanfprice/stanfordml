@@ -10,21 +10,22 @@
   (reaver/extract 
     page
     []
-    ".srch_results .srch_results_lft + .srch_results_rht > a" (attr :href)))
+    ".srch_results .srch_results_lft + .srch_results_rht > a" (reaver/attr :href)))
 
 (defn- extract-search-result-pager-links
+  ;TODO: the page doesn't show all links in the pagination, so we should compute it instead
   "Given a Jsoup document containing a search results page from summitpost,
   return a set of links representing other pages of search results from the 
   results pagination."
   [page]
-  (let [pager-links (reaver/extract page [] ".pagertext" (attr :href))]
+  (let [pager-links (reaver/extract page [] ".pagertext" (reaver/attr :href))]
     (->> pager-links
          (remove nil?)
          (map (partial re-find #".*page=\d+"))
          (remove nil?)
          (set))))
 
-(defn- all-search-result-pager-links 
+(defn- get-search-result-pager-links 
   "Given a link to a paginated search results page,
   GET the page and return a sequence of links to all search results pages."
   [link]
@@ -33,23 +34,31 @@
         other-links (extract-search-result-pager-links page)]
     (conj other-links link)))
 
-(defn- all-search-result-pages 
+(defn- get-search-result-pages 
   "Given a link to a paginated search results page,
   GET every search results page in the pagination and return them as a lazy 
   sequence."
   [link]
   (->> link
-       (all-search-result-pager-links)
+       (get-search-result-pager-links)
        (map (partial str base-url))
        (map slurp)))
 
-(defn- all-search-result-links
-  "Given a link to a paginated search results page, return a sequence of
-  links to all of the search result items. This function performs multiple
-  GET requests."
+(defn get-search-result-urls
+  "Given a link to a paginated search results page (i.e. relative to the
+  summitpost domain), return a sequence of fully qualified urls to all of the
+  search result items. This function performs multiple GET requests."
   [link]
   (->> link
-       (all-search-result-pages) 
+       (get-search-result-pages) 
        (map reaver/parse)
        (map extract-search-result-links)
-       (apply concat)))
+       (apply concat)
+       (map (partial str base-url))))
+
+(defn extract-item-name
+  "Given a url to an item (such as a url returned by get-search-result-urls),
+  return the name of the item." 
+  [url]
+  (nth (re-find (re-pattern (str base-url "/([^/]+)/.*")) url)
+       1))
