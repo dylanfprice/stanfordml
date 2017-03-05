@@ -1,6 +1,6 @@
 (ns scrape-data.core
   (:gen-class)
-  (:require [scrape-data.summitpost :as summitpost]
+  (:require [scrape-data.summitpost.search-result :as search-result]
             [reaver]
             [clojure.java.io :as io]))
 
@@ -10,11 +10,12 @@
 
 
 (defn- save-summitpost-item [item-url]
-  (let [file-name (summitpost/extract-item-name item-url)
+  (let [item-name (search-result/extract-item-name item-url)
+        file-name (str item-name ".html")
         file-contents (slurp item-url)]
     (spit (str "data/" file-name) file-contents)))
 
 (defn -main [& args]
   (.mkdir (io/file "data"))
   (map save-summitpost-item
-       (summitpost/get-search-result-urls summitpost-wa-mountains)))
+       (search-result/get-urls summitpost-wa-mountains)))
