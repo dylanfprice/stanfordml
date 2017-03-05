@@ -3,7 +3,7 @@
 (set-env!
   :resource-paths #{"src"}
   :dependencies '[[org.clojure/clojure "1.8.0"]
-                  [incanter "1.9.1"]])
+                  [incanter "1.9.0"]])
 
 (task-options!
     aot {:all true}
