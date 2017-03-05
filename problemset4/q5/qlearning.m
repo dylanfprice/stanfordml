@@ -19,7 +19,7 @@ for i = 1:episodes
     action = choose_action(q, state)
     [new_x, new_state, new_absorb] = mountain_car(x, actions(action))
     steps_per_episode(i)++
-    q(state, action) = (1 - alpha) * q(state, action) + gamma * (rewards(new_state) + gamma * max(q(new_state, :)))
+    q(state, action) = (1 - alpha) * q(state, action) + alpha * (rewards(new_state) + gamma * max(q(new_state, :)))
   
     x = new_x
     state = new_state 
