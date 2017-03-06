@@ -11,27 +11,29 @@ function W = ica(X)
         for i = 1:num_chunks
             stop = i * chunk_size
             start = stop - (chunk_size - 1)
-            W = update_W(W, X_shuffled(start:min(stop, m), :))
-            if (is_converged(W, old_W))
+            delta = compute_delta(W, X_shuffled(start:min(stop, m), :))
+            if (is_converged(delta))
                 break
             endif
+            W += delta
         endfor
-    until (is_converged(W, old_W))
+    until (is_converged(delta))
 
 endfunction
 
 
-function new_W = update_W(W, X)
+function delta = compute_delta(W, X)
 
     alpha = 0.0005
-    new_W = W + (alpha * ((1 - 2 * sigmoid(W * X')) * X + inv(W')))
+    delta = alpha * ((1 - 2 * sigmoid(W * X')) * X + inv(W'))
 
 endfunction
 
 
-function converged = is_converged(W, old_W)
+function converged = is_converged(delta)
 
-    converged = all(all(abs(W - old_W) < .0001))
+    % try to get to .00001
+    converged = all(all(abs(delta) < .001))
 
 endfunction
 
