@@ -3,14 +3,14 @@
 (set-env!
   :resource-paths #{"src"}
   :dependencies '[[org.clojure/clojure "1.8.0"]
-                  [clj-http "2.3.0"]
+                  [org.clojure/tools.cli "0.3.5"]
                   [reaver "0.1.2"]])
 
 (task-options!
     aot {:all true}
-    pom {:project 'scrape-data
+    pom {:project 'scrape-summitpost-data
          :version "0.0.0"}
-    jar {:main 'scrape-data.core})
+    jar {:main 'scrape-summitpost-data.core})
 
 (deftask build []
   (comp (aot) (pom) (uber) (jar) (target)))

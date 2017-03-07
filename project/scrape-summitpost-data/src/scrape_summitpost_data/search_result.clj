@@ -1,5 +1,6 @@
-(ns scrape-data.summitpost.search-result
-  (:require [reaver]))
+(ns scrape-summitpost-data.search-result
+  (:require [clojure.java.io :as io]
+            [reaver]))
 
 (def base-url "http://www.summitpost.org")
 
@@ -63,7 +64,7 @@
        (map (partial str base-url))
        (map slurp)))
 
-(defn get-urls
+(defn- get-urls
   "Given a link to a paginated search results page from summitpost (i.e.
   relative to the summitpost domain), return a sequence of fully qualified
   urls to all of the search result items. This function performs multiple GET
@@ -76,9 +77,26 @@
        (apply concat)
        (map (partial str base-url))))
 
-(defn extract-item-name
+(defn- extract-item-name
   "Given a url to an item (such as a url returned by get-urls),
   return the name of the item." 
   [url]
   (nth (re-find (re-pattern (str base-url "/([^/]+)/.*")) url)
        1))
+
+(defn- save-summitpost-item!
+  "Given a directory to store files in and a url to a summitpost item,
+  GET the url and save to a file."
+  [data-dir item-url]
+  (let [item-name (extract-item-name item-url)
+        file-name (str item-name ".html")
+        file-contents (slurp item-url)]
+    (spit (str data-dir "/" file-name) file-contents)))
+
+(defn save-summitpost-search-results! 
+  "GET all search result items found at `search-link` (iterating through
+  pagination) and save them to files in `data-dir`. Creates `data-dir` if
+  necessary."
+  [data-dir search-link]
+  (.mkdir (io/file data-dir))
+  (last (map (partial save-summitpost-item! data-dir) (get-urls search-link))))
