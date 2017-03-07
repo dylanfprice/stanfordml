@@ -6,6 +6,9 @@
 \usepackage[latin1]{inputenc}
 \usepackage[margin=0.5in]{geometry}
 \usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
 
 \everymath{\displaystyle}
 \setlength\parindent{0pt}
@@ -318,15 +321,27 @@ So we have
     \lambda U^* &= \Sigma U^* \\
 \end{align*}
 
-\pagebreak
 \section*{3}
-ICA basis functions:
 
-\includegraphics[width=\textwidth]{q3/ica_filters.png}
+See q3/ folder for code.
 
-PCA basis functions:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{q3/ica_filters.png}
+        \caption{ICA unmixing matrix}
+        \label{fig:ica}
+    \end{subfigure}
+    ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
+      %(or a blank line to force the subfigure onto a new line)
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{q3/pca_filters.png}
+        \caption{PCA principal components matrix}
+        \label{fig:pca}
+    \end{subfigure}
+\end{figure}
 
-\includegraphics[width=\textwidth]{q3/pca_filters.png}
+The ICA unmixing matrix separates the input data into its original sources, while the PCA principal components matrix represents the principal dimensions the data lies in.
 
 \section*{4}
 \subsection*{a)}
@@ -355,6 +370,13 @@ Since $V_1(s) \le V_2(s) \quad \forall s \in \mathbb{S}$,\quad$V_1(s') \le V_2(s
 \end{align*}
 Therefore $||B^{\pi}(v) - V^{\pi}||_{\infty} \le \gamma || V - V^{\pi} ||_{\infty}$. \\
 
+\section*{5}
+
+See q5/ folder for code.
+
+\includegraphics[width=0.5\textwidth]{q5/learning_curves.png}
+
+x-axis is episode number, y-axis is number of steps before the car reached the top of the hill. The values plotted represent an average over 20 runs (i.e. there were 20 runs where each run contains 100 episodes).
 
 \end{document}
 
