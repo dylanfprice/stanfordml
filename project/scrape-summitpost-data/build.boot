@@ -12,5 +12,7 @@
          :version "0.0.0"}
     jar {:main 'scrape-summitpost-data.core})
 
-(deftask build []
+(deftask build 
+  "Build scrape-summitpost-data uberjar."
+  []
   (comp (aot) (pom) (uber) (jar) (target)))
