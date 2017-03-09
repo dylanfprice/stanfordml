@@ -99,4 +99,4 @@
   necessary."
   [data-dir search-link]
   (.mkdir (io/file data-dir))
-  (last (map (partial save-summitpost-item! data-dir) (get-urls search-link))))
+  (dorun (map (partial save-summitpost-item! data-dir) (get-urls search-link))))
