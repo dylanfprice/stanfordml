@@ -1,7 +1,9 @@
 (ns scrape-summitpost-data.core
-  (:require [clojure.string :as string]
+  (:require [clojure.data.csv :as csv]
+            [clojure.java.io :as io]
+            [clojure.string :as string]
             [clojure.tools.cli :refer [parse-opts]]
-            [scrape-summitpost-data.search-result :refer [save-summitpost-search-results!]])
+            [scrape-summitpost-data.get-item-texts :refer [get-item-texts]])
   (:gen-class))
 
 (def cli-options
@@ -30,6 +32,15 @@
 (defn exit [status msg]
   (println msg)
   (System/exit status))
+
+(defn save-summitpost-search-results!
+  "Save a csv of item names and page texts for all search result items found
+  at `search-link`."
+  [file-name search-link]
+  (with-open [out-file (io/writer file-name)]
+    (csv/write-csv out-file
+                   (cons ["item-name", "item-text"]
+                         (get-item-texts search-link)))))
 
 (defn -main [& args]
   (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)]
