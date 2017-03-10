@@ -85,8 +85,8 @@
        (map (partial str base-url))))
 
 (defn- extract-item-name
-  "Given a url to an item (such as a url returned by get-urls),
-  return the name of the item." 
+  "Given a url to an item on summitpost (such as a mountain), return the name
+  of the item."
   [url]
   (nth (re-find (re-pattern (str base-url "/([^/]+)/.*")) url)
        1))
