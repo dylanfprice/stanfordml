@@ -1,28 +1,12 @@
-(ns scrape-summitpost-data.search-result-test
+(ns scrape-summitpost-data.extract-test
   (require [clojure.test :refer [deftest is]]
-           [scrape-summitpost-data.search-result :as test-ns]))
+           [scrape-summitpost-data.extract :as test-ns]))
 
 (deftest ensure-sequence-test
   (is (= [1 2 3] (#'test-ns/ensure-sequence [1 2 3]))
       "returns sequence when given a sequence")
   (is (= [1] (#'test-ns/ensure-sequence 1))
       "returns sequence when given an int"))
-
-(deftest extract-result-links-test
-  (let [jsoup-snippet (reaver/parse 
-                        "<table class='srch_results'>
-                           <tbody>
-                           <tr>
-                             <td class='srch_results_lft'></td>
-                             <td class='srch_results_rht'>
-                               <a href='/test-item-name/12345'></a>
-                             </td>
-                           </tr>
-                           </tbody>
-                         </table>")]
-    (is (= ["/test-item-name/12345"]
-           (#'test-ns/extract-result-links jsoup-snippet))
-        "extracts link to item from search results table")))
 
 (deftest extract-pager-links-test
   (let [jsoup-snippet (reaver/parse
@@ -57,7 +41,7 @@
 (deftest extract-all-pager-links-test
   (let [jsoup-snippet (reaver/parse "<td></td>")]
     (is (= nil
-           (#'test-ns/extract-all-pager-links jsoup-snippet))
+           (test-ns/extract-all-pager-links jsoup-snippet))
         "returns nil when there are no pager links"))
   (let [jsoup-snippet (reaver/parse
                         "<td>
@@ -67,10 +51,26 @@
                          </td>")]
     (is (= ["/test?page=1", "/test?page=2", "/test?page=3"
             "/test?page=4", "/test?page=5", "/test?page=6"]
-           (#'test-ns/extract-all-pager-links jsoup-snippet))
+           (test-ns/extract-all-pager-links jsoup-snippet))
         "extracts entire range of links")))
+
+(deftest extract-result-links-test
+  (let [jsoup-snippet (reaver/parse 
+                        "<table class='srch_results'>
+                           <tbody>
+                           <tr>
+                             <td class='srch_results_lft'></td>
+                             <td class='srch_results_rht'>
+                               <a href='/test-item-name/12345'></a>
+                             </td>
+                           </tr>
+                           </tbody>
+                         </table>")]
+    (is (= ["/test-item-name/12345"]
+           (test-ns/extract-result-links jsoup-snippet))
+        "extracts link to item from search results table")))
 
 (deftest extract-item-name-test
   (is (= "test-item-name"
-         (#'test-ns/extract-item-name "http://www.summitpost.org/test-item-name/12345"))
+         (test-ns/extract-item-name "http://example.org" "http://example.org/test-item-name/12345"))
       "extracts item name from page"))
