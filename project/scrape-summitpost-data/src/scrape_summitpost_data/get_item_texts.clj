@@ -42,7 +42,8 @@
 (defn get-item-texts
   "Given a link to a search results page from summitpost (i.e. relative to the
   summitpost domain), GET all search result items (iterating through
-  pagination) and return a sequence of [item-name, item-text] pairs."
+  pagination if present) and return a sequence of [item-name, item-text]
+  pairs."
   [search-link]
   (->> (get-urls search-link)
        (map #(vector 
