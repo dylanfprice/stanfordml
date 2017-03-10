@@ -55,6 +55,10 @@
       "fails on a non-integer value of page param"))
 
 (deftest extract-all-pager-links-test
+  (let [jsoup-snippet (reaver/parse "<td></td>")]
+    (is (= nil
+           (#'test-ns/extract-all-pager-links jsoup-snippet))
+        "returns nil when there are no pager links"))
   (let [jsoup-snippet (reaver/parse
                         "<td>
                          <a href='/test?page=1' class='pagertext'></a>

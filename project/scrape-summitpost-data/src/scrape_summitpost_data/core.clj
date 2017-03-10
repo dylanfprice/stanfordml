@@ -1,17 +1,17 @@
 (ns scrape-summitpost-data.core
   (:require [clojure.string :as string]
             [clojure.tools.cli :refer [parse-opts]]
-            [reaver]
             [scrape-summitpost-data.search-result :refer [save-summitpost-search-results!]])
   (:gen-class))
 
 (def cli-options
-  [["-d" "--data-dir DATA-DIR" "Data directory"
-    :default "data"]
+  [["-f" "--file FILE" "File name for csv data"
+    :default "data.csv"]
    ["-h" "--help"]])
 
 (defn usage [options-summary]
-  (->> ["Scrape summitpost pages from a search results page."
+  (->> ["Scrape summitpost pages from a search results page and save their
+        text content to a csv."
         ""
         "Usage: scrape-summitpost-data [options] link"
         ""
@@ -37,4 +37,4 @@
       (:help options) (exit 0 (usage summary))
       (not= (count arguments) 1) (exit 1 (usage summary))
       errors (exit 1 (error-msg errors)))
-    (save-summitpost-search-results! (:data-dir options) (first arguments))))
+    (save-summitpost-search-results! (:file options) (first arguments))))
