@@ -4,6 +4,12 @@
 
 (def base-url "http://www.summitpost.org")
 
+(defn- ensure-sequence
+  "If arg is sequential?, return arg. Otherwise return a one-element list
+  containing arg."
+  [arg]
+  (if (sequential? arg) arg (list arg)))
+
 (defn- extract-result-links 
   "Given a Jsoup document containing a search results page from summitpost, 
   return a sequence of links representing the results on that page."
@@ -18,6 +24,7 @@
   return a sequence of pager links with page=\\d+ query params."
   [page]
   (->> (reaver/extract page [] ".pagertext" (reaver/attr :href))
+       (ensure-sequence)
        (remove nil?)
        (map (partial re-find #".*page=\d+"))
        (remove nil?)))
