@@ -12,15 +12,16 @@
    ["-h" "--help"]])
 
 (defn usage [options-summary]
-  (->> ["Scrape summitpost pages from a search results page and save their
-        text content to a csv."
+  (->> ["Scrape summitpost pages from a search results page and save their"
+        "text content to a csv."
         ""
         "Usage: scrape-summitpost-data [options] link"
         ""
         "Options:"
         options-summary
         ""
-        "link: link (i.e. relative to summitpost domain) to a summitpost search results page"
+        "link: link (relative to summitpost domain) to a summitpost search"
+        "results page"
         "      e.g. /object_list.php?object_type=1&state_province_1=Washington&sort_select_1=object_name"
         ""]
        (string/join \newline)))
