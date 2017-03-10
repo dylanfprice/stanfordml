@@ -3,6 +3,7 @@
 (set-env!
   :source-paths #{"src", "test"}
   :dependencies '[[org.clojure/clojure "1.8.0"]
+                  [org.clojure/data.csv "0.1.3"]
                   [org.clojure/tools.cli "0.3.5"]
                   [reaver "0.1.2"]
                   [adzerk/boot-test "1.2.0" :scope "test"]])
