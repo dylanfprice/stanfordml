@@ -14,10 +14,12 @@
   "Given a Jsoup document containing a search results page from summitpost, 
   return a sequence of links representing the results on that page."
   [page]
-  (reaver/extract 
-    page
-    []
-    ".srch_results .srch_results_lft + .srch_results_rht > a" (reaver/attr :href)))
+  (ensure-sequence
+    (reaver/extract
+      page
+      []
+      ".srch_results .srch_results_lft + .srch_results_rht > a"
+      (reaver/attr :href))))
 
 (defn- extract-pager-links
   "Given a Jsoup document containing a search results page from summitpost,

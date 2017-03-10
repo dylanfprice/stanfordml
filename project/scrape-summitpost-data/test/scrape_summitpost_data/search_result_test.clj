@@ -20,7 +20,7 @@
                            </tr>
                            </tbody>
                          </table>")]
-    (is (= "/test-item-name/12345"
+    (is (= ["/test-item-name/12345"]
            (#'test-ns/extract-result-links jsoup-snippet))
         "extracts link to item from search results table")))
 
