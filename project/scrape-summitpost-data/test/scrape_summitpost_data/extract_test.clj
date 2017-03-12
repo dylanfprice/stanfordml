@@ -1,6 +1,6 @@
 (ns scrape-summitpost-data.extract-test
   (:require [clojure.test :refer [deftest is]]
-           [scrape-summitpost-data.extract :as test-ns]))
+            [scrape-summitpost-data.extract :as test-ns]))
 
 (deftest ensure-sequence-test
   (is (= [1 2 3] (#'test-ns/ensure-sequence [1 2 3]))
