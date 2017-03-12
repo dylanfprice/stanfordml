@@ -1,5 +1,5 @@
 (ns scrape-summitpost-data.extract-test
-  (require [clojure.test :refer [deftest is]]
+  (:require [clojure.test :refer [deftest is]]
            [scrape-summitpost-data.extract :as test-ns]))
 
 (deftest ensure-sequence-test
@@ -55,7 +55,7 @@
         "extracts entire range of links")))
 
 (deftest extract-result-links-test
-  (let [jsoup-snippet (reaver/parse 
+  (let [jsoup-snippet (reaver/parse
                         "<table class='srch_results'>
                            <tbody>
                            <tr>
