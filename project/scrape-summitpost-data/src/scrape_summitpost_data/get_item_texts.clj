@@ -41,11 +41,12 @@
 
 (defn get-item-texts
   "Given a link to a search results page from summitpost (i.e. relative to the
-  summitpost domain), GET all search result items (iterating through
-  pagination if present) and return a sequence of [item-name, item-text]
-  pairs."
+  summitpost domain), GET all search result items (iterating through pagination
+  if present) and return a sequence of [item-url, item-name, item-text]
+  triples."
   [search-link]
   (->> (get-urls search-link)
-       (map #(vector 
-               (extract-item-name base-url %) 
+       (map #(vector
+               %
+               (extract-item-name base-url %)
                (->> % slurp reaver/parse extract-item-text)))))

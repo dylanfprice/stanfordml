@@ -40,7 +40,7 @@
   [file-name search-link]
   (with-open [out-file (io/writer file-name)]
     (csv/write-csv out-file
-                   (cons ["item-name", "item-text"]
+                   (cons ["item-url", "item-name", "item-text"]
                          (get-item-texts search-link)))))
 
 (defn -main [& args]
