@@ -2,7 +2,6 @@
   (:require [clojure.test :refer [deftest is]]
             [analyze-data.n-grams :as test-ns]))
 
-
 (deftest to-words-test
   (is (= ["hello" "world"]
          (test-ns/to-words "hello world"))
@@ -13,3 +12,8 @@
   (is (= ["hello" "world" "!"]
          (test-ns/to-words "Hello world!"))
       "separates punctuation"))
+
+(deftest n-grams-test
+  (is (= [["a" "b"] ["b" "c"]]
+         (test-ns/n-grams 2 ["a" "b" "c"]))
+      "creates bigrams"))
