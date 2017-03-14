@@ -1,17 +1,17 @@
 (ns analyze-data.term-frequency)
 
 (defn term-frequency
-  "Return a map from word to number of times it appears."
-  [words]
-  (reduce (fn [m word] (assoc m word (inc (get m word 0)))) {} words))
+  "Return a map from term to number of times it appears."
+  [terms]
+  (reduce (fn [m term] (assoc m term (inc (get m term 0)))) {} terms))
 
 (defn double-normalized-term-frequency
   "Like term-frequency, but prevents bias towards longer documents. See
   https://en.wikipedia.org/wiki/Tf–idf#Term_frequency_2"
-  [words]
-  (let [tf (term-frequency words)
+  [terms]
+  (let [tf (term-frequency terms)
         max-tf (apply max (vals tf))
         normalized-tf (fn [term]
                         (+ 0.5 (* 0.5 (/ (get tf term) max-tf))))
         normalized-tf-entry (fn [term] [term (normalized-tf term)])]
-    (apply hash-map (mapcat normalized-tf-entry words))))
+    (apply hash-map (mapcat normalized-tf-entry terms))))

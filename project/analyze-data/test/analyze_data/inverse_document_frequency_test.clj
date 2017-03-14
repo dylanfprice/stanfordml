@@ -5,13 +5,13 @@
 (deftest count-documents-test
   (is (= 0
          (test-ns/count-documents [{"a" 1}] "b"))
-      "0 when no documents contain word")
+      "0 when no documents contain term")
   (is (= 1
          (test-ns/count-documents [{"b" 1}] "b"))
-      "1 when a single document contains word")
+      "1 when a single document contains term")
   (is (= 1
          (test-ns/count-documents [{"a" 1} {"b" 1}] "b"))
-      "only counts documents that contain word"))
+      "only counts documents that contain term"))
 
 (deftest inverse-document-frequency-math-test
   (is (= (Math/log 5)

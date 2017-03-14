@@ -5,16 +5,16 @@
 (deftest term-frequency-test
   (is (= {}
          (test-ns/term-frequency []))
-      "returns empty map for empty words")
+      "returns empty map for empty terms")
   (is (= {"a" 1}
          (test-ns/term-frequency ["a"]))
-      "counts a single word")
+      "counts a single term")
   (is (= {"a" 2}
          (test-ns/term-frequency ["a" "a"]))
-      "counts a word that appears twice")
+      "counts a term that appears twice")
   (is (= {"a" 1 "b" 2}
          (test-ns/term-frequency ["b" "a" "b"]))
-      "counts multiple words"))
+      "counts multiple terms"))
 
 (deftest double-normalized-term-frequency-test
   (is (= {"a" 0.75 "b" 1.0}
