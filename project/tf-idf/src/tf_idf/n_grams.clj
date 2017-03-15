@@ -1,4 +1,4 @@
-(ns analyze-data.n-grams
+(ns tf-idf.n-grams
   (:require [clojure.string :as string]))
 
 (defn to-words

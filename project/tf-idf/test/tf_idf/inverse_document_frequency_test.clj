@@ -1,6 +1,6 @@
-(ns analyze-data.inverse-document-frequency-test
+(ns tf-idf.inverse-document-frequency-test
   (:require [clojure.test :refer [deftest is]]
-            [analyze-data.inverse-document-frequency :as test-ns]))
+            [tf-idf.inverse-document-frequency :as test-ns]))
 
 (deftest count-documents-test
   (is (= 0

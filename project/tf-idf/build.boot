@@ -11,9 +11,8 @@
 
 (task-options!
     aot {:all true}
-    pom {:project 'analyze-data
-         :version "0.0.0"}
-    jar {:main 'analyze-data.core})
+    pom {:project 'tf-idf
+         :version "0.0.0"})
 
 (deftask build []
   (comp (aot) (pom) (uber) (jar) (target)))
