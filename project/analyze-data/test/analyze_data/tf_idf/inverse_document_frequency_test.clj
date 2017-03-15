@@ -17,7 +17,16 @@
   (is (= (Math/log 5)
          (test-ns/inverse-document-frequency-math 5 1))))
 
-; TODO: flesh out this test
 (deftest inverse-document-frquency-test
-  (is (= {"a" (Math/log 2), "b" 0.0}
-         (test-ns/inverse-document-frequency [{"a" 5 "b" 1} {"b" 1}]))))
+  (is (= {}
+         (test-ns/inverse-document-frequency []))
+      "empty map when no documents")
+  (is (= {"a" (Math/log 1)}
+         (test-ns/inverse-document-frequency [{"a" 1}]))
+      "log(1) when single document containing term")
+  (is (= {"a" (Math/log 2)}
+         (test-ns/inverse-document-frequency [{"a" 1} {}]))
+      "log(2) when two documents and only one contains term")
+  (is (= {"a" (Math/log 2) "b" 0.0}
+         (test-ns/inverse-document-frequency [{"a" 1 "b" 1} {"b" 1}]))
+      "handles multiple terms"))
