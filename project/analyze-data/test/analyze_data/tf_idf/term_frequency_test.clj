@@ -1,6 +1,6 @@
-(ns tf-idf.term-frequency-test
+(ns analyze-data.tf-idf.term-frequency-test
   (:require [clojure.test :refer [deftest is]]
-            [tf-idf.term-frequency :as test-ns]))
+            [analyze-data.tf-idf.term-frequency :as test-ns]))
 
 (deftest term-frequency-test
   (is (= {}

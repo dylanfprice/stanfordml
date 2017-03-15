@@ -1,4 +1,4 @@
-(ns tf-idf.term-frequency)
+(ns analyze-data.tf-idf.term-frequency)
 
 (defn term-frequency
   "Return a map from term to number of times it appears."

@@ -1,4 +1,4 @@
-(ns tf-idf.inverse-document-frequency)
+(ns analyze-data.tf-idf.inverse-document-frequency)
 
 (defn count-documents
   "Return a count of how many documents in tf-corpus contain term."
