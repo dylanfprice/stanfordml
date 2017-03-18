@@ -14,6 +14,6 @@
       "separates punctuation"))
 
 (deftest n-grams-test
-  (is (= [["a" "b"] ["b" "c"]]
+  (is (= ["a b" "b c"]
          (test-ns/n-grams 2 ["a" "b" "c"]))
       "creates bigrams"))

@@ -4,8 +4,8 @@
 
 (deftest to-terms-test
   (is (= ["hello" "world" "test"
-          ["hello" "world"] ["world" "test"]
-          ["hello" "world" "test"]]
+          "hello world" "world test"
+          "hello world test"]
          (test-ns/to-terms "hello world test"))
       "returns words, bigrams, and trigrams"))
 

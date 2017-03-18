@@ -11,4 +11,6 @@
 (defn n-grams
   "Partition a sequence of words into n-grams of size n."
   [n words]
-  (partition n 1 words))
+  (->> words
+       (partition n 1)
+       (map (partial string/join " "))))
