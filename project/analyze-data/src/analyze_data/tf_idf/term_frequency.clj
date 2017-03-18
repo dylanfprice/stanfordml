@@ -10,7 +10,7 @@
   https://en.wikipedia.org/wiki/Tf–idf#Term_frequency_2"
   [terms]
   (let [tf (term-frequency terms)
-        max-tf (apply max (vals tf))
+        max-tf (apply max 0 (vals tf))
         normalized-tf (fn [term]
                         (+ 0.5 (* 0.5 (/ (get tf term) max-tf))))
         normalized-tf-entry (fn [term] [term (normalized-tf term)])]

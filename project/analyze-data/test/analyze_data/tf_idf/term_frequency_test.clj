@@ -17,6 +17,9 @@
       "counts multiple terms"))
 
 (deftest double-normalized-term-frequency-test
+  (is (= {}
+         (test-ns/double-normalized-term-frequency []))
+      "returns empty map for empty terms")
   (is (= {"a" 0.75 "b" 1.0}
          (test-ns/double-normalized-term-frequency ["b" "a" "b"]))
       "computes normalized frequencies"))
