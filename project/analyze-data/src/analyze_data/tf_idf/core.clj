@@ -44,7 +44,7 @@
   [term-corpus]
   (let [all-terms (sort (distinct (apply concat term-corpus)))
         tf-corpus (map double-normalized-term-frequency term-corpus)
-        idf (inverse-document-frequency tf-corpus)
+        idf (inverse-document-frequency all-terms tf-corpus)
         tf-idf-values (map (partial tf-idf-document idf all-terms) tf-corpus)]
     (cons all-terms tf-idf-values)))
 

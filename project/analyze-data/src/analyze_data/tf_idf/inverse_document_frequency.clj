@@ -15,13 +15,15 @@
   (Math/log (/ n documents_with_term)))
 
 (defn inverse-document-frequency
-  "Return a map from term to its inverse document frequency (as defined at
-  https://en.wikipedia.org/wiki/Tf–idf#Inverse_document_frequency_2).
-  tf-corpus is a sequence of term-frequency maps where each one represents a
-  single document."
-  [tf-corpus]
-  (let [terms (->> tf-corpus (map keys) (apply concat) (set))
-        n (count tf-corpus)
+  "Given
+  terms: a sequence of all terms
+  tf-corpus: a sequence of term-frequency maps where each one represents a
+             single document
+
+  Return a map from term to its inverse document frequency (as defined at
+  https://en.wikipedia.org/wiki/Tf–idf#Inverse_document_frequency_2)."
+  [terms tf-corpus]
+  (let [n (count tf-corpus)
         documents_with_term (map (partial count-documents tf-corpus) terms)]
     (->> documents_with_term
          (map #(vector %1 (inverse-document-frequency-math n %2)) terms)

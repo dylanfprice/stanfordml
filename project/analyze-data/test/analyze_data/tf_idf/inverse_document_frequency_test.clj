@@ -19,14 +19,15 @@
 
 (deftest inverse-document-frquency-test
   (is (= {}
-         (test-ns/inverse-document-frequency []))
+         (test-ns/inverse-document-frequency [] []))
       "empty map when no documents")
   (is (= {"a" (Math/log 1)}
-         (test-ns/inverse-document-frequency [{"a" 1}]))
+         (test-ns/inverse-document-frequency ["a"] [{"a" 1}]))
       "log(1) when single document containing term")
   (is (= {"a" (Math/log 2)}
-         (test-ns/inverse-document-frequency [{"a" 1} {}]))
+         (test-ns/inverse-document-frequency ["a"] [{"a" 1} {}]))
       "log(2) when two documents and only one contains term")
   (is (= {"a" (Math/log 2) "b" 0.0}
-         (test-ns/inverse-document-frequency [{"a" 1 "b" 1} {"b" 1}]))
+         (test-ns/inverse-document-frequency ["a" "b"]
+                                             [{"a" 1 "b" 1} {"b" 1}]))
       "handles multiple terms"))
