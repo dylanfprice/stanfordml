@@ -9,9 +9,12 @@
   (is (= ["hello" "world"]
          (test-ns/to-words "Hello world"))
       "lowercases words")
-  (is (= ["hello" "world" "!"]
+  (is (= ["hello" "world"]
          (test-ns/to-words "Hello world!"))
-      "separates punctuation"))
+      "removes punctuation...")
+  (is (= ["he'll" "world"]
+         (test-ns/to-words "he'll world"))
+      "...but keeps apostrophes"))
 
 (deftest n-grams-test
   (is (= ["a b" "b c"]

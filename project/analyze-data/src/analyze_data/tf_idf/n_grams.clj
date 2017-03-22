@@ -6,7 +6,7 @@
   [text]
   (->> text
        (string/lower-case)
-       (re-seq #"\p{Lower}+|\p{Punct}")))
+       (re-seq #"[a-z,']+")))
 
 (defn n-grams
   "Partition a sequence of words into n-grams of size n."
