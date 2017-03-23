@@ -1,12 +1,25 @@
 (ns analyze-data.tf-idf.n-grams
-  (:require [clojure.string :as string]))
+  (:require [clojure.string :as string]
+            [clojure.java.io :refer [resource]]))
+
+(def stopwords (delay (-> "stopwords.txt"
+                          (resource)
+                          (slurp)
+                          (string/split #"\n")
+                          (set))))
 
 (defn to-words
-  "Tokenize a string into a sequence of words and punctuation."
+  "Tokenize a string into a sequence of words."
   [text]
   (->> text
        (string/lower-case)
        (re-seq #"[a-z,']+")))
+
+(defn remove-stopwords
+  "Remove very common words from a sequence of words. The set of stopwords
+  can be found at n-grams/stopwords."
+  [words]
+  (remove @stopwords words))
 
 (defn n-grams
   "Partition a sequence of words into n-grams of size n."

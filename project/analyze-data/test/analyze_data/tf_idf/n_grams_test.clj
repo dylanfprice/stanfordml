@@ -16,6 +16,11 @@
          (test-ns/to-words "he'll world"))
       "...but keeps apostrophes"))
 
+(deftest remove-stopwords-test
+  (is (= ["hello" "world"]
+         (test-ns/remove-stopwords ["the" "hello" "world"]))
+      "removes common word \"the\""))
+
 (deftest n-grams-test
   (is (= ["a b" "b c"]
          (test-ns/n-grams 2 ["a" "b" "c"]))
