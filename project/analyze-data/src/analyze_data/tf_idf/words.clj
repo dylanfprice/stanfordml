@@ -1,4 +1,4 @@
-(ns analyze-data.tf-idf.n-grams
+(ns analyze-data.tf-idf.words
   (:require [clojure.string :as string]
             [clojure.java.io :refer [resource]]))
 
@@ -17,7 +17,7 @@
 
 (defn remove-stopwords
   "Remove very common words from a sequence of words. The set of stopwords
-  can be found at n-grams/stopwords."
+  can be found at words/stopwords."
   [words]
   (remove @stopwords words))
 

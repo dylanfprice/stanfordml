@@ -1,6 +1,6 @@
-(ns analyze-data.tf-idf.n-grams-test
+(ns analyze-data.tf-idf.words-test
   (:require [clojure.test :refer [deftest is]]
-            [analyze-data.tf-idf.n-grams :as test-ns]))
+            [analyze-data.tf-idf.words :as test-ns]))
 
 (deftest to-words-test
   (is (= ["hello" "world"]

@@ -3,7 +3,7 @@
              :refer [double-normalized-term-frequency]]
             [analyze-data.tf-idf.inverse-document-frequency
              :refer [inverse-document-frequency]]
-            [analyze-data.tf-idf.n-grams
+            [analyze-data.tf-idf.words
              :refer [n-grams to-words]]))
 
 (defn to-terms
