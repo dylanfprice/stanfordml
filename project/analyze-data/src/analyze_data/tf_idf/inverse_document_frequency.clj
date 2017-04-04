@@ -1,18 +1,20 @@
 (ns analyze-data.tf-idf.inverse-document-frequency)
 
-(defn count-documents
-  "Return a count of how many documents in tf-corpus contain term."
-  [tf-corpus term]
-  (->> tf-corpus
-       (filter #(contains? % term))
-       (count)))
+(defn document-frequency
+  "Return a map from term to number of documents it appears in."
+  [tf-corpus]
+  (let [count-term (fn [m term] (assoc m term (inc (get m term 0))))
+        term-keys (mapcat keys tf-corpus)]
+    (reduce count-term {} term-keys)))
 
-(defn inverse-document-frequency-math
-  "Calculates inverse document frequency given the n, the total number of
-  documents, and documents_with_term, the number of documents containing the
-  term we are calculating for."
-  [n documents_with_term]
-  (Math/log (/ n documents_with_term)))
+(defn calc-inverse-document-frequency
+  "Calculate inverse document frequency.
+
+  num-documents: the total number of documents
+  num-documents-with-term: the number of documents containing the term we are
+                           calculating for"
+  [num-documents num-documents-with-term]
+  (Math/log (/ num-documents num-documents-with-term)))
 
 (defn inverse-document-frequency
   "Given
@@ -23,9 +25,12 @@
   Return a map from term to its inverse document frequency (as defined at
   https://en.wikipedia.org/wiki/Tf–idf#Inverse_document_frequency_2)."
   [terms tf-corpus]
-  (let [n (count tf-corpus)
-        documents_with_term (map (partial count-documents tf-corpus) terms)]
-    (->> documents_with_term
-         (map #(vector %1 (inverse-document-frequency-math n %2)) terms)
-         (apply concat)
-         (apply hash-map))))
+  (let [num-documents (count tf-corpus)
+        document-frequencies (document-frequency tf-corpus)
+        assoc-idf (fn [m term num-documents-with-term]
+                    (assoc m
+                           term
+                           (calc-inverse-document-frequency
+                             num-documents
+                             num-documents-with-term)))]
+    (reduce-kv assoc-idf {} document-frequencies)))
