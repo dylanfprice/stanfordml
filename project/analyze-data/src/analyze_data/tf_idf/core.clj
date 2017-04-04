@@ -4,13 +4,13 @@
             [analyze-data.tf-idf.inverse-document-frequency
              :refer [inverse-document-frequency]]
             [analyze-data.tf-idf.words
-             :refer [n-grams to-words]]))
+             :refer [n-grams remove-stopwords to-words]]))
 
 (defn to-terms
   "Given a string representing a document, return a sequence of words,
   bigrams, and trigrams found in the document."
   [document]
-  (let [words (to-words document)]
+  (let [words (remove-stopwords (to-words document))]
     (concat words (n-grams 2 words) (n-grams 3 words))))
 
 (defn- tf-idf-document
