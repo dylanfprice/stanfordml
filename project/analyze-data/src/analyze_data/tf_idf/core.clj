@@ -42,7 +42,7 @@
   corpus. The rest are sequences of tf-idf values of those terms, for each
   document in term-corpus."
   [term-corpus]
-  (let [all-terms (sort (distinct (reduce into term-corpus)))
+  (let [all-terms (sort (distinct (apply concat term-corpus)))
         tf-corpus (map normalized-term-frequency term-corpus)
         idf (inverse-document-frequency tf-corpus)
         tf-idf-values (map (partial tf-idf-document idf all-terms) tf-corpus)]
