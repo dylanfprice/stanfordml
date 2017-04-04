@@ -16,6 +16,17 @@
          (test-ns/term-frequency ["b" "a" "b"]))
       "counts multiple terms"))
 
+(deftest calc-normalized-term-frequency-test
+  (is (= 1.0
+         (test-ns/calc-normalized-term-frequency 5 5))
+      "term that appears the most number of times is normalize to 1")
+  (is (= 0.75
+         (test-ns/calc-normalized-term-frequency 5 10))
+      "term that appears half as much as max is normalize to .75")
+  (is (= 0.5
+         (test-ns/calc-normalized-term-frequency 0 10))
+      "term that never appears normalized to 0.5"))
+
 (deftest double-normalized-term-frequency-test
   (is (= {}
          (test-ns/double-normalized-term-frequency []))
