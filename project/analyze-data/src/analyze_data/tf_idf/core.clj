@@ -1,6 +1,6 @@
 (ns analyze-data.tf-idf.core
   (:require [analyze-data.tf-idf.term-frequency
-             :refer [double-normalized-term-frequency]]
+             :refer [normalized-term-frequency]]
             [analyze-data.tf-idf.inverse-document-frequency
              :refer [inverse-document-frequency]]
             [analyze-data.tf-idf.words
@@ -43,7 +43,7 @@
   document in term-corpus."
   [term-corpus]
   (let [all-terms (sort (distinct (reduce into term-corpus)))
-        tf-corpus (map double-normalized-term-frequency term-corpus)
+        tf-corpus (map normalized-term-frequency term-corpus)
         idf (inverse-document-frequency tf-corpus)
         tf-idf-values (map (partial tf-idf-document idf all-terms) tf-corpus)]
     (cons all-terms tf-idf-values)))

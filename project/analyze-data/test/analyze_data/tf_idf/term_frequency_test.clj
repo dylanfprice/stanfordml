@@ -27,10 +27,10 @@
          (test-ns/calc-normalized-term-frequency 0 10))
       "term that never appears normalized to 0.5"))
 
-(deftest double-normalized-term-frequency-test
+(deftest normalized-term-frequency-test
   (is (= {}
-         (test-ns/double-normalized-term-frequency []))
+         (test-ns/normalized-term-frequency []))
       "returns empty map for empty terms")
   (is (= {"a" 0.75 "b" 1.0}
-         (test-ns/double-normalized-term-frequency ["b" "a" "b"]))
+         (test-ns/normalized-term-frequency ["b" "a" "b"]))
       "computes normalized frequencies"))

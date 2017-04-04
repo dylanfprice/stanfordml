@@ -10,7 +10,7 @@
   [term-frequency max-term-frequency]
   (+ 0.5 (* 0.5 (/ term-frequency max-term-frequency))))
 
-(defn double-normalized-term-frequency
+(defn normalized-term-frequency
   "Like term-frequency, but prevents bias towards longer documents. See
   https://en.wikipedia.org/wiki/Tf–idf#Term_frequency_2"
   [terms]
