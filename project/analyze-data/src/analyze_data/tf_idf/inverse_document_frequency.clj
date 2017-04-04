@@ -18,13 +18,12 @@
 
 (defn inverse-document-frequency
   "Given
-  terms: a sequence of all terms
   tf-corpus: a sequence of term-frequency maps where each one represents a
              single document
 
   Return a map from term to its inverse document frequency (as defined at
   https://en.wikipedia.org/wiki/Tf–idf#Inverse_document_frequency_2)."
-  [terms tf-corpus]
+  [tf-corpus]
   (let [num-documents (count tf-corpus)
         document-frequencies (document-frequency tf-corpus)
         assoc-idf (fn [m term num-documents-with-term]
