@@ -2,9 +2,9 @@
 
 (defn document-frequency
   "Return a map from term to number of documents it appears in."
-  [tf-corpus]
+  [term-frequency-corpus]
   (let [count-term (fn [m term] (assoc m term (inc (get m term 0))))
-        term-keys (mapcat keys tf-corpus)]
+        term-keys (mapcat keys term-frequency-corpus)]
     (reduce count-term {} term-keys)))
 
 (defn calc-inverse-document-frequency
@@ -18,14 +18,14 @@
 
 (defn inverse-document-frequency
   "Given
-  tf-corpus: a sequence of term-frequency maps where each one represents a
-             single document
+  term-frequency-corpus: a sequence of term-frequency maps where each one
+                         represents a single document
 
   Return a map from term to its inverse document frequency (as defined at
   https://en.wikipedia.org/wiki/Tf–idf#Inverse_document_frequency_2)."
-  [tf-corpus]
-  (let [num-documents (count tf-corpus)
-        document-frequencies (document-frequency tf-corpus)
+  [term-frequency-corpus]
+  (let [num-documents (count term-frequency-corpus)
+        document-frequencies (document-frequency term-frequency-corpus)
         assoc-idf (fn [m term num-documents-with-term]
                     (assoc m
                            term
