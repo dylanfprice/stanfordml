@@ -13,7 +13,7 @@
   [text]
   (->> text
        (string/lower-case)
-       (re-seq #"[a-z,']+")))
+       (re-seq #"[a-z']+")))
 
 (defn remove-stopwords
   "Remove very common words from a sequence of words. The set of stopwords

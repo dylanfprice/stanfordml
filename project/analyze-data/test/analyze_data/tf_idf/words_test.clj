@@ -12,6 +12,9 @@
   (is (= ["hello" "world"]
          (test-ns/to-words "Hello world!"))
       "removes punctuation...")
+  (is (= ["hello" "world"]
+         (test-ns/to-words "Hello, world"))
+      "...including commas...")
   (is (= ["he'll" "world"]
          (test-ns/to-words "he'll world"))
       "...but keeps apostrophes"))
