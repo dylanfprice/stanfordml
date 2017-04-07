@@ -42,7 +42,8 @@
         (cons header-row data)))
 
 (defn csv-corpus-to-tf-idf-data!
-  "Transform a csv containing a corpus of documents into a file of tf-idf vectors.
+  "Transform a csv containing a corpus of documents into a file of tf-idf
+  vectors.
 
   in-path: path to a csv file. It should contain the headers 'item-name' and
            'item-text', with values as described in corpus-to-tf-idf-data.
