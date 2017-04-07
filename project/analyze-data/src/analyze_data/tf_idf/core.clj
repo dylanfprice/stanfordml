@@ -8,7 +8,7 @@
 
 (defn to-terms
   "Given a string representing a document, return a sequence of words,
-  bigrams, and trigrams found in the document."
+  bigrams, and trigrams found in the document. Stopwords will be removed."
   [document]
   (let [words (remove-stopwords (to-words document))]
     (concat words (n-grams 2 words) (n-grams 3 words))))
@@ -28,8 +28,9 @@
     (map calc-tf-idf all-terms)))
 
 (defn tf-idf
-  "Calculates (term frequency * inverse document frequency) values for a corpus
-  of documents.
+  "Calculates (term frequency * inverse document frequency) values for a
+  corpus of documents.
+
 
   term-corpus: a sequence of term sequences. A term is a word, or bigram, or
                trigram, etc. Each term sequence should represent a single
