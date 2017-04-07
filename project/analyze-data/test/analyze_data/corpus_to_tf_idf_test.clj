@@ -1,6 +1,6 @@
-(ns analyze-data.core-test
+(ns analyze-data.corpus-to-tf-idf-test
   (:require [clojure.test :refer [deftest is]]
-            [analyze-data.core :as test-ns]))
+            [analyze-data.corpus-to-tf-idf :as test-ns]))
 
 (deftest corpus-to-tf-idf-data-test
   (let [corpus [{"item-name" "foo" "item-text" "my dog rover"}

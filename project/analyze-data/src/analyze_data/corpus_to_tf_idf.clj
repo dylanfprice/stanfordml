@@ -1,4 +1,4 @@
-(ns analyze-data.core
+(ns analyze-data.corpus-to-tf-idf
   (:require [clojure.data.csv :as csv]
             [clojure.java.io :as io]
             [analyze-data.tf-idf.core :refer [to-terms tf-idf]]))
