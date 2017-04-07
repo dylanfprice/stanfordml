@@ -31,7 +31,8 @@
   Return a sequence of the following form:
   [['item-name' term1        term2        ...]
    [item-name1  term1-tf-idf term2-tf-idf ...]
-   [item-name2  term1-tf-idf term2-tf-idf ...]]"
+   [item-name2  term1-tf-idf term2-tf-idf ...]
+   ...]"
   [corpus]
   (let [document-names (map #(% "item-name") corpus)
         document-texts (map #(% "item-text") corpus)

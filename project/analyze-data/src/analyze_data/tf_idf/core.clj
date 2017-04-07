@@ -36,7 +36,10 @@
                document in the corpus.
 
   Return a sequence of the form:
-  [[\"a\" ...] [0.3 ...] [0.2 ...] ...]
+  [[term1        ...]
+   [term1-tf-idf ...]
+   [term1-tf-idf ...]
+   ...]
 
   The first sequence is a sorted sequence of all terms found in the
   corpus. The rest are sequences of tf-idf values of those terms, for each
