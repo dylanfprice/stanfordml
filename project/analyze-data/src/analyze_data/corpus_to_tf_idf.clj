@@ -28,7 +28,7 @@
           where 'item-name' is a unique identifier and 'item-text' is a
           document
 
-  Return a sequence of the following form:
+  Return a lazy sequence of the following form:
   [['item-name' term1        term2        ...]
    [item-name1  term1-tf-idf term2-tf-idf ...]
    [item-name2  term1-tf-idf term2-tf-idf ...]
