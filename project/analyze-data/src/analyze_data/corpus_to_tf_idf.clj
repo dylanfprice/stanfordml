@@ -18,8 +18,8 @@
   memory at a time."
   [s file-path]
   (with-open [out (io/writer file-path)]
-    (doseq [line s]
-      (.write out (prn-str line)))))
+    (binding [*out* out]
+      (doseq [line s] (prn line)))))
 
 (defn corpus-to-tf-idf-data
   "Transform a corpus of documents into a sequence of tf-idf vectors.
