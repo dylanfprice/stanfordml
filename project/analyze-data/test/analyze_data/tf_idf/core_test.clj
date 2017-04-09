@@ -39,8 +39,11 @@
   (let [term-corpus [["a" "b"] ["a" "c"] ["b" "a"]]
         result (test-ns/tf-idf term-corpus)]
     (is (= ["a" "b" "c"]
-           (first result))
-        "first sequence is a sorted sequence of terms")
+           (:terms result))
+        ":terms is a sorted sequence of terms")
+    (is (every? (partial contains? (:idf result))
+                ["a" "b" "c"])
+        ":idf contains a key for every term")
     (is (every? #(= java.lang.Double (type %))
-                (->> result (rest) (apply concat)))
-        "rest of the sequences contain doubles")))
+                (->> result :tf-idf (apply concat)))
+        ":tf-idf sequences contain doubles")))

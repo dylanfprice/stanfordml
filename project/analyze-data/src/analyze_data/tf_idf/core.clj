@@ -36,18 +36,24 @@
                trigram, etc. Each term sequence should represent a single
                document in the corpus.
 
-  Return a sequence of the form:
-  [[term1        ...]
-   [term1-tf-idf ...]
-   [term1-tf-idf ...]
-   ...]
+  Return a map of the form:
+  {:terms  [term1 term2 ...]
+   :idf    {term1 value
+            term2 value
+            ...}
+   :tf-idf [[term1-value term2-value ...]
+            [term1-value term2-value ...]
+            ...]}
 
-  The first sequence is a sorted sequence of all terms found in the
-  corpus. The rest are sequences of tf-idf values of those terms, for each
-  document in term-corpus."
+  :terms is a sorted sequence of all terms found in the corpus. :idf is a map
+  from term to its inverse document frequency. :tf-idf contains sequences of
+  tf-idf values matching the order of :terms, for each document in
+  term-corpus."
   [term-corpus]
   (let [all-terms (sort (distinct (apply concat term-corpus)))
         tf-corpus (map normalized-term-frequency term-corpus)
         idf (inverse-document-frequency tf-corpus)
         tf-idf-values (map (partial tf-idf-document idf all-terms) tf-corpus)]
-    (cons all-terms tf-idf-values)))
+    {:terms all-terms
+     :idf idf
+     :tf-idf tf-idf-values}))
