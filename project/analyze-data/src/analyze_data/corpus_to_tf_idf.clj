@@ -54,7 +54,7 @@
   (let [document-names (map #(% "item-name") corpus)
         document-texts (map #(% "item-text") corpus)
         tf-idf-corpus (tf-idf (map to-terms document-texts))
-        header-row (cons "item-name" (:terms tf-idf-corpus))
+        header-row (cons "item-name" (:all-terms tf-idf-corpus))
         data (map (partial cons) document-names (:tf-idf tf-idf-corpus))]
         {:idf (:idf tf-idf-corpus)
          :tf-idf (cons header-row data)}))
