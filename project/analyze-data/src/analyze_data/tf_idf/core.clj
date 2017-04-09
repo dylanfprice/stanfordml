@@ -14,8 +14,8 @@
     (concat words (n-grams 2 words) (n-grams 3 words))))
 
 (defn- tf-idf-document
-  "Calculate a sequence of (term frequency * inverse document frequency) values
-  for a single document.
+  "Calculate a sequence of (term frequency * inverse document frequency)
+  values for a single document.
 
   idf: map from term to its inverse document frequency in the corpus
   all-terms: sorted sequence of all terms found in the corpus
