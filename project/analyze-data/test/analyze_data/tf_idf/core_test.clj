@@ -22,29 +22,29 @@
       "returns words, bigrams, and trigrams when all specified"))
 
 (deftest tf-idf-document
-  (is (= [3]
+  (is (= [3.0]
          (test-ns/tf-idf-document
            ["test"]
            {"test" 3}
-           {"test" 1}))
-      "multiplies tf by idf")
-  (is (= [0]
+           ["test"]))
+      "3 when idf is 3 and tf is 1")
+  (is (= [0.0]
          (test-ns/tf-idf-document
            ["test"]
            {}
-           {"test" 1}))
-      "uses 0 for idf when missing")
-  (is (= [0]
+           ["test"]))
+      "0 when idf is 0")
+  (is (= [0.0]
          (test-ns/tf-idf-document
            ["test"]
            {"test" 3}
-           {}))
-      "uses 0 for tf when missing")
-  (is (= [3 2]
+           []))
+      "0 when tf is 0")
+  (is (= [3.0 2.0]
          (test-ns/tf-idf-document
            ["test" "hello"]
            {"hello" 2 "test" 3}
-           {"hello" 1 "test" 1}))
+           ["hello" "test"]))
       "matches the order of all-terms"))
 
 (deftest tf-idf
