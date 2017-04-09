@@ -13,20 +13,23 @@
         data (rest csv-file)]
     (map (partial zipmap header-row) data)))
 
+(defn gzip-writer
+  "Like io/writer but writes output compressed with gzip."
+  [x]
+  (-> x io/output-stream GZIPOutputStream. io/writer))
+
 (defn write-sequence!
   "Write each item in sequence s as a line of edn to file-path. Uses doseq
   such that if s is lazy only a small number of items in s will reside in
   memory at a time.
 
-  There is one valid option
+  There is one option
     :compress? (default false) if true, compress output with gzip"
   [s file-path & options]
   (let [{:keys [compress?] :or {compress? false}} options]
-    (with-open [output-stream (io/output-stream file-path)
-                output-stream (if compress?
-                                (GZIPOutputStream. output-stream)
-                                output-stream)
-                out (io/writer output-stream)]
+    (with-open [out (if compress?
+                      (gzip-writer file-path)
+                      (io/writer file-path))]
       (binding [*out* out]
         (doseq [line s] (prn line))))))
 
