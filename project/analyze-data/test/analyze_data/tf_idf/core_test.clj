@@ -36,12 +36,11 @@
       "matches the order of all-terms"))
 
 (deftest tf-idf
-  (is (= ["a" "b" "c"]
-         (first (test-ns/tf-idf [["a" "b"] ["a" "c"] ["b" "a"]])))
-      "first sequence is a sorted sequence of terms")
-  (is (->> (test-ns/tf-idf [["a" "b"] ["a" "c"] ["b" "a"]])
-           (rest)
-           (concat)
-           (map #(= float (type %)))
-           (and))
-      "rest of the sequences contain floats"))
+  (let [term-corpus [["a" "b"] ["a" "c"] ["b" "a"]]
+        result (test-ns/tf-idf term-corpus)]
+    (is (= ["a" "b" "c"]
+           (first result))
+        "first sequence is a sorted sequence of terms")
+    (is (every? #(= java.lang.Double (type %))
+                (->> result (rest) (apply concat)))
+        "rest of the sequences contain doubles")))
