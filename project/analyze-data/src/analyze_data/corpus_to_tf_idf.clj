@@ -37,18 +37,24 @@
           where 'item-name' is a unique identifier and 'item-text' is a
           document
 
-  Return a lazy sequence of the following form:
-  [['item-name' term1        term2        ...]
-   [item-name1  term1-tf-idf term2-tf-idf ...]
-   [item-name2  term1-tf-idf term2-tf-idf ...]
-   ...]"
+  Return a map of the following form:
+  {:idf    {term1 value
+            term2 value
+            ...}
+   :tf-idf [['item-name' term1       term2       ...]
+            [item-name1  term1-value term2-value ...]
+            [item-name2  term1-value term2-value ...]
+            ...]}
+
+  Note that :tf-idf is a lazy sequence."
   [corpus]
   (let [document-names (map #(% "item-name") corpus)
         document-texts (map #(% "item-text") corpus)
         tf-idf-corpus (tf-idf (map to-terms document-texts))
         header-row (cons "item-name" (:terms tf-idf-corpus))
         data (map (partial cons) document-names (:tf-idf tf-idf-corpus))]
-        (cons header-row data)))
+        {:idf (:idf tf-idf-corpus)
+         :tf-idf (cons header-row data)}))
 
 (defn csv-corpus-to-tf-idf-data!
   "Transform a csv containing a corpus of documents into a file of tf-idf
@@ -64,4 +70,4 @@
   (with-open [in (io/reader in-path)]
     (let [corpus (csv-to-map in)
           tf-idf-data (corpus-to-tf-idf-data corpus)]
-      (write-sequence! tf-idf-data out-path, :compress? true))))
+      (write-sequence! (:tf-idf tf-idf-data) out-path, :compress? true))))
