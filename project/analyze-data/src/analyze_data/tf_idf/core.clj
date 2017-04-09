@@ -61,7 +61,7 @@
   [term-corpus]
   (let [all-terms (sort (distinct (apply concat term-corpus)))
         tf-corpus (map normalized-term-frequency term-corpus)
-        idf (inverse-document-frequency tf-corpus)
+        idf (inverse-document-frequency term-corpus)
         tf-idf-values (map (partial tf-idf-document all-terms idf) tf-corpus)]
     {:all-terms all-terms
      :idf idf

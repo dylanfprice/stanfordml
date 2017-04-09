@@ -2,10 +2,10 @@
 
 (defn document-frequency
   "Return a map from term to number of documents it appears in."
-  [term-frequency-corpus]
+  [term-corpus]
   (let [count-term (fn [m term] (assoc m term (inc (get m term 0))))
-        term-keys (mapcat keys term-frequency-corpus)]
-    (reduce count-term {} term-keys)))
+        unique-terms-per-document (mapcat set term-corpus)]
+    (reduce count-term {} unique-terms-per-document)))
 
 (defn calc-inverse-document-frequency
   "Calculate inverse document frequency.
@@ -18,14 +18,15 @@
 
 (defn inverse-document-frequency
   "Given
-  term-frequency-corpus: a sequence of term-frequency maps where each one
-                         represents a single document
+  term-corpus: a sequence of term sequences. A term is a word, or bigram, or
+               trigram, etc. Each term sequence should represent a single
+               document in the corpus.
 
   Return a map from term to its inverse document frequency (as defined at
   https://en.wikipedia.org/wiki/Tf–idf#Inverse_document_frequency_2)."
-  [term-frequency-corpus]
-  (let [num-documents (count term-frequency-corpus)
-        document-frequencies (document-frequency term-frequency-corpus)
+  [term-corpus]
+  (let [num-documents (count term-corpus)
+        document-frequencies (document-frequency term-corpus)
         assoc-idf (fn [m term num-documents-with-term]
                     (assoc m
                            term
