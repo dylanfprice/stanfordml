@@ -3,11 +3,23 @@
             [analyze-data.tf-idf.core :as test-ns]))
 
 (deftest to-terms-test
+  (is (= []
+         (test-ns/to-terms "the"))
+      "removes stopwords")
+  (is (= ["hello" "world" "test"]
+         (test-ns/to-terms "hello world test"))
+      "returns a sequence of words")
+  (is (= ["hello world" "world test"]
+         (test-ns/to-terms "hello world test" :bigrams))
+      "returns bigrams when :bigrams specified")
+  (is (= ["hello world test"]
+         (test-ns/to-terms "hello world test" :trigrams))
+      "returns trigrams when :trigrams specified")
   (is (= ["hello" "world" "test"
           "hello world" "world test"
           "hello world test"]
-         (test-ns/to-terms "hello world test"))
-      "returns words, bigrams, and trigrams"))
+         (test-ns/to-terms "hello world test" :words :bigrams :trigrams))
+      "returns words, bigrams, and trigrams when all specified"))
 
 (deftest tf-idf-document
   (is (= [3]

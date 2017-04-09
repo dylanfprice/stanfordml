@@ -15,7 +15,7 @@
             second-row (second tf-idf)]
         (is (= 3 (count tf-idf))
             "contains same number of rows as input plus one header row")
-        (is (= ["item-name" "dog" "dog rover" "dog spot" "rover" "spot"]
+        (is (= ["item-name" "dog" "rover" "spot"]
                first-row)
             "first row is header row with sorted terms")
         (is (= "foo"

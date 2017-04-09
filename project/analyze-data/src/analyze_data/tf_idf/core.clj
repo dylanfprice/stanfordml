@@ -7,11 +7,20 @@
              :refer [n-grams remove-stopwords to-words]]))
 
 (defn to-terms
-  "Given a string representing a document, return a sequence of words,
-  bigrams, and trigrams found in the document. Stopwords will be removed."
-  [document]
-  (let [words (remove-stopwords (to-words document))]
-    (concat words (n-grams 2 words) (n-grams 3 words))))
+  "Turn document into a sequence of words, remove stopwords, and return a lazy
+  sequence of terms based on term-types.
+
+  valid term-types are
+    :words
+    :bigrams
+    :trigrams
+    (default is [:words])"
+  [document & term-types]
+  (let [words (-> document to-words remove-stopwords)
+        term-types (or (not-empty (set term-types)) #{:words})]
+    (concat (if (:words term-types) words [])
+            (if (:bigrams term-types) (n-grams 2 words) [])
+            (if (:trigrams term-types) (n-grams 3 words) []))))
 
 (defn tf-idf-document
   "Calculate a sequence of (term frequency * inverse document frequency)
