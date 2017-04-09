@@ -18,5 +18,5 @@
     (is (= "foo"
            (first second-row))
         "first element of second row is first item-name")
-    (is (and (map #(= java.lang.Double (type %)) second-row))
+    (is (every? #(= java.lang.Double (type %)) (rest second-row))
         "rest of elements of second row are doubles (tf-idf values)")))
