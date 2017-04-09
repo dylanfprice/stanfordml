@@ -11,25 +11,25 @@
 
 (deftest tf-idf-document
   (is (= [3]
-         (#'test-ns/tf-idf-document
+         (test-ns/tf-idf-document
            {"test" 3}
            ["test"]
            {"test" 1}))
       "multiplies tf by idf")
   (is (= [0]
-         (#'test-ns/tf-idf-document
+         (test-ns/tf-idf-document
            {}
            ["test"]
            {"test" 1}))
       "uses 0 for idf when missing")
   (is (= [0]
-         (#'test-ns/tf-idf-document
+         (test-ns/tf-idf-document
            {"test" 3}
            ["test"]
            {}))
       "uses 0 for tf when missing")
   (is (= [2 3]
-         (#'test-ns/tf-idf-document
+         (test-ns/tf-idf-document
            {"hello" 2 "test" 3}
            ["hello" "test"]
            {"hello" 1 "test" 1}))

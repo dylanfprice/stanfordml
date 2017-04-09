@@ -13,7 +13,7 @@
   (let [words (remove-stopwords (to-words document))]
     (concat words (n-grams 2 words) (n-grams 3 words))))
 
-(defn- tf-idf-document
+(defn tf-idf-document
   "Calculate a sequence of (term frequency * inverse document frequency)
   values for a single document.
 
