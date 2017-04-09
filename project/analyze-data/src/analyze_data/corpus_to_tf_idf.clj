@@ -11,7 +11,7 @@
   (let [csv-file (csv/read-csv reader)
         header-row (first csv-file)
         data (rest csv-file)]
-    (map #(zipmap header-row %) data)))
+    (map (partial zipmap header-row) data)))
 
 (defn write-sequence!
   "Write each item in sequence s as a line of edn to file-path. Uses doseq
@@ -47,7 +47,7 @@
         document-texts (map #(% "item-text") corpus)
         tf-idf-corpus (tf-idf (map to-terms document-texts))
         header-row (cons "item-name" (first tf-idf-corpus))
-        data (map #(cons %1 %2) document-names (rest tf-idf-corpus))]
+        data (map (partial cons) document-names (rest tf-idf-corpus))]
         (cons header-row data)))
 
 (defn csv-corpus-to-tf-idf-data!
