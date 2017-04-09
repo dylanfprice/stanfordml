@@ -17,13 +17,13 @@
   "Calculate a sequence of (term frequency * inverse document frequency)
   values for a single document.
 
-  idf: map from term to its inverse document frequency in the corpus
   all-terms: sorted sequence of all terms found in the corpus
+  idf: map from term to its inverse document frequency in the corpus
   tf-document: map from term to its frequency in a single document
 
   Return a sequence of calculated tf-idf values for the given tf-document,
   matching the order of all-terms."
-  [idf all-terms tf-document]
+  [all-terms idf tf-document]
   (let [calc-tf-idf (fn [term] (* (get tf-document term 0) (get idf term 0)))]
     (map calc-tf-idf all-terms)))
 
@@ -53,7 +53,7 @@
   (let [all-terms (sort (distinct (apply concat term-corpus)))
         tf-corpus (map normalized-term-frequency term-corpus)
         idf (inverse-document-frequency tf-corpus)
-        tf-idf-values (map (partial tf-idf-document idf all-terms) tf-corpus)]
+        tf-idf-values (map (partial tf-idf-document all-terms idf) tf-corpus)]
     {:all-terms all-terms
      :idf idf
      :tf-idf tf-idf-values}))

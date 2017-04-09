@@ -12,26 +12,26 @@
 (deftest tf-idf-document
   (is (= [3]
          (test-ns/tf-idf-document
-           {"test" 3}
            ["test"]
+           {"test" 3}
            {"test" 1}))
       "multiplies tf by idf")
   (is (= [0]
          (test-ns/tf-idf-document
-           {}
            ["test"]
+           {}
            {"test" 1}))
       "uses 0 for idf when missing")
   (is (= [0]
          (test-ns/tf-idf-document
-           {"test" 3}
            ["test"]
+           {"test" 3}
            {}))
       "uses 0 for tf when missing")
-  (is (= [2 3]
+  (is (= [3 2]
          (test-ns/tf-idf-document
+           ["test" "hello"]
            {"hello" 2 "test" 3}
-           ["hello" "test"]
            {"hello" 1 "test" 1}))
       "matches the order of all-terms"))
 
