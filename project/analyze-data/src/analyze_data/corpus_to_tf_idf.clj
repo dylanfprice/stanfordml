@@ -54,10 +54,9 @@
   [corpus]
   (let [document-names (map #(% "item-name") corpus)
         document-texts (map #(% "item-text") corpus)
-        tf-idf-corpus (tf-idf (map to-terms document-texts))]
-    (concat
-      [(:idf tf-idf-corpus) (:all-terms tf-idf-corpus) document-names]
-      (:tf-idf tf-idf-corpus))))
+        {:keys [idf all-terms]
+         tf-idf-data :tf-idf} (tf-idf (map to-terms document-texts))]
+    (concat [idf all-terms document-names] tf-idf-data)))
 
 (defn csv-corpus-to-tf-idf-data!
   "Transform a csv containing a corpus of documents into a file of tf-idf
