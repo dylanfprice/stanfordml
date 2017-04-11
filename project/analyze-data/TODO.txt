@@ -1,0 +1,30 @@
+X analyze memory usage and figure out where we need to cut
+X improve tokenization (e.g. one improvement: we shouldn't split up on apostrophes)
+X apply stopwords filtering
+X explore using clojure.core.matrix and sparse matrices
+X finish documentation in analyze-data.core and make sure it works
+X investigate using java.util.zip to read and write compressed data files
+  boot.user=> (with-open [out (io/writer (GZIPOutputStream. (io/output-stream "test.txt.gz")))]
+         #_=>     (.write out "hello"))
+X do we need to keep around the inverse document frequencies? can we just do cosine-similarity between a normal term-frequency vector and tf-idf vectors?
+  yes we need to keep around or the magnitudes of the features will be different which will change the direction of the vector!
+X refactor tf-idf-document to take a terms-document instead of tf-document
+X implement k-nn algorithm
+    cosine-similarity(x, y): 1 - dot(x, y) / (norm(x) * norm(y))
+    dot-product(x, y): sum(x_1 * y_1, x_2 * y_2, ...)
+X see how many dimensions data has
+  data with just words has ~ 19000 dimensionts
+- investigate performance of algorithm
+    - does a high cosine similarity correspond to a good prediction?
+        no: then trs and sp pages are not very related
+        yes: then investigate ways to improve cosine similarity
+    - possible changes, create metrics to decide which one:
+        - include more n-grams in feature vectors
+        - add more text to source data (e.g. concat route pages on)
+        - apply PCA to reduce dimensions
+      
+- vectorz or other implementation: serializing sparse arrays to a file?
+- rest vs next
+- testing clojure functions with side-effects
+- testing philosophies in clojure, unit vs integration, whether to fully isolate functions, i/o etc.
+- add command-line wrapper around analyze-data?
