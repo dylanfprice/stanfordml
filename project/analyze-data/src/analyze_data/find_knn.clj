@@ -48,7 +48,8 @@
   (->> document (to-terms) (tf-idf-document all-terms idf) (m/sparse-array)))
 
 (defn find-knn
-  "Find 3 nearest neighbors to query-document in tf-idf-data.
+  "Find 3 nearest neighbors (per cosine-distance) to query-document in
+  tf-idf-data.
 
   tf-idf-data: map produced by read-tf-idf-data
   query-document: string
