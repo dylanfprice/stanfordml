@@ -9,9 +9,9 @@
    [--x2--]
    ...]
 
-  y is a vector
+  y is a core.matrix vector
 
-  Return a vector of [distance-from-x1 distance-from-x2 ...]."
+  Return a sequence of [distance-from-x1 distance-from-x2 ...]."
   [X y]
   (m/div
     (m/sub 1 (m/mmul X y))
@@ -26,9 +26,9 @@
    [--x2--]
    ...]
 
-  y is a vector
+  y is a core.matrix vector
 
-  Return a vector of [distance-from-x1 distance-from-x2 ...]."
+  Return a sequence of [distance-from-x1 distance-from-x2 ...]."
   [X y]
   (map (partial m/distance y) X))
 
@@ -40,7 +40,7 @@
    [--x2--]
    ...]
 
-  y is a vector
+  y is a core.matrix vector
 
   Options
     :k (default 3)
