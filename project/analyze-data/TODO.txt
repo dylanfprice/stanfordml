@@ -19,9 +19,14 @@ X see how many dimensions data has
         no: then trs and sp pages are not very related
         yes: then investigate ways to improve cosine similarity
     - possible changes, create metrics to decide which one:
-        - include more n-grams in feature vectors
-        - add more text to source data (e.g. concat route pages on)
-        - apply PCA to reduce dimensions
+        - when cosine similarities are very small,
+          query and source do not have many matching features
+            - if query and source have more 2 or 3 word phrases in common,
+              include more n-grams in feature vectors
+            - if query and source do not have very many words or phrases in common,
+              add more text to source data (e.g. concat route pages on)
+            - if query and source use different words that mean the same thing,
+              apply PCA to reduce dimensions
       
 - vectorz or other implementation: serializing sparse arrays to a file?
 - rest vs next
