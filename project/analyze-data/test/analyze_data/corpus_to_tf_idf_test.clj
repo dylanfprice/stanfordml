@@ -10,11 +10,11 @@
     (is (sequential? result) "returns a sequence")
     (is (= 5 (count result))
         "contains same number of rows as input plus three header rows")
-    (testing "first row is map from term to inverse document frequency"
-      (is (= ["dog" "rover" "spot"] (keys (nth result 0))))
-      (is (every? double? (vals (nth result 0)))))
-    (is (= ["dog" "rover" "spot"] (nth result 1))
-        "second row contains sorted terms")
+    (is (= ["dog" "rover" "spot"] (nth result 0))
+        "first row contains sorted terms")
+    (testing "second row is map from term to inverse document frequency"
+      (is (= ["dog" "rover" "spot"] (keys (nth result 1))))
+      (is (every? double? (vals (nth result 1)))))
     (is (= ["foo" "bar"] (nth result 2))
         "third row contains item names")
     (is (every? double? (nth result 3))

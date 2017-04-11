@@ -37,16 +37,16 @@
           document
 
   Return a lazy sequence of the following form:
-  [{term1 value,      term2 value,      ...}
-   [term1             term2             ...]
+  [[term1             term2             ...]
+   {term1 value,      term2 value,      ...}
    [item1-name        item2-name        ...]
    [item1-term1-value item1-term2-value ...]
    [item2-term1-value item2-term2-value ...]
    ...]]
 
   which can be interpreted as:
-  [{inverse document frequencies}
-   [term order]
+  [[term order]
+   {inverse document frequencies}
    [item names]
    [item1 tf-idf values]
    [item2 tf-idf values]
@@ -54,9 +54,9 @@
   [corpus]
   (let [document-names (map #(% "item-name") corpus)
         document-texts (map #(% "item-text") corpus)
-        {:keys [idf all-terms]
+        {:keys [all-terms idf]
          tf-idf-data :tf-idf} (tf-idf (map to-terms document-texts))]
-    (concat [idf all-terms document-names] tf-idf-data)))
+    (concat [all-terms idf document-names] tf-idf-data)))
 
 (defn csv-corpus-to-tf-idf-data!
   "Transform a csv containing a corpus of documents into a file of tf-idf

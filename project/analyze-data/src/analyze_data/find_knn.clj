@@ -21,13 +21,13 @@
 (defn read-tf-idf-data
   "Given the path to a file of gzipped tf-idf data as produced by
   analyze-data.corpus-to-tf-idf/csv-corpus-to-tf-idf-data!, read into a map
-  with :idf, :all-terms, :item-names, and :data keys."
+  with :all-terms, :idf, :item-names, and :data keys."
   [file-path]
   (with-open [file-reader (-> file-path
                               gzip-reader
                               PushbackReader.)]
-    {:idf (edn/read file-reader)
-     :all-terms (edn/read file-reader)
+    {:all-terms (edn/read file-reader)
+     :idf (edn/read file-reader)
      :item-names (edn/read file-reader)
      :data (m/sparse-matrix (read-edn-stream file-reader m/sparse-array))}))
 
@@ -59,7 +59,7 @@
    [item-name distance]
    [item-name distance]]"
   [tf-idf-data query-document]
-  (let [{:keys [idf all-terms item-names data]} tf-idf-data
+  (let [{:keys [all-terms idf item-names data]} tf-idf-data
         query-vector (document-to-vector all-terms idf query-document)
         nearest-neighbors (knn data
                                query-vector

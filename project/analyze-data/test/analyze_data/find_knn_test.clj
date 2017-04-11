@@ -31,8 +31,8 @@
         "document with a term returns a tf-idf value for that term")))
 
 (deftest find-knn-test
-  (let [tf-idf-data {:idf {"bar" 1, "foo" 1}
-                     :all-terms ["bar" "foo"]
+  (let [tf-idf-data {:all-terms ["bar" "foo"]
+                     :idf {"bar" 1, "foo" 1}
                      :item-names ["1" "2" "3"]
                      :data [[1 1] [1 0.5] [1 0]]}]
     (is (= ["1" "2" "3"]
