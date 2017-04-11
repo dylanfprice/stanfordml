@@ -1,7 +1,8 @@
 ; vi: ft=clojure
 
 (set-env!
-  :resource-paths #{"src", "test"}
+  :source-paths #{"src", "test"}
+  :resource-paths #{"resources"}
   :dependencies '[[org.clojure/clojure "1.8.0"]
                   [org.clojure/data.csv "0.1.3"]
                   [incanter "1.9.0"]
