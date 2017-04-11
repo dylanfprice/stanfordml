@@ -61,19 +61,16 @@
 
 (defn csv-corpus-to-tf-idf-data!
   "Transform a csv containing a corpus of documents into a file of tf-idf
-  vectors and a file of idf values.
+  vectors.
 
   in-path: path to a csv file. It should contain the headers 'item-name' and
            'item-text', with values as described in corpus-to-tf-idf-data.
-  idf-path: path to write an edn map from term to idf value.
   tf-idf-path: path where the tf-idf vectors will be written as a gzipped
                file. Each line of the output file will be an edn list, and
                each will correspond to an entry from the :tf-idf key in the
                return value of corpus-to-tf-idf-data."
-  [in-path idf-path tf-idf-path]
-  (with-open [in (io/reader in-path)
-              idf-out (io/writer idf-path)]
+  [in-path tf-idf-path]
+  (with-open [in (io/reader in-path)]
     (let [corpus (csv-to-map in)
           tf-idf-data (corpus-to-tf-idf-data corpus)]
-      (binding [*out* idf-out] (prn (:idf tf-idf-data)))
-      (write-sequence! (:tf-idf tf-idf-data) tf-idf-path, :compress? true))))
+      (write-sequence! tf-idf-data tf-idf-path, :compress? true))))
