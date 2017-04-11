@@ -14,6 +14,15 @@ X implement k-nn algorithm
     dot-product(x, y): sum(x_1 * y_1, x_2 * y_2, ...)
 X see how many dimensions data has
   data with just words has ~ 19000 dimensionts
+X reduce memory footprint of read-tf-idf-data
+X write tests for find-knn
+X be consistent with order of all-terms, idf, item-names in function params and files, maps, etc.t 
+- figure out what's broken right now
+- write code to measure performance given labelled test data
+- refactor functions with options to use destructuring syntax in arg list
+- consider changing uses of rest to next?
+- write tests for io functions
+- make a split for unit/integration tests?
 - investigate performance of algorithm
     - does a high cosine similarity correspond to a good prediction?
         no: then trs and sp pages are not very related
@@ -28,8 +37,16 @@ X see how many dimensions data has
             - if query and source use different words that mean the same thing,
               apply PCA to reduce dimensions
       
-- vectorz or other implementation: serializing sparse arrays to a file?
-- rest vs next
-- testing clojure functions with side-effects
-- testing philosophies in clojure, unit vs integration, whether to fully isolate functions, i/o etc.
-- add command-line wrapper around analyze-data?
+- vectorz or other implementation: serializing sparse arrays/matrix to a file?
+  java Serializable - ObjectOutputStream
+- testing
+    - testing clojure functions with side-effects
+        - DI and protocols for interactions with external services
+        - StringReader and StringWriter for IO
+        - with-redefs can reach in and redefine Vars
+        - there are also mock libraries
+    - testing philosophies in clojure, unit vs integration, whether to fully isolate functions
+        - one idiom: put both unit and integration together but mark integration with ^:integration or similar
+          leiningen knows how to run tests based on these but boot may not
+    - equivalent of StringIO
+      java.io.StringWriter and java.io.StringReader
