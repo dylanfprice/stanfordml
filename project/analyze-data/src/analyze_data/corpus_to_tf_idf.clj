@@ -36,25 +36,28 @@
           where 'item-name' is a unique identifier and 'item-text' is a
           document
 
-  Return a map of the following form:
-  {:idf    {term1 value
-            term2 value
-            ...}
-   :tf-idf [[term1             term2             ...]
-            [item1-name        item2-name        ...]
-            [item1-term1-value item1-term2-value ...]
-            [item2-term1-value item2-term2-value ...]
-            ...]}
+  Return a lazy sequence of the following form:
+  [{term1 value,      term2 value,      ...}
+   [term1             term2             ...]
+   [item1-name        item2-name        ...]
+   [item1-term1-value item1-term2-value ...]
+   [item2-term1-value item2-term2-value ...]
+   ...]]
 
-  Note that :tf-idf is a lazy sequence."
+  which can be interpreted as:
+  [{inverse document frequencies}
+   [term order]
+   [item names]
+   [item1 tf-idf values]
+   [item2 tf-idf values]
+   ...]"
   [corpus]
   (let [document-names (map #(% "item-name") corpus)
         document-texts (map #(% "item-text") corpus)
-        tf-idf-corpus (tf-idf (map to-terms document-texts))
-        all-terms (:all-terms tf-idf-corpus)
-        data (:tf-idf tf-idf-corpus)]
-        {:idf (:idf tf-idf-corpus)
-         :tf-idf (->> data (cons document-names) (cons all-terms))}))
+        tf-idf-corpus (tf-idf (map to-terms document-texts))]
+    (concat
+      [(:idf tf-idf-corpus) (:all-terms tf-idf-corpus) document-names]
+      (:tf-idf tf-idf-corpus))))
 
 (defn csv-corpus-to-tf-idf-data!
   "Transform a csv containing a corpus of documents into a file of tf-idf
