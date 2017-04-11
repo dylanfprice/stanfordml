@@ -1,6 +1,7 @@
 (ns analyze-data.corpus-to-tf-idf
   (:require [clojure.data.csv :as csv]
             [clojure.java.io :as io]
+            [analyze-data.gzip :refer [gzip-writer]]
             [analyze-data.tf-idf.core :refer [to-terms tf-idf]])
   (:import java.util.zip.GZIPOutputStream))
 
@@ -12,11 +13,6 @@
         header-row (first csv-file)
         data (rest csv-file)]
     (map (partial zipmap header-row) data)))
-
-(defn gzip-writer
-  "Like io/writer but writes output compressed with gzip."
-  [x]
-  (-> x io/output-stream GZIPOutputStream. io/writer))
 
 (defn write-sequence!
   "Write each item in sequence s as a line of edn to file-path. Uses doseq
