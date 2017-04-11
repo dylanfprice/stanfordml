@@ -1,8 +1,9 @@
 (ns analyze-data.knn.core
   (:require [clojure.core.matrix :as m]))
 
-(defn cosine-similarity
-  "TODO: this is the cosine of the angle between the two vectors?
+(defn cosine-distance
+  "Calculate 1 - cos(theta) between each vector in X and y, where theta is the
+  angle between the vectors.
 
   X is a matrix of the form
   [[--x1--]
@@ -13,13 +14,13 @@
 
   Return a sequence of [distance-from-x1 distance-from-x2 ...]."
   [X y]
-  (m/div
-    (m/sub 1 (m/mmul X y))
-    (m/mul (map m/magnitude X)
-           (m/magnitude y))))
+  (let [dot-product (m/mmul X y)
+        product-of-norms (m/mul (map m/magnitude X) (m/magnitude y))
+        cosine-similarity (m/div dot-product product-of-norms)]
+    (m/sub 1 cosine-similarity)))
 
 (defn euclidean-distance
-  "Euclidean distance between each row of a matrix and a vector.
+  "Euclidean distance between each vector in X and y.
 
   X is a matrix of the form
   [[--x1--]
