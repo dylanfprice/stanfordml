@@ -12,14 +12,13 @@
     (testing ":tf-idf"
       (let [tf-idf (:tf-idf result)
             first-row (first tf-idf)
-            second-row (second tf-idf)]
-        (is (= 3 (count tf-idf))
-            "contains same number of rows as input plus one header row")
-        (is (= ["item-name" "dog" "rover" "spot"]
-               first-row)
-            "first row is header row with sorted terms")
-        (is (= "foo"
-               (first second-row))
-            "first element of second row is first item-name")
-        (is (every? #(= java.lang.Double (type %)) (rest second-row))
-            "rest of elements of second row are doubles (tf-idf values)")))))
+            second-row (second tf-idf)
+            third-row (nth tf-idf 2)]
+        (is (= 4 (count tf-idf))
+            "contains same number of rows as input plus two header rows")
+        (is (= ["dog" "rover" "spot"] first-row)
+            "first row is header row of sorted terms")
+        (is (= ["foo" "bar"] second-row)
+            "second row is header row of item names")
+        (is (every? #(= java.lang.Double (type %)) third-row)
+            "elements of third row are tf-idf values")))))

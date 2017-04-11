@@ -40,9 +40,10 @@
   {:idf    {term1 value
             term2 value
             ...}
-   :tf-idf [['item-name' term1       term2       ...]
-            [item-name1  term1-value term2-value ...]
-            [item-name2  term1-value term2-value ...]
+   :tf-idf [[term1             term2             ...]
+            [item1-name        item2-name        ...]
+            [item1-term1-value item1-term2-value ...]
+            [item2-term1-value item2-term2-value ...]
             ...]}
 
   Note that :tf-idf is a lazy sequence."
@@ -50,10 +51,10 @@
   (let [document-names (map #(% "item-name") corpus)
         document-texts (map #(% "item-text") corpus)
         tf-idf-corpus (tf-idf (map to-terms document-texts))
-        header-row (cons "item-name" (:all-terms tf-idf-corpus))
-        data (map (partial cons) document-names (:tf-idf tf-idf-corpus))]
+        all-terms (:all-terms tf-idf-corpus)
+        data (:tf-idf tf-idf-corpus)]
         {:idf (:idf tf-idf-corpus)
-         :tf-idf (cons header-row data)}))
+         :tf-idf (->> data (cons document-names) (cons all-terms))}))
 
 (defn csv-corpus-to-tf-idf-data!
   "Transform a csv containing a corpus of documents into a file of tf-idf
