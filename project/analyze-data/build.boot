@@ -5,10 +5,11 @@
   :resource-paths #{"resources"}
   :dependencies '[[org.clojure/clojure "1.8.0"]
                   [org.clojure/data.csv "0.1.3"]
-                  [incanter "1.9.0"]
-                  [adzerk/boot-test "1.2.0" :scope "test"]])
+                  [metosin/boot-alt-test "0.3.1" :scope "test"]
+                  [net.mikera/core.matrix "0.58.0"]
+                  [net.mikera/vectorz-clj "0.46.0"]])
 
-(require '[adzerk.boot-test :refer [test]])
+(require '[metosin.boot-alt-test :refer [alt-test]])
 
 (task-options!
     aot {:all true}
