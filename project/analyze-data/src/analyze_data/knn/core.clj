@@ -17,7 +17,9 @@
   (let [dot-product (m/mmul X y)
         product-of-norms (m/mul (map m/magnitude X) (m/magnitude y))
         cosine-similarity (m/div dot-product product-of-norms)]
-    (m/sub 1 cosine-similarity)))
+    (->> cosine-similarity
+         (m/sub 1)
+         (m/emap #(if (Double/isNaN %) 1.0 %)))))
 
 (defn euclidean-distance
   "Euclidean distance between each vector in X and y.
