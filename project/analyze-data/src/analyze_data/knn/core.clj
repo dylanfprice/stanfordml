@@ -58,5 +58,5 @@
          :or {k 3, distance-fn euclidean-distance}} options]
     (->> (distance-fn X y)
          (map-indexed #(vector %1 %2))
-         (sort (comparator #(< (second %1) (second %2))))
+         (sort-by second)
          (take k))))
