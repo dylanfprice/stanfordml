@@ -15,8 +15,9 @@
     (map (partial zipmap header-row) data)))
 
 (defn corpus-to-tf-idf-data
-  "Transform a corpus of documents into a map containing tf-idf vectors and
-  other associated data.
+  "Transform a corpus of documents into a map containing a matrix of tf-idf
+  values and other associated data. All data will be non-lazy so as to be
+  suitable for serialization.
 
   corpus: a sequence of maps containing keys 'document-name' and
           'document-text', where 'document-name' is a unique identifier and
@@ -33,17 +34,17 @@
                 ...]}
 
   :all-terms is a sorted sequence of all terms found in the corpus.
-  :document-names is a sequence of the 'document-name' keys
+  :document-names is a sequence of the 'document-name' keys.
   :idf is a map from term to its inverse document frequency.
   :tf-idf is a core.matrix sparse matrix containing the tf-idf values. Each
           row corresponds to a document and each column to a term."
   [corpus]
-  (let [document-names (map #(% "document-name") corpus)
+  (let [document-names (mapv #(% "document-name") corpus)
         document-texts (map #(% "document-text") corpus)
         tf-idf-data (tf-idf (map to-terms document-texts))]
     (assoc tf-idf-data
-           :tf-idf (m/sparse-matrix (:tf-idf tf-idf-data))
-           :document-names document-names)))
+           :document-names document-names
+           :tf-idf (m/sparse-matrix (:tf-idf tf-idf-data)))))
 
 (defn csv-corpus-to-tf-idf-data!
   "Transform a csv containing a corpus of documents into a file of tf-idf
