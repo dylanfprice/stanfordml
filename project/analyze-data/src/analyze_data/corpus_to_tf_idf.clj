@@ -25,10 +25,10 @@
 
   Return a map of the following form:
   {:all-terms  [term1 term2 ...]
-   :document-names [item1 item2 ...]
    :idf        {term1 value
                 term2 value
                 ...}
+   :document-names [item1 item2 ...]
    :tf-idf     [[term1-value term2-value ...]
                 [term1-value term2-value ...]
                 ...]}
