@@ -1,6 +1,16 @@
 (ns analyze-data.corpus-to-tf-idf-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [clojure.core.matrix :as m]
+            [clojure.test :refer [deftest is testing use-fixtures]]
             [analyze-data.corpus-to-tf-idf :as test-ns]))
+
+(defn use-vectorz-fixture
+  [f]
+  (let [default-implementation (m/current-implementation)]
+    (m/set-current-implementation :vectorz)
+    (f)
+    (m/set-current-implementation default-implementation)))
+
+(use-fixtures :once use-vectorz-fixture)
 
 (deftest corpus-to-tf-idf-data-test
   (let [corpus [{"item-name" "foo", "item-text" "my dog rover"}

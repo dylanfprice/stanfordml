@@ -1,5 +1,6 @@
 (ns analyze-data.tf-idf.core
-  (:require [analyze-data.tf-idf.term-frequency
+  (:require [clojure.core.matrix :as m]
+            [analyze-data.tf-idf.term-frequency
              :refer [normalized-term-frequency]]
             [analyze-data.tf-idf.inverse-document-frequency
              :refer [inverse-document-frequency]]
@@ -31,13 +32,13 @@
                               in the corpus
   term-document: sequence of terms representing a single document
 
-  Return a sequence of calculated tf-idf values for the given term-document,
-  matching the order of all-terms."
+  Return a core.matrix sparse array of calculated tf-idf values for the given
+  term-document, matching the order of all-terms."
   [all-terms inverse-document-frequency term-document]
   (let [term-frequencies (normalized-term-frequency term-document)
         calc-tf-idf #(* (get term-frequencies % 0.0)
                         (get inverse-document-frequency % 0.0))]
-    (map calc-tf-idf all-terms)))
+    (m/sparse-array (map calc-tf-idf all-terms))))
 
 (defn tf-idf
   "Calculates (term frequency * inverse document frequency) values for a
@@ -58,9 +59,9 @@
                ...]}
 
   :all-terms is a sorted sequence of all terms found in the corpus. :idf is a
-  map from term to its inverse document frequency. :tf-idf contains sequences
-  of tf-idf values matching the order of :terms, for each document in
-  term-corpus."
+  map from term to its inverse document frequency. :tf-idf is a lazy sequence
+  of core.matrix sparse arrays which contain the tf-idf values for each
+  document in term-corpus."
   [term-corpus]
   (let [all-terms (->> term-corpus (apply concat) (distinct) (sort))
         idf (inverse-document-frequency term-corpus)

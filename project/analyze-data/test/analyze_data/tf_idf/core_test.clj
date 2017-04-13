@@ -1,6 +1,15 @@
 (ns analyze-data.tf-idf.core-test
-  (:require [clojure.test :refer [deftest is]]
+  (:require [clojure.core.matrix :as m]
+            [clojure.test :refer [deftest is use-fixtures]]
             [analyze-data.tf-idf.core :as test-ns]))
+(defn use-vectorz-fixture
+  [f]
+  (let [default-implementation (m/current-implementation)]
+    (m/set-current-implementation :vectorz)
+    (f)
+    (m/set-current-implementation default-implementation)))
+
+(use-fixtures :once use-vectorz-fixture)
 
 (deftest to-terms-test
   (is (= []
@@ -23,28 +32,28 @@
 
 (deftest tf-idf-document
   (is (= [3.0]
-         (test-ns/tf-idf-document
+         (vec (test-ns/tf-idf-document
            ["test"]
            {"test" 3}
-           ["test"]))
+           ["test"])))
       "3 when idf is 3 and tf is 1")
   (is (= [0.0]
-         (test-ns/tf-idf-document
+         (vec (test-ns/tf-idf-document
            ["test"]
            {}
-           ["test"]))
+           ["test"])))
       "0 when idf is 0")
   (is (= [0.0]
-         (test-ns/tf-idf-document
+         (vec (test-ns/tf-idf-document
            ["test"]
            {"test" 3}
-           []))
+           [])))
       "0 when tf is 0")
   (is (= [3.0 2.0]
-         (test-ns/tf-idf-document
+         (vec (test-ns/tf-idf-document
            ["test" "hello"]
            {"hello" 2 "test" 3}
-           ["hello" "test"]))
+           ["hello" "test"])))
       "matches the order of all-terms"))
 
 (deftest tf-idf
