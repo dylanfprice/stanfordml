@@ -33,7 +33,7 @@
 (deftest find-knn-test
   (let [tf-idf-data {:all-terms ["bar" "foo"]
                      :idf {"bar" 1, "foo" 1}
-                     :item-names ["1" "2" "3"]
+                     :document-names ["1" "2" "3"]
                      :data [[1 1] [1 0.5] [1 0]]}]
     (is (= ["1" "2" "3"]
            (map first (test-ns/find-knn tf-idf-data "foo bar")))

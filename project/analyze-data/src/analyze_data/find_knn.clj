@@ -21,22 +21,22 @@
 (defn read-tf-idf-data
   "Given the path to a file of gzipped tf-idf data as produced by
   analyze-data.corpus-to-tf-idf/csv-corpus-to-tf-idf-data!, read into a map
-  with :all-terms, :idf, :item-names, and :data keys."
+  with :all-terms, :idf, :document-names, and :data keys."
   [file-path]
   (with-open [file-reader (-> file-path
                               gzip-reader
                               PushbackReader.)]
     {:all-terms (edn/read file-reader)
      :idf (edn/read file-reader)
-     :item-names (edn/read file-reader)
+     :document-names (edn/read file-reader)
      :data (m/sparse-matrix (read-edn-stream file-reader m/sparse-array))}))
 
 (defn knn-named-result
-  "Transform [index value] into [item-name value]."
-  [item-names result]
+  "Transform [index value] into [document-name value]."
+  [document-names result]
   (let [index (first result)
         distance (second result)]
-    [(nth item-names index) distance]))
+    [(nth document-names index) distance]))
 
 (defn document-to-vector
   "Turn a document into a core.matrix/sparse-array of tf-idf values.
@@ -55,14 +55,14 @@
   query-document: string
 
   Return sequence of the form
-  [[item-name distance]
-   [item-name distance]
-   [item-name distance]]"
+  [[document-name distance]
+   [document-name distance]
+   [document-name distance]]"
   [tf-idf-data query-document]
-  (let [{:keys [all-terms idf item-names data]} tf-idf-data
+  (let [{:keys [all-terms idf document-names data]} tf-idf-data
         query-vector (document-to-vector all-terms idf query-document)
         nearest-neighbors (knn data
                                query-vector
                                :k 3
                                :distance-fn cosine-distance)]
-    (map (partial knn-named-result item-names) nearest-neighbors)))
+    (map (partial knn-named-result document-names) nearest-neighbors)))

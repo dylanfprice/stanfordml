@@ -18,13 +18,13 @@
   "Transform a corpus of documents into a map containing tf-idf vectors and
   other associated data.
 
-  corpus: a sequence of maps containing keys 'item-name' and 'item-text',
-          where 'item-name' is a unique identifier and 'item-text' is a
-          document
+  corpus: a sequence of maps containing keys 'document-name' and
+          'document-text', where 'document-name' is a unique identifier and
+          'document-text' is a document
 
   Return a map of the following form:
   {:all-terms  [term1 term2 ...]
-   :item-names [item1 item2 ...]
+   :document-names [item1 item2 ...]
    :idf        {term1 value
                 term2 value
                 ...}
@@ -33,24 +33,25 @@
                 ...]}
 
   :all-terms is a sorted sequence of all terms found in the corpus.
-  :item-names is a sequence of the 'item-name' keys
+  :document-names is a sequence of the 'document-name' keys
   :idf is a map from term to its inverse document frequency.
   :tf-idf is a core.matrix sparse matrix containing the tf-idf values. Each
           row corresponds to a document and each column to a term."
   [corpus]
-  (let [document-names (map #(% "item-name") corpus)
-        document-texts (map #(% "item-text") corpus)
+  (let [document-names (map #(% "document-name") corpus)
+        document-texts (map #(% "document-text") corpus)
         tf-idf-data (tf-idf (map to-terms document-texts))]
     (assoc tf-idf-data
            :tf-idf (m/sparse-matrix (:tf-idf tf-idf-data))
-           :item-names document-names)))
+           :document-names document-names)))
 
 (defn csv-corpus-to-tf-idf-data!
   "Transform a csv containing a corpus of documents into a file of tf-idf
   data.
 
-  in-path: path to a csv file. It should contain the headers 'item-name' and
-           'item-text', with values as described in corpus-to-tf-idf-data.
+  in-path: path to a csv file. It should contain the headers 'document-name'
+           and 'document-text', with values as described in
+           corpus-to-tf-idf-data.
   tf-idf-path: path where the tf-idf data will be written as a serialized
                map. You may read this data back in using
                analyze-data.serialize/read-object, make sure you use the same
