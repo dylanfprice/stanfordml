@@ -1,7 +1,6 @@
 (ns analyze-data.serialize
   (:require [clojure.java.io :as io])
-  (:import (java.io ObjectInputStream ObjectOutputStream)
-           (java.util.zip GZIPInputStream GZIPOutputStream)))
+  (:import (java.io ObjectInputStream ObjectOutputStream)))
 
 (defn write-object!
   "Write a java.io.Serializable object as gzipped output to f."
