@@ -1,35 +1,7 @@
 (ns analyze-data.find-knn
   (:require [clojure.core.matrix :as m]
-            [clojure.edn :as edn]
-            [clojure.java.io :as io]
             [analyze-data.knn.core :refer [cosine-distance knn]]
-            [analyze-data.tf-idf.core :refer [tf-idf-document to-terms]]
-            [analyze-data.gzip :refer [gzip-reader]])
-  (:import java.io.PushbackReader))
-
-(defn read-edn-stream
-  "Return a lazy sequence of (transform-fn item) for each item parsed from a
-  stream of edn objects. transform-fn defaults to identity. reader must be a
-  java.io.PushbackReader or some derivee. Since it is lazy, the stream must
-  remain open while new items are being requested."
-  ([reader] (read-edn-stream reader identity))
-  ([reader transform-fn]
-    (lazy-seq
-      (when-let [line (edn/read {:eof nil} reader)]
-        (cons (transform-fn line) (read-edn-stream reader transform-fn))))))
-
-(defn read-tf-idf-data
-  "Given the path to a file of gzipped tf-idf data as produced by
-  analyze-data.corpus-to-tf-idf/csv-corpus-to-tf-idf-data!, read into a map
-  with :all-terms, :idf, :document-names, and :data keys."
-  [file-path]
-  (with-open [file-reader (-> file-path
-                              gzip-reader
-                              PushbackReader.)]
-    {:all-terms (edn/read file-reader)
-     :idf (edn/read file-reader)
-     :document-names (edn/read file-reader)
-     :data (m/sparse-matrix (read-edn-stream file-reader m/sparse-array))}))
+            [analyze-data.tf-idf.core :refer [tf-idf-document to-terms]]))
 
 (defn knn-named-result
   "Transform [index value] into [document-name value]."
@@ -51,7 +23,7 @@
   "Find 3 nearest neighbors (per cosine-distance) to query-document in
   tf-idf-data.
 
-  tf-idf-data: map produced by read-tf-idf-data
+  tf-idf-data: map produced by corpus-to-tf-idf-data
   query-document: string
 
   Return sequence of the form
