@@ -31,9 +31,9 @@
    [document-name distance]
    [document-name distance]]"
   [tf-idf-data query-document]
-  (let [{:keys [all-terms idf document-names data]} tf-idf-data
+  (let [{:keys [all-terms idf document-names tf-idf]} tf-idf-data
         query-vector (document-to-vector all-terms idf query-document)
-        nearest-neighbors (knn data
+        nearest-neighbors (knn tf-idf
                                query-vector
                                :k 3
                                :distance-fn cosine-distance)]
