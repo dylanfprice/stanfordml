@@ -17,15 +17,15 @@
                 {"item-name" "bar", "item-text" "my dog spot"}]
         double? #(= java.lang.Double (type %))
         result (test-ns/corpus-to-tf-idf-data corpus)]
-    (is (sequential? result) "returns a sequence")
-    (is (= 5 (count result))
-        "contains same number of rows as input plus three header rows")
-    (is (= ["dog" "rover" "spot"] (nth result 0))
-        "first row contains sorted terms")
-    (testing "second row is map from term to inverse document frequency"
-      (is (= ["dog" "rover" "spot"] (keys (nth result 1))))
-      (is (every? double? (vals (nth result 1)))))
-    (is (= ["foo" "bar"] (nth result 2))
-        "third row contains item names")
-    (is (every? double? (nth result 3))
-        "elements of fourth row are tf-idf values")))
+    (is (map? result) "returns a map")
+    (is (every? #(contains? result %) [:all-terms :item-names :idf :tf-idf])
+        "contains :all-terms, :item-names, :idf, and :tf-idf keys")
+    (is (= ["dog" "rover" "spot"] (:all-terms result))
+        ":all-terms contains sorted terms")
+    (testing ":idf is map from term to inverse document frequency"
+      (is (= ["dog" "rover" "spot"] (keys (:idf result))))
+      (is (every? double? (vals (:idf result)))))
+    (is (= ["foo" "bar"] (:item-names result))
+        ":item-names contains item names")
+    (is (every? double? (first (:tf-idf result)))
+        "elements of :tf-idf rows are tf-idf values")))
