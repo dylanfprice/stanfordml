@@ -3,7 +3,7 @@
   (:import (java.io ObjectInputStream ObjectOutputStream)))
 
 (defn write-object!
-  "Write a java.io.Serializable object as gzipped output to f."
+  "Write a java.io.Serializable object as output to f."
   [f object]
   (with-open [out (-> f
                       io/output-stream
