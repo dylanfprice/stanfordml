@@ -14,6 +14,19 @@
         data (rest csv-file)]
     (map (partial zipmap header-row) data)))
 
+(defn create-sparse-matrix
+  "Given
+  num-rows: number of rows in the resultant matrix
+  data: lazy sequence of rows of data
+
+  Return core.matrix sparse matrix containing data."
+  [num-rows data]
+  (let [shape (cons num-rows (m/shape (first data)))
+        indexed-data (map-indexed #(vector %1 %2) data)
+        matrix (m/new-sparse-array shape)]
+    (doseq [[index row] indexed-data]
+      (m/set-row! matrix index row))))
+
 (defn corpus-to-tf-idf-data
   "Transform a corpus of documents into a map containing a matrix of tf-idf
   values and other associated data. All data will be non-lazy so as to be
@@ -43,7 +56,8 @@
         tf-idf-data (tf-idf (map to-terms document-texts))]
     (assoc tf-idf-data
            :document-names document-names
-           :tf-idf (m/sparse-matrix (:tf-idf tf-idf-data)))))
+           :tf-idf (create-sparse-matrix (count document-names)
+                                         (:tf-idf tf-idf-data)))))
 
 (defn csv-corpus-to-tf-idf-data!
   "Transform a csv containing a corpus of documents into a file of tf-idf
