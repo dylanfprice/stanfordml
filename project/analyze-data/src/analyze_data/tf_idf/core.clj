@@ -37,13 +37,20 @@
   [all-terms inverse-document-frequency term-document]
   (let [term-frequencies (normalized-term-frequency term-document)
         calc-tf-idf #(* (get term-frequencies % 0.0)
-                        (get inverse-document-frequency % 0.0))]
-    (m/sparse-array (map calc-tf-idf all-terms))))
+                        (get inverse-document-frequency % 0.0))
+        indexed-tf-idf-values (eduction (map calc-tf-idf)
+                                        (map-indexed #(vector %1 %2))
+                                        (filter #(not= 0.0 (second %)))
+                                        all-terms)
+        array (m/new-sparse-array [(count all-terms)])
+        set-value (fn [[index value]] (m/mset! array index value))]
+    (run! set-value indexed-tf-idf-values)
+    array))
+
 
 (defn tf-idf
   "Calculates (term frequency * inverse document frequency) values for a
   corpus of documents.
-
 
   term-corpus: a sequence of term sequences. A term is a word, or bigram, or
                trigram, etc. Each term sequence should represent a single
