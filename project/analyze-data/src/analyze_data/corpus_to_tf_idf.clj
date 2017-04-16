@@ -20,21 +20,20 @@
   suitable for serialization.
 
   corpus: a sequence of maps containing keys 'document-name' and
-          'document-text', where 'document-name' is a unique identifier and
-          'document-text' is a document
+          'document-text', where 'document-name' is a unique identifier.
 
   Return a map of the following form:
   {:all-terms  [term1 term2 ...]
    :idf        {term1 value
                 term2 value
                 ...}
-   :document-names [item1 item2 ...]
-   :tf-idf     [[term1-value term2-value ...]
-                [term1-value term2-value ...]
+   :document-names [doc1-name doc2-name ...]
+   :tf-idf     [[doc1-term1-value doc1-term2-value ...]
+                [doc2-term1-value doc2-term2-value ...]
                 ...]}
 
   :all-terms is a sorted sequence of all terms found in the corpus.
-  :document-names is a sequence of the 'document-name' keys.
+  :document-names is a sequence of the 'document-name' values.
   :idf is a map from term to its inverse document frequency.
   :tf-idf is a core.matrix sparse matrix containing the tf-idf values. Each
           row corresponds to a document and each column to a term."
