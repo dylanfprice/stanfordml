@@ -16,7 +16,8 @@
         indexed-data (map-indexed #(vector %1 %2) data)
         matrix (m/new-sparse-array shape)]
     (doseq [[index row] indexed-data]
-      (m/set-row! matrix index row))))
+      (m/set-row! matrix index row))
+    matrix))
 
 (defn corpus-to-tf-idf-data
   "Transform a corpus of documents into a map containing a matrix of tf-idf

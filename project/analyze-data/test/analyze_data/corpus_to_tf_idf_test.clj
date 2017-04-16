@@ -30,5 +30,7 @@
       (is (every? double? (vals (:idf result)))))
     (is (= ["foo" "bar"] (:document-names result))
         ":document-names contains item names")
+    (is (not (nil? (first (:tf-idf result))))
+        ":tf-idf is not nil")
     (is (every? double? (first (:tf-idf result)))
         "elements of :tf-idf rows are tf-idf values")))
