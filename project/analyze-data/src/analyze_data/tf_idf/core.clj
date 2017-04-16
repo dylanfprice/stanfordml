@@ -42,11 +42,10 @@
                                         (map-indexed #(vector %1 %2))
                                         (filter #(not= 0.0 (second %)))
                                         all-terms)
-        array (m/new-sparse-array [(count all-terms)])
-        set-value (fn [[index value]] (m/mset! array index value))]
-    (run! set-value indexed-tf-idf-values)
+        array (m/new-sparse-array [(count all-terms)])]
+    (doseq [[index value] indexed-tf-idf-values]
+      (m/mset! array index value))
     array))
-
 
 (defn tf-idf
   "Calculates (term frequency * inverse document frequency) values for a
