@@ -38,11 +38,11 @@
   (let [term-frequencies (normalized-term-frequency term-document)
         calc-tf-idf #(* (get term-frequencies % 0.0)
                         (get inverse-document-frequency % 0.0))
+        array (m/new-sparse-array [(count all-terms)])
         indexed-tf-idf-values (eduction (map calc-tf-idf)
                                         (map-indexed #(vector %1 %2))
                                         (filter #(not= 0.0 (second %)))
-                                        all-terms)
-        array (m/new-sparse-array [(count all-terms)])]
+                                        all-terms)]
     (doseq [[index value] indexed-tf-idf-values]
       (m/mset! array index value))
     array))
