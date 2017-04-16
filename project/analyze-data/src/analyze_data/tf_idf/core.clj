@@ -58,10 +58,10 @@
                [term1-value term2-value ...]
                ...]}
 
-  :all-terms is a sorted sequence of all terms found in the corpus. :idf is a
-  map from term to its inverse document frequency. :tf-idf is a lazy sequence
-  of core.matrix sparse arrays which contain the tf-idf values for each
-  document in term-corpus."
+  :all-terms is a sorted sequence of all terms found in the corpus.
+  :idf is a map from term to its inverse document frequency.
+  :tf-idf is a lazy sequence of core.matrix sparse arrays which contain the
+          tf-idf values for each document in term-corpus."
   [term-corpus]
   (let [all-terms (->> term-corpus (apply concat) (distinct) (sort))
         idf (inverse-document-frequency term-corpus)
