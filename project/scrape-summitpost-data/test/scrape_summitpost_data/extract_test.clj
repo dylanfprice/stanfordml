@@ -2,12 +2,6 @@
   (:require [clojure.test :refer [deftest is]]
             [scrape-summitpost-data.extract :as test-ns]))
 
-(deftest ensure-sequence-test
-  (is (= [1 2 3] (#'test-ns/ensure-sequence [1 2 3]))
-      "returns sequence when given a sequence")
-  (is (= [1] (#'test-ns/ensure-sequence 1))
-      "returns sequence when given an int"))
-
 (deftest extract-pager-links-test
   (let [jsoup-snippet (reaver/parse
                         "<td>

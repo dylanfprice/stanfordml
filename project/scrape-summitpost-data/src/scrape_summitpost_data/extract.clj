@@ -1,12 +1,7 @@
 (ns scrape-summitpost-data.extract
-  (:require [reaver]))
-
-
-(defn- ensure-sequence
-  "If arg is sequential?, return arg. Otherwise return a one-element vector
-  containing arg."
-  [arg]
-  (if (sequential? arg) arg [arg]))
+  (:require [reaver]
+            [scrape-summitpost-data.ensure-sequence
+             :refer [ensure-sequence]]))
 
 (defn- extract-pager-links
   "Given a Jsoup document containing a search results page from summitpost,
@@ -24,7 +19,7 @@
   [links]
   (->> links
        (map (partial re-find #"page=(\d+)"))
-       (map #(nth % 1)) 
+       (map #(nth % 1))
        (map #(Integer/parseInt %))
        (apply max)))
 
@@ -37,13 +32,13 @@
     (let [last-page (extract-last-page pager-links)
           template (first pager-links)]
       (->> (range 1 (+ 1 last-page))
-           (map #(clojure.string/replace 
-                   template 
-                   #"page=\d+" 
+           (map #(clojure.string/replace
+                   template
+                   #"page=\d+"
                    (str "page=" %)))))))
 
-(defn extract-result-links 
-  "Given a Jsoup document containing a search results page from summitpost, 
+(defn extract-result-links
+  "Given a Jsoup document containing a search results page from summitpost,
   return a sequence of links representing the results on that page."
   [page]
   (ensure-sequence
