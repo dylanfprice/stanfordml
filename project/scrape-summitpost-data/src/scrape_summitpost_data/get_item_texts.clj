@@ -1,13 +1,14 @@
 (ns scrape-summitpost-data.get-item-texts
   (:require [reaver]
-            [scrape-summitpost-data.extract :refer [extract-all-pager-links
-                                                    extract-result-links
+            [scrape-summitpost-data.extract-pager-links
+             :refer [extract-all-pager-links]]
+            [scrape-summitpost-data.extract :refer [extract-result-links
                                                     extract-item-name
                                                     extract-item-text]]))
 
 (def base-url "http://www.summitpost.org")
 
-(defn- get-pager-links 
+(defn- get-pager-links
   "Given a link to a paginated search results page from summitpost, GET the
   page and return a sequence of links to all search results pages. If there
   is no pagination, return nil."
@@ -18,10 +19,10 @@
        (reaver/parse)
        (extract-all-pager-links)))
 
-(defn- get-pages 
+(defn- get-pages
   "Given a link to a search results page from summitpost, GET every search
   results page in the pagination (or just the page if no pagination) and
-  return them as a lazy sequence." 
+  return them as a lazy sequence."
   [link]
   (->> (or (get-pager-links link) [link])
        (map (partial str base-url))
@@ -33,7 +34,7 @@
   performs multiple GET requests."
   [link]
   (->> link
-       (get-pages) 
+       (get-pages)
        (map reaver/parse)
        (map extract-result-links)
        (apply concat)
