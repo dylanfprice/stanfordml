@@ -30,10 +30,11 @@
   [page]
   (when-let [pager-links (-> page extract-pager-links not-empty)]
     (let [last-page (extract-last-page pager-links)
-          template (first pager-links)]
-      (->> (range 1 (+ 1 last-page))
-           (map #(clojure.string/replace
-                   template
-                   #"page=\d+"
-                   (str "page=" %)))))))
-
+          template (first pager-links)
+          page-numbers (range 1 (+ 1 last-page))
+          make-pager-link #(clojure.string/replace
+                             template
+                             #"page=\d+"
+                             (str "page=" %))
+          all-pager-links (map make-pager-link page-numbers)]
+      all-pager-links)))
