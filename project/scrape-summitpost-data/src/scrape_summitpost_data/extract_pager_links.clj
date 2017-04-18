@@ -4,10 +4,10 @@
              :refer [ensure-sequence]]))
 
 (defn- extract-pager-links
-  "Given a Jsoup document containing a search results page from summitpost,
+  "Given a string containing a search results page from summitpost,
   return a sequence of pager links with page=\\d+ query params."
   [page]
-  (->> (reaver/extract page [] ".pagertext" (reaver/attr :href))
+  (->> (reaver/extract (reaver/parse page) [] ".pagertext" (reaver/attr :href))
        (ensure-sequence)
        (remove nil?)
        (map (partial re-find #".*page=\d+"))
@@ -24,11 +24,11 @@
        (apply max)))
 
 (defn extract-all-pager-links
-  "Given a Jsoup document containing a search results page from summitpost,
-  return a sequence of links to all pages of search results. If there is no
-  pagination, return nil."
+  "Given a string containing a search results page from summitpost, return a
+  sequence of links to all pages of search results. If there is no pagination,
+  return nil."
   [page]
-  (when-let [pager-links (not-empty (extract-pager-links page))]
+  (when-let [pager-links (-> page extract-pager-links not-empty)]
     (let [last-page (extract-last-page pager-links)
           template (first pager-links)]
       (->> (range 1 (+ 1 last-page))

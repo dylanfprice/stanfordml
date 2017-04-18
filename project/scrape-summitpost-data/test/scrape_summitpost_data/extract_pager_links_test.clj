@@ -3,20 +3,18 @@
             [scrape-summitpost-data.extract-pager-links :as test-ns]))
 
 (deftest extract-pager-links-test
-  (let [jsoup-snippet (reaver/parse
-                        "<td>
-                         <a href='/test?foo=bar&page=1' class='pagertext'></a>
-                         </td>")]
+  (let [page "<td>
+              <a href='/test?foo=bar&page=1' class='pagertext'></a>
+              </td>"]
     (is (= ["/test?foo=bar&page=1"]
-           (#'test-ns/extract-pager-links jsoup-snippet))
+           (#'test-ns/extract-pager-links page))
         "extracts pager link"))
-  (let [jsoup-snippet (reaver/parse
-                        "<td>
-                         <a href='/test?foo=bar&page=1' class='pagertext'></a>
-                         <a href='/test?foo=bar' class='pagertext'></a>
-                         </td>")]
+  (let [page "<td>
+              <a href='/test?foo=bar&page=1' class='pagertext'></a>
+              <a href='/test?foo=bar' class='pagertext'></a>
+              </td>"]
     (is (= ["/test?foo=bar&page=1"]
-           (#'test-ns/extract-pager-links jsoup-snippet))
+           (#'test-ns/extract-pager-links page))
         "ignores links without page param")))
 
 (deftest extract-last-page-test
@@ -33,17 +31,16 @@
       "fails on a non-integer value of page param"))
 
 (deftest extract-all-pager-links-test
-  (let [jsoup-snippet (reaver/parse "<td></td>")]
+  (let [page "<td></td>"]
     (is (= nil
-           (test-ns/extract-all-pager-links jsoup-snippet))
+           (test-ns/extract-all-pager-links page))
         "returns nil when there are no pager links"))
-  (let [jsoup-snippet (reaver/parse
-                        "<td>
-                         <a href='/test?page=1' class='pagertext'></a>
-                         <a href='/test?page=2' class='pagertext'></a>
-                         <a href='/test?page=6' class='pagertext'></a>
-                         </td>")]
+  (let [page "<td>
+              <a href='/test?page=1' class='pagertext'></a>
+              <a href='/test?page=2' class='pagertext'></a>
+              <a href='/test?page=6' class='pagertext'></a>
+              </td>"]
     (is (= ["/test?page=1", "/test?page=2", "/test?page=3"
             "/test?page=4", "/test?page=5", "/test?page=6"]
-           (test-ns/extract-all-pager-links jsoup-snippet))
+           (test-ns/extract-all-pager-links page))
         "extracts entire range of links")))
