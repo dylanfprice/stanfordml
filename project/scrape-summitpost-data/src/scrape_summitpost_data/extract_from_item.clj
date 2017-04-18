@@ -9,7 +9,7 @@
        1))
 
 (defn extract-item-text
-  "Given a Jsoup document containing an item page from summitpost, return the
-  text of the main article."
+  "Given a string containing an item page from summitpost, return the text of
+  the main article."
   [page]
-  (reaver/extract page [] "article" reaver/text))
+  (reaver/extract (reaver/parse page) [] "article" reaver/text))

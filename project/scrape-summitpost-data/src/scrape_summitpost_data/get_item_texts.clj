@@ -1,6 +1,5 @@
 (ns scrape-summitpost-data.get-item-texts
-  (:require [reaver]
-            [scrape-summitpost-data.extract-pager-links
+  (:require [scrape-summitpost-data.extract-pager-links
              :refer [extract-all-pager-links]]
             [scrape-summitpost-data.extract-result-links
              :refer [extract-result-links]]
@@ -41,4 +40,4 @@
        (map #(vector
                %
                (extract-item-name base-url %)
-               (->> % slurp reaver/parse extract-item-text)))))
+               (->> % slurp extract-item-text)))))
