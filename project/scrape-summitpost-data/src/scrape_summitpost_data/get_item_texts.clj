@@ -32,7 +32,6 @@
   [link]
   (->> link
        (get-search-pages)
-       (map reaver/parse)
        (map extract-result-links)
        (apply concat)
        (map (partial str base-url))))
