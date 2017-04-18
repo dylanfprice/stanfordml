@@ -1,6 +1,6 @@
-(ns scrape-summitpost-data.extract-test
+(ns scrape-summitpost-data.extract-from-item-test
   (:require [clojure.test :refer [deftest is]]
-            [scrape-summitpost-data.extract :as test-ns]))
+            [scrape-summitpost-data.extract-from-item :as test-ns]))
 
 (deftest extract-item-name-test
   (is (= "test-item-name"

@@ -1,4 +1,4 @@
-(ns scrape-summitpost-data.extract
+(ns scrape-summitpost-data.extract-from-item
   (:require [reaver]))
 
 (defn extract-item-name

@@ -4,8 +4,8 @@
              :refer [extract-all-pager-links]]
             [scrape-summitpost-data.extract-result-links
              :refer [extract-result-links]]
-            [scrape-summitpost-data.extract :refer [extract-item-name
-                                                    extract-item-text]]))
+            [scrape-summitpost-data.extract-from-item
+             :refer [extract-item-name extract-item-text]]))
 
 (def base-url "http://www.summitpost.org")
 
