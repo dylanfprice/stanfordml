@@ -15,7 +15,7 @@
   (let [page (slurp (str base-url link))]
     (or (extract-all-pager-links page) [link])))
 
-(defn- get-pages
+(defn- get-search-pages
   "Given a link to a search results page from summitpost, GET every search
   results page in the pagination (or just the page if no pagination) and
   return them as a lazy sequence."
@@ -30,7 +30,7 @@
   performs multiple GET requests."
   [link]
   (->> link
-       (get-pages)
+       (get-search-pages)
        (map reaver/parse)
        (map extract-result-links)
        (apply concat)
