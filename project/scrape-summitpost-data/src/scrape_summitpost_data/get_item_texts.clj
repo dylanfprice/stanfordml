@@ -10,21 +10,18 @@
 
 (defn- get-pager-links
   "Given a link to a paginated search results page from summitpost, GET the
-  page and return a sequence of links to all search results pages. If there
-  is no pagination, return nil."
+  page and return a sequence of links to all search results pages."
   [link]
-  (->> link
-       (str base-url)
-       (slurp)
-       (reaver/parse)
-       (extract-all-pager-links)))
+  (let [page (slurp (str base-url link))
+        jsoup (reaver/parse page)]
+    (or (extract-all-pager-links jsoup) [link])))
 
 (defn- get-pages
   "Given a link to a search results page from summitpost, GET every search
   results page in the pagination (or just the page if no pagination) and
   return them as a lazy sequence."
   [link]
-  (->> (or (get-pager-links link) [link])
+  (->> (get-pager-links link)
        (map (partial str base-url))
        (map slurp)))
 
