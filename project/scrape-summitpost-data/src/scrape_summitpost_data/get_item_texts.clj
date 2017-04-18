@@ -2,8 +2,9 @@
   (:require [reaver]
             [scrape-summitpost-data.extract-pager-links
              :refer [extract-all-pager-links]]
-            [scrape-summitpost-data.extract :refer [extract-result-links
-                                                    extract-item-name
+            [scrape-summitpost-data.extract-result-links
+             :refer [extract-result-links]]
+            [scrape-summitpost-data.extract :refer [extract-item-name
                                                     extract-item-text]]))
 
 (def base-url "http://www.summitpost.org")
