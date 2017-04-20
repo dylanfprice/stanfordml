@@ -13,3 +13,12 @@
       []
       ".srch_results .srch_results_lft + .srch_results_rht > a"
       (reaver/attr :href))))
+
+(defn extract-all-result-links
+  "Given a sequence of search results pages from summitpost (as strings),
+  return a sequence of fully qualified urls to all of the search result
+  items."
+  [search-pages]
+  (->> search-pages
+       (map extract-result-links)
+       (apply concat)))
