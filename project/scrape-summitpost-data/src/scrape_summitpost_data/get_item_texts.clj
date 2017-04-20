@@ -2,7 +2,7 @@
   (:require [scrape-summitpost-data.extract-pager-links
              :refer [extract-all-pager-links]]
             [scrape-summitpost-data.extract-result-links
-             :refer [extract-result-links]]
+             :refer [extract-all-result-links]]
             [scrape-summitpost-data.extract-from-item
              :refer [extract-item-name extract-item-text]]))
 
@@ -23,8 +23,7 @@
   items."
   [search-pages]
   (->> search-pages
-       (map extract-result-links)
-       (apply concat)
+       (extract-all-result-links)
        (map (partial str base-url))))
 
 (defn get-item-texts
