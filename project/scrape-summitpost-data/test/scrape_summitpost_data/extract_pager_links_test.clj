@@ -7,14 +7,14 @@
               <a href='/test?foo=bar&page=1' class='pagertext'></a>
               </td>"]
     (is (= ["/test?foo=bar&page=1"]
-           (#'test-ns/extract-pager-links page))
+           (test-ns/extract-pager-links page))
         "extracts pager link"))
   (let [page "<td>
               <a href='/test?foo=bar&page=1' class='pagertext'></a>
               <a href='/test?foo=bar' class='pagertext'></a>
               </td>"]
     (is (= ["/test?foo=bar&page=1"]
-           (#'test-ns/extract-pager-links page))
+           (test-ns/extract-pager-links page))
         "ignores links without page param")))
 
 (deftest extract-last-page-test

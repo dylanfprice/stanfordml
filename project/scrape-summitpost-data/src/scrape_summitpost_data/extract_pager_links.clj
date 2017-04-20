@@ -3,7 +3,7 @@
             [scrape-summitpost-data.ensure-sequence
              :refer [ensure-sequence]]))
 
-(defn- extract-pager-links
+(defn extract-pager-links
   "Given a string containing a search results page from summitpost,
   return a sequence of pager links with page=\\d+ query params."
   [page]
