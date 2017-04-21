@@ -45,4 +45,3 @@
        (drop 1)
        (take-while #(nil? (extract-left-box-heading %)))
        (keep extract-left-box-link)))
-
