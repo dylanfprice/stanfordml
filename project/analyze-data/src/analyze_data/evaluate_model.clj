@@ -22,7 +22,10 @@
 
 (defn evaluate-model-file
   "Like evaluate-model, but take file path arguments for both model and test
-  data."
+  data.
+
+  tf-idf-model-file: path to a file containing serialized tf-idf-model
+  test-file: path to a csv with 'document-name' and 'document-text' headers"
   [tf-idf-model-file test-file]
   (with-open [in (io/reader test-file)]
     (let [model (read-object tf-idf-model-file)
