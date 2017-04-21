@@ -21,17 +21,17 @@
 
 (defn find-knn
   "Find 3 nearest neighbors (per cosine-distance) to query-document in
-  tf-idf-data.
+  tf-idf-model.
 
-  tf-idf-data: map produced by corpus-to-tf-idf-data
+  tf-idf-model: map produced by corpus-to-tf-idf-model
   query-document: string
 
   Return sequence of the form
   [[document-name distance]
    [document-name distance]
    [document-name distance]]"
-  [tf-idf-data query-document]
-  (let [{:keys [all-terms idf document-names tf-idf]} tf-idf-data
+  [tf-idf-model query-document]
+  (let [{:keys [all-terms idf document-names tf-idf]} tf-idf-model
         query-vector (document-to-vector all-terms idf query-document)
         nearest-neighbors (knn tf-idf
                                query-vector
