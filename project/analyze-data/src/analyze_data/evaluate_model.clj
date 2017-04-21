@@ -27,4 +27,4 @@
   (with-open [in (io/reader test-file)]
     (let [model (read-object tf-idf-model-file)
           test-data (csv-to-map in)]
-      (evaluate-model tf-idf-model test-data))))
+      (evaluate-model model test-data))))
