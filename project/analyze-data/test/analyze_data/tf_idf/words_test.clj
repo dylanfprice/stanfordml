@@ -10,6 +10,9 @@
          (test-ns/to-words "Hello world"))
       "lowercases words")
   (is (= ["hello" "world"]
+         (test-ns/to-words "hello\nworld"))
+      "splits words on newline")
+  (is (= ["hello" "world"]
          (test-ns/to-words "Hello world!"))
       "removes punctuation...")
   (is (= ["hello" "world"]
