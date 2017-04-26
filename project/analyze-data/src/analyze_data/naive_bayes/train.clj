@@ -36,9 +36,7 @@
                   for some k.
 
   Return a k x n matrix 'phi' where k is the number of class labels and n is
-  the number of terms. Each entry phi[i][j] represents prob(j|y=i), that is,
-  the conditional probability that term j appears in a document given its
-  class label i."
+  the number of terms. Each entry phi[i][j] represents prob(j|y=i)."
   [X label-indices]
   (let [sum-of-samples-by-label (sum-samples-by-label X label-indices)
         sum-of-all-samples (apply m/add X)
@@ -53,8 +51,7 @@
    num-samples: number of samples
 
   Return a vector 'phi-y' of length k where k is the number of class labels.
-  Each entry phi-y[i] represents p(y=i), that is, the posterior probability
-  that a document is in class i."
+  Each entry phi-y[i] represents p(y=i). "
   [label-indices num-samples]
   (let [num-docs-in-class (map #(count (second %)) label-indices)]
     (m/div num-docs-in-class num-samples)))
@@ -69,9 +66,18 @@
        --x(m)--]
       where each x(i) is a vector of length n
       thus m is the number of samples and n is the number of terms
-   y: n x 1 vector of class labels, which must be integers"
+   y: n x 1 vector of class labels, which must be integers
+
+  Return a map with keys :log-phi and :log-phi-y.
+  :log-phi is a k x n matrix where k is the number of class labels and n is
+    the number of terms. Each (i,j) entry represents log p(j|y=i), that is,
+    the log of the conditional probability that term j appears in a document
+    given its class label i.
+  :log-phi-y is a length k vector where the ith entry represents log p(y=i),
+    that is, the log of the posterior probability that a document is in class
+    i."
   [X y]
   (let [label-indices (group-indices-by-value y)
         num-samples (first (m/shape X))]
-    {:phi (calc-phi X label-indices)
-     :phi-y (calc-phi-y label-indices num-samples)}))
+    {:log-phi (m/log (calc-phi X label-indices))
+     :log-phi-y (m/log (calc-phi-y label-indices num-samples))}))

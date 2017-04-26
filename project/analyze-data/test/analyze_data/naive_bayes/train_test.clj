@@ -1,5 +1,6 @@
 (ns analyze-data.naive-bayes.train-test
-  (:require [clojure.test :refer [deftest is use-fixtures]]
+  (:require [clojure.core.matrix :as m]
+            [clojure.test :refer [deftest is use-fixtures]]
             [analyze-data.naive-bayes.train :as test-ns]))
 
 (deftest group-indices-by-value-test
@@ -51,9 +52,9 @@
 (deftest train-test
   (let [X [[1 0] [0 1] [1 1]]
         y [0 1 1]]
-    (is (= [:phi :phi-y] (keys (test-ns/train X y)))
+    (is (= [:log-phi :log-phi-y] (keys (test-ns/train X y)))
         "returns map with keys :phi and :phi-y")
-    (is (= {:phi [[1/2 1/4] [1/2 3/4]]
-            :phi-y [1/3 2/3]}
+    (is (= {:log-phi (m/log [[1/2 1/4] [1/2 3/4]])
+            :log-phi-y (m/log [1/3 2/3])}
            (test-ns/train X y))
         "returns parameters phi and phi-y")))
