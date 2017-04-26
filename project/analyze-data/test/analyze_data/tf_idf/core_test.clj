@@ -1,15 +1,9 @@
 (ns analyze-data.tf-idf.core-test
-  (:require [clojure.core.matrix :as m]
-            [clojure.test :refer [deftest is use-fixtures]]
+  (:require [clojure.test :refer [deftest is use-fixtures]]
+            [analyze-data.test-fixtures :refer [use-vectorz]]
             [analyze-data.tf-idf.core :as test-ns]))
-(defn use-vectorz-fixture
-  [f]
-  (let [default-implementation (m/current-implementation)]
-    (m/set-current-implementation :vectorz)
-    (f)
-    (m/set-current-implementation default-implementation)))
 
-(use-fixtures :once use-vectorz-fixture)
+(use-fixtures :once use-vectorz)
 
 (deftest to-terms-test
   (is (= []
