@@ -3,7 +3,7 @@
 (defn term-frequency
   "Return a map from term to number of times it appears in terms."
   [terms]
-  (reduce (fn [m term] (assoc m term (inc (get m term 0)))) {} terms))
+  (frequencies terms))
 
 (defn calc-normalized-term-frequency
   "Normalize term-frequency based on max-term-frequency."
