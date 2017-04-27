@@ -4,15 +4,16 @@
              :refer [create-sparse-matrix]]))
 
 (defn- group-indices-by-value
-  "y: a vector
+  "y: a core.matrix vector
 
   Return a sorted map from value in y to a vector of indices into y. The
   entry for key k will index the values in y which are equal to k."
   [y]
-  (let [assoc-index (fn [m index value]
+  (let [indexed-y (map-indexed (partial vector) y)
+        assoc-index (fn [m [index value]]
                       (let [indices (get m value [])]
                         (assoc m value (conj indices index))))]
-    (reduce-kv assoc-index (sorted-map) y)))
+    (reduce assoc-index (sorted-map) indexed-y)))
 
 (defn- sum-samples-by-label
   "X: design matrix
