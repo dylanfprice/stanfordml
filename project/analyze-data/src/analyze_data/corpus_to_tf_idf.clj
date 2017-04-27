@@ -19,7 +19,7 @@
       (m/set-row! matrix index row))
     matrix))
 
-(defn corpus-to-tf-idf-model
+(defn corpus-to-tf-idf-data
   "Transform a corpus of documents into a map containing a matrix of tf-idf
   values and other associated data. All data will be non-lazy so as to be
   suitable for serialization.
@@ -51,19 +51,19 @@
            :tf-idf (create-sparse-matrix (count document-labels)
                                          (:tf-idf tf-idf-data)))))
 
-(defn csv-corpus-to-tf-idf-model-file!
+(defn csv-corpus-to-tf-idf-data-file!
   "Transform a csv containing a corpus of documents into a file of tf-idf
   data.
 
   in-path: path to a csv file. It should contain the headers 'document-label'
            and 'document-text', with values as described in
-           corpus-to-tf-idf-model.
-  tf-idf-path: path where the tf-idf model will be written as a serialized
-               map. You may read this data back in using
+           corpus-to-tf-idf-data.
+  tf-idf-path: path where the tf-idf data will be written as a serialized map.
+               You may read this data back in using
                analyze-data.serialize/read-object, make sure you use the same
                core.matrix implementation on each end."
   [in-path tf-idf-path]
   (with-open [in (io/reader in-path)]
     (let [corpus (csv-to-map in)
-          tf-idf-model (corpus-to-tf-idf-model corpus)]
-      (write-object! tf-idf-path tf-idf-model))))
+          tf-idf-data (corpus-to-tf-idf-data corpus)]
+      (write-object! tf-idf-path tf-idf-data))))

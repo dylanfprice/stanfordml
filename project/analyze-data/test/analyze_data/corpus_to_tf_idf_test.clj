@@ -5,11 +5,11 @@
 
 (use-fixtures :once use-vectorz)
 
-(deftest corpus-to-tf-idf-model-test
+(deftest corpus-to-tf-idf-data-test
   (let [corpus [{"document-label" "foo", "document-text" "my dog rover"}
                 {"document-label" "bar", "document-text" "my dog spot"}]
         double? #(= java.lang.Double (type %))
-        result (test-ns/corpus-to-tf-idf-model corpus)]
+        result (test-ns/corpus-to-tf-idf-data corpus)]
     (is (map? result) "returns a map")
     (is (every? #(contains? result %) [:all-terms
                                        :document-labels
