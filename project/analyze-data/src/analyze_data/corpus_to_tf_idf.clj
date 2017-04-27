@@ -29,26 +29,35 @@
 
   Return a map of the following form:
   {:all-terms  [term1 term2 ...]
+   :all-labels [label1 label2 ...]
    :idf        {term1 value
                 term2 value
                 ...}
-   :document-labels [doc1-name doc2-name ...]
+   :labels [doc1-label-index doc2-label-index ...]
    :tf-idf     [[doc1-term1-value doc1-term2-value ...]
                 [doc2-term1-value doc2-term2-value ...]
                 ...]}
 
-  :all-terms is a sorted sequence of all terms found in the corpus.
-  :document-labels is a sequence of the 'document-label' values.
+  :all-terms is a sorted sequence of all terms found in corpus.
+  :all-labels is a sorted sequence of all labels in corpus.
   :idf is a map from term to its inverse document frequency.
+  :labels is a sequence of indexes into :all-labels. The first entry will
+          represent the label of the first document in :tf-idf, and so on.
   :tf-idf is a core.matrix sparse matrix containing the tf-idf values. Each
           row corresponds to a document and each column to a term."
   [corpus]
   (let [document-labels (mapv #(% "document-label") corpus)
         document-texts (map #(% "document-text") corpus)
+        all-labels (vec (sort (distinct document-labels)))
+        lookup-label-index (reduce-kv (fn [m k v] (assoc m v k))
+                                      {}
+                                      all-labels)
+        labels (mapv (partial lookup-label-index) document-labels)
         tf-idf-data (tf-idf (map to-terms document-texts))]
     (assoc tf-idf-data
-           :document-labels document-labels
-           :tf-idf (create-sparse-matrix (count document-labels)
+           :all-labels all-labels
+           :labels labels
+           :tf-idf (create-sparse-matrix (count labels)
                                          (:tf-idf tf-idf-data)))))
 
 (defn csv-corpus-to-tf-idf-data-file!
