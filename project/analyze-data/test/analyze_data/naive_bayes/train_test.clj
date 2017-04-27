@@ -7,15 +7,15 @@
 (use-fixtures :once use-vectorz)
 
 (deftest group-indices-by-value-test
-  (is (= {}
-         (#'test-ns/group-indices-by-value (m/array [])))
+  (is (= {} (#'test-ns/group-indices-by-value []))
       "returns empty map when y is empty")
-  (is (= {0.0 [1 3], 1.0 [0 2]}
-         (#'test-ns/group-indices-by-value (m/array [1.0 0.0 1.0 0.0])))
+  (is (= {0 [1 3], 1 [0 2]} (#'test-ns/group-indices-by-value [1 0 1 0]))
       "returns map where ith entry indexes entries in y with value i")
-  (is (= [0.0 1.0 2.0]
-         (keys (#'test-ns/group-indices-by-value (m/array [2.0 1.0 0.0]))))
-      "returns a sorted map"))
+  (is (= [0 1 2] (keys (#'test-ns/group-indices-by-value [2 1 0])))
+      "returns a sorted map")
+  (is (= {"foo" [0 2] "bar" [1]}
+         (#'test-ns/group-indices-by-value ["foo" "bar" "foo"]))
+      "returns map of indices when values in y are strings"))
 
 (deftest sum-samples-by-label-test
   (is (= (m/matrix [])
