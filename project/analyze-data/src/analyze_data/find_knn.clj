@@ -4,11 +4,11 @@
             [analyze-data.tf-idf.core :refer [tf-idf-document to-terms]]))
 
 (defn knn-named-result
-  "Transform [index value] into [document-name value]."
-  [document-names result]
+  "Transform [index value] into [document-label value]."
+  [document-labels result]
   (let [index (first result)
         distance (second result)]
-    [(nth document-names index) distance]))
+    [(nth document-labels index) distance]))
 
 (defn document-to-vector
   "Turn a document into a core.matrix/sparse-array of tf-idf values.
@@ -27,14 +27,14 @@
   query-document: string
 
   Return sequence of the form
-  [[document-name distance]
-   [document-name distance]
-   [document-name distance]]"
+  [[document-label distance]
+   [document-label distance]
+   [document-label distance]]"
   [tf-idf-model query-document]
-  (let [{:keys [all-terms idf document-names tf-idf]} tf-idf-model
+  (let [{:keys [all-terms idf document-labels tf-idf]} tf-idf-model
         query-vector (document-to-vector all-terms idf query-document)
         nearest-neighbors (knn tf-idf
                                query-vector
                                :k 3
                                :distance-fn cosine-distance)]
-    (map (partial knn-named-result document-names) nearest-neighbors)))
+    (map (partial knn-named-result document-labels) nearest-neighbors)))

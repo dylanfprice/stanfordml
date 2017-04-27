@@ -8,14 +8,14 @@
   "Make a prediction for each row of test-data using given model.
 
   tf-idf-model: map produced by corpus-to-tf-idf-model
-  test-data: sequence of maps with 'document-name' and 'document-text' keys
+  test-data: sequence of maps with 'document-label' and 'document-text' keys
 
   Return a sequence of the form:
   [[test-label [predicted-label distance]]
     ...]"
   [tf-idf-model test-data]
   (let [test-corpus (map #(get % "document-text") test-data)
-        test-labels (map #(get % "document-name") test-data)
+        test-labels (map #(get % "document-label") test-data)
         predictions (map (partial find-knn tf-idf-model) test-corpus)]
     (map #(vector %1 (first %2)) test-labels predictions)))
 
@@ -31,7 +31,7 @@
   correct predictions / # total predictions).
 
   tf-idf-model: map produced by corpus-to-tf-idf-model
-  test-data: sequence of maps with 'document-name' and 'document-text' keys"
+  test-data: sequence of maps with 'document-label' and 'document-text' keys"
   [tf-idf-model test-data]
   (let [predictions (get-predictions tf-idf-model test-data)
         correct-predictions (filter correct-prediction? predictions)]
@@ -42,7 +42,7 @@
   data.
 
   tf-idf-model-file: path to a file containing serialized tf-idf-model
-  test-file: path to a csv with 'document-name' and 'document-text' headers"
+  test-file: path to a csv with 'document-label' and 'document-text' headers"
   [tf-idf-model-file test-file]
   (with-open [in (io/reader test-file)]
     (let [model (read-object tf-idf-model-file)
