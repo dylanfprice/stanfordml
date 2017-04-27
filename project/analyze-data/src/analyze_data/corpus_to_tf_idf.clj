@@ -28,8 +28,9 @@
   :all-terms is a sorted sequence of all terms found in corpus.
   :all-labels is a sorted sequence of all labels in corpus.
   :idf is a map from term to its inverse document frequency.
-  :labels is a sequence of indexes into :all-labels. The first entry will
-          represent the label of the first document in :tf-idf, and so on.
+  :labels is a core.matrix vector of indexes into :all-labels. The first
+          entry will represent the label of the first document in :tf-idf,
+          and so on.
   :tf-idf is a core.matrix sparse matrix containing the tf-idf values. Each
           row corresponds to a document and each column to a term."
   [corpus]
@@ -43,7 +44,7 @@
         tf-idf-data (tf-idf (map to-terms document-texts))]
     (assoc tf-idf-data
            :all-labels all-labels
-           :labels labels
+           :labels (m/array labels)
            :tf-idf (create-sparse-matrix (count labels)
                                          (:tf-idf tf-idf-data)))))
 
