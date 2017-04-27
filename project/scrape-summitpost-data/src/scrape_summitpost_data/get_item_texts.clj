@@ -10,15 +10,23 @@
 
 (def base-url "http://www.summitpost.org")
 
+; TODO: come up with more sophisticated error handling strategy
+(defn- try-slurp
+  [f]
+  (try
+    (slurp f)
+    (catch Exception e
+      "ERROR")))
+
 (defn- get-result-urls
   "Given a link to a paginated search results page from summitpost, GET the
   page and return a sequence of fully qualified urls to all of the search
   results."
   [link]
-  (let [page (slurp (str base-url link))
+  (let [page (try-slurp (str base-url link))
         pager-links (or (extract-all-pager-links page) [link])
         pager-urls (map (partial str base-url) pager-links)
-        search-pages (map slurp pager-urls)
+        search-pages (map try-slurp pager-urls)
         result-links (extract-all-result-links search-pages)]
     (map (partial str base-url) result-links)))
 
@@ -37,7 +45,7 @@
   [search-link]
   (let [result-urls (get-result-urls search-link)
         result-texts (->> result-urls
-                          (map slurp)
+                          (map try-slurp)
                           (map extract-item-text))]
     (map make-result-entry result-urls result-texts)))
 
@@ -51,7 +59,7 @@
   "Concatenate result page content with contents of pages at child-urls."
   [result-page child-urls]
   (let [result-text (extract-item-text result-page)
-        child-pages (map slurp child-urls)
+        child-pages (map try-slurp child-urls)
         child-texts (map extract-item-text child-pages)]
     (string/join "\n" (cons result-text child-texts))))
 
@@ -63,7 +71,7 @@
   sequence."
   [search-link]
   (let [result-urls (get-result-urls search-link)
-        result-pages (map slurp result-urls)
+        result-pages (map try-slurp result-urls)
         child-urls (map get-child-urls result-pages)
         all-child-urls (set (apply concat child-urls))
         result-texts (map get-result-text-and-child-texts
