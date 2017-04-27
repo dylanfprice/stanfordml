@@ -31,7 +31,7 @@
     (count label-indices)
     (for [[label indices] label-indices]
       (let [samples (m/select X indices :all)]
-        (apply m/add samples)))))
+        (reduce m/add samples)))))
 
 (defn- calc-phi
   "X: design matrix
