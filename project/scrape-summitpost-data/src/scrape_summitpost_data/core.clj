@@ -48,7 +48,7 @@
                          get-item-texts-with-children
                          get-item-texts)]
     (csv/write-csv out-file
-                   (cons ["document-url", "document-name", "document-text"]
+                   (cons ["document-url", "document-label", "document-text"]
                          (get-texts-fn search-link))))))
 
 (defn -main [& args]
