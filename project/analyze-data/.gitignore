@@ -1,2 +1,4 @@
 .nrepl*
 target/
+*.csv
+*.model
