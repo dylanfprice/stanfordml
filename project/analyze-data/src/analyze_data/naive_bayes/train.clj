@@ -43,7 +43,7 @@
   the number of terms. Each entry phi[i][j] represents prob(j|y=i)."
   [X label-indices]
   (let [sum-of-samples-by-label (sum-samples-by-label X label-indices)
-        sum-of-all-samples (apply m/add X)
+        sum-of-all-samples (reduce m/add X)
         num-terms (second (m/shape X))]
     (m/div (m/add sum-of-samples-by-label 1)
            (m/add sum-of-all-samples num-terms))))
