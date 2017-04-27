@@ -1,6 +1,5 @@
 (ns analyze-data.corpus-to-tf-idf-test
-  (:require [clojure.core.matrix :as m]
-            [clojure.test :refer [deftest is testing use-fixtures]]
+  (:require [clojure.test :refer [deftest is testing use-fixtures]]
             [analyze-data.corpus-to-tf-idf :as test-ns]
             [analyze-data.test-fixtures :refer [use-vectorz]]))
 
@@ -26,7 +25,7 @@
     (testing ":idf is map from term to inverse document frequency"
       (is (= #{"cat" "dog" "rover" "spot"} (-> result :idf keys set)))
       (is (every? double? (vals (:idf result)))))
-    (is (= (m/array [1 1 0]) (:labels result))
+    (is (= [1 1 0] (:labels result))
         ":labels contains label indexes for documents")
     (is (not (nil? (first (:tf-idf result))))
         ":tf-idf is not nil")
