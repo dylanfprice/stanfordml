@@ -1,5 +1,7 @@
 (ns analyze-data.naive-bayes.train
-  (:require [clojure.core.matrix :as m]))
+  (:require [clojure.core.matrix :as m]
+            [analyze-data.create-sparse-matrix
+             :refer [create-sparse-matrix]]))
 
 (defn- group-indices-by-value
   "y: a vector
@@ -18,16 +20,18 @@
                   i. It must be true that (= (keys label-indices) (range k))
                   for some k.
 
-  Return a lazy sequence of core.matrix vectors where the ith vector is the
-  sum of all samples labelled i."
+  Return a core.matrix sparse matrix where the ith row is the sum of all
+  samples labelled i."
   [X label-indices]
   ; preconditions
   (if-let [classes (keys label-indices)]
     (assert (= classes (range (+ 1 (m/emax classes))))))
   ; function
-  (for [i (keys label-indices)]
-    (let [samples (m/select X (get label-indices i) :all)]
-      (apply m/add samples))))
+  (create-sparse-matrix
+    (count label-indices)
+    (for [[label indices] label-indices]
+      (let [samples (m/select X indices :all)]
+        (apply m/add samples)))))
 
 (defn- calc-phi
   "X: design matrix
