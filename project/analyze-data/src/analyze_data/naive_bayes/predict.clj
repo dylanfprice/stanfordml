@@ -6,8 +6,8 @@
    x: vector of term weights representing a document
 
   Return a sequence of the form
-  [[most-likely-label        probability]
-   [second-most-likely-label probability]
+  [[most-likely-label        score]
+   [second-most-likely-label score]
    ...]"
   [model x]
   (let [{:keys [log-phi log-phi-y]} model
