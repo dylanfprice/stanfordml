@@ -66,7 +66,7 @@
        --x(m)--]
       where each x(i) is a vector of length n
       thus m is the number of samples and n is the number of terms
-   y: n x 1 vector of class labels, which must be integers
+   y: m x 1 vector of class labels, which must be integers
 
   Return a map with keys :log-phi and :log-phi-y.
   :log-phi is a k x n matrix where k is the number of class labels and n is
