@@ -4,12 +4,12 @@
 
 (defn predict
   "parameters: map produced by analyze-data.naive-bayes.train/train
-   x: vector of term weights representing a document
+   z: vector of term weights representing a document
 
   Return a vector of [most-likely-label score]"
-  [parameters x]
+  [parameters z]
   (let [{:keys [log-phi log-phi-y]} parameters
-        log-probs (->> (m/mul log-phi x)
+        log-probs (->> (m/mul log-phi z)
                        (map m/esum)
                        (m/add log-phi-y))
         indexed-log-probs (map-indexed #(vector %1 %2) log-probs)]
