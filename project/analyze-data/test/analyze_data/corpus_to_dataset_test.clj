@@ -13,7 +13,7 @@
         dataset-types [:tf-idf]]
     (testing "for all dataset-types,"
       (doseq [dataset-type dataset-types]
-        (let [result (test-ns/corpus-to-dataset corpus dataset-type)]
+        (let [result (test-ns/corpus-to-dataset dataset-type corpus)]
           (is (map? result) "returns a map")
           (is (every? #(contains? result %) [:type
                                              :X
@@ -33,7 +33,7 @@
               "labels contains sorted distinct labels")
           (is (map? (:extra result)) "extra is a map"))))
     (testing ":tf-idf dataset-type"
-      (let [result (test-ns/corpus-to-dataset corpus :tf-idf)
+      (let [result (test-ns/corpus-to-dataset :tf-idf corpus)
             double? #(= java.lang.Double (type %))]
         (is (some? (first (:X result))) "X rows are not nil")
         (is (every? double? (first (:X result)))

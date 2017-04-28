@@ -9,10 +9,10 @@
 (defmulti corpus-to-dataset
   "Transform a corpus of documents into a dataset.
 
-  corpus: a sequence of maps containing keys 'document-label' and
-          'document-text'
   dataset-type: specifies the type of features to extract to make the
                 dataset.  Currently the only type is :tf-idf.
+  corpus: a sequence of maps containing keys 'document-label' and
+          'document-text'
 
   Return a dataset, which is a map with the following keys:
   :type      the type of the dataset
@@ -23,7 +23,7 @@
   :features  a vector of names for each feature column
   :labels    a vector of sorted distinct labels in the corpus
   :extra     a map for type-specific extra data"
-  (fn [corpus dataset-type] dataset-type))
+  (fn [dataset-type corpus] dataset-type))
 
 (defn csv-corpus-to-dataset-file!
   "Transform a csv containing a corpus of documents into a dataset file.
@@ -37,7 +37,7 @@
   [in out dataset-type]
   (with-open [reader (io/reader in)]
     (let [corpus (csv-to-map reader)
-          dataset (corpus-to-dataset corpus dataset-type)]
+          dataset (corpus-to-dataset dataset-type corpus)]
       (write-object! out dataset))))
 
 (defn- get-y-and-labels
@@ -50,7 +50,7 @@
         y (mapv (partial lookup-label-index) document-labels)]
     {:y y :labels labels}))
 
-(defmethod corpus-to-dataset :tf-idf [corpus dataset-type]
+(defmethod corpus-to-dataset :tf-idf [dataset-type corpus]
   (let [{:keys [y labels]} (get-y-and-labels corpus)
         document-texts (map #(% "document-text") corpus)
         {:keys [all-terms tf-idf idf]} (tf-idf (map to-terms document-texts))]
