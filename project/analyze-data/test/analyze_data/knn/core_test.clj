@@ -22,3 +22,12 @@
     (is (= [[0 1.0]]
            (test-ns/knn X [1], :k 1))
         "returns top 1 nearest neighbor index when k is 1")))
+
+(deftest predict-test
+  (let [X [[2] [3] [4]]
+        y [0 0 1]
+        z [1]]
+    (is (= [0 2] (test-ns/predict X y z))
+        "returns most likely label and number of votes.")
+    (is (= [0 1] (test-ns/predict X y z :k 1))
+        "number of votes is 1 when :k is restricted to 1")))

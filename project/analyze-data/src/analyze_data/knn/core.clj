@@ -1,5 +1,6 @@
 (ns analyze-data.knn.core
-  (:require [clojure.core.matrix :as m]))
+  (:require [clojure.core.matrix :as m]
+            [analyze-data.greatest :refer [greatest]]))
 
 (defn cosine-distance
   "Calculate 1 - cos(theta) between each vector in X and z, where theta is the
@@ -60,3 +61,25 @@
          (map-indexed #(vector %1 %2))
          (sort-by second)
          (take k))))
+
+(defn predict
+  "Predict a label for for z based on a majority vote of its k nearest
+  neighbors.
+
+  X is a matrix of the form
+  [[--x1--]
+   [--x2--]
+   ...]
+
+  y is a vector of integer labels
+
+  z is a core.matrix vector
+
+  options are passed through to knn
+
+  Return a vector of [most-likely-label num-votes]."
+  [X y z & options]
+  (let [nearest-neighbors (apply knn X z options)
+        nearest-labels (->> nearest-neighbors (map first) (map #(y %)))
+        neighbor-frequencies (frequencies nearest-labels)]
+    (reduce greatest neighbor-frequencies)))
