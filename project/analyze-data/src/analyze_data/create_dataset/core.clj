@@ -1,10 +1,8 @@
-(ns analyze-data.create-dataset
+(ns analyze-data.create-dataset.core
   (:require [clojure.java.io :as io]
+            [analyze-data.create-dataset [tf-idf :as tf-idf]]
             [analyze-data.csv-to-map :refer [csv-to-map]]
-            [analyze-data.create-sparse-matrix
-             :refer [create-sparse-matrix]]
-            [analyze-data.serialize :refer [write-object!]]
-            [analyze-data.tf-idf.core :refer [tf-idf to-terms]]))
+            [analyze-data.serialize :refer [write-object!]]))
 
 (defmulti create-dataset
   "Transform a corpus of documents into a dataset.
@@ -25,6 +23,17 @@
   :extra     a map for type-specific extra data"
   (fn [dataset-type corpus] dataset-type))
 
+(defmethod create-dataset :tf-idf [dataset-type corpus]
+  (tf-idf/create-dataset dataset-type corpus))
+
+(defmulti document-to-vector
+  "Turn a document into a core.matrix vector with the same type of features
+  as dataset."
+  (fn [dataset document] (:type dataset)))
+
+(defmethod document-to-vector :tf-idf [dataset document]
+  (tf-idf/document-to-vector dataset document))
+
 (defn create-dataset-file!
   "Like create-dataset, but expects a file name for input and output.
 
@@ -39,24 +48,3 @@
     (let [corpus (csv-to-map reader)
           dataset (create-dataset dataset-type corpus)]
       (write-object! out dataset))))
-
-(defn- get-y-and-labels
-  [corpus]
-  (let [document-labels (mapv #(% "document-label") corpus)
-        labels (vec (sort (distinct document-labels)))
-        lookup-label-index (reduce-kv (fn [m k v] (assoc m v k))
-                                      {}
-                                      labels)
-        y (mapv (partial lookup-label-index) document-labels)]
-    {:y y :labels labels}))
-
-(defmethod create-dataset :tf-idf [dataset-type corpus]
-  (let [{:keys [y labels]} (get-y-and-labels corpus)
-        document-texts (map #(% "document-text") corpus)
-        {:keys [all-terms tf-idf idf]} (tf-idf (map to-terms document-texts))]
-    {:type dataset-type
-     :X (create-sparse-matrix (count y) tf-idf)
-     :y y
-     :features all-terms
-     :labels labels
-     :extra {:inverse-document-frequencies idf}}))
