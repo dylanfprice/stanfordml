@@ -1,19 +1,19 @@
-(ns analyze-data.corpus-to-dataset-test
+(ns analyze-data.create-dataset-test
   (:require [clojure.core.matrix :as m]
             [clojure.test :refer [deftest is testing use-fixtures]]
-            [analyze-data.corpus-to-dataset :as test-ns]
+            [analyze-data.create-dataset :as test-ns]
             [analyze-data.test-fixtures :refer [use-vectorz]]))
 
 (use-fixtures :once use-vectorz)
 
-(deftest corpus-to-dataset-test
+(deftest create-dataset-test
   (let [corpus [{"document-label" "dog", "document-text" "my dog rover"}
                 {"document-label" "dog", "document-text" "my dog spot"}
                 {"document-label" "cat", "document-text" "my cat rover"}]
         dataset-types [:tf-idf]]
     (testing "for all dataset-types,"
       (doseq [dataset-type dataset-types]
-        (let [result (test-ns/corpus-to-dataset dataset-type corpus)]
+        (let [result (test-ns/create-dataset dataset-type corpus)]
           (is (map? result) "returns a map")
           (is (every? #(contains? result %) [:type
                                              :X
@@ -33,7 +33,7 @@
               "labels contains sorted distinct labels")
           (is (map? (:extra result)) "extra is a map"))))
     (testing ":tf-idf dataset-type"
-      (let [result (test-ns/corpus-to-dataset :tf-idf corpus)
+      (let [result (test-ns/create-dataset :tf-idf corpus)
             double? #(= java.lang.Double (type %))]
         (is (some? (first (:X result))) "X rows are not nil")
         (is (every? double? (first (:X result)))

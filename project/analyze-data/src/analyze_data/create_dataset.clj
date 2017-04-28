@@ -1,4 +1,4 @@
-(ns analyze-data.corpus-to-dataset
+(ns analyze-data.create-dataset
   (:require [clojure.java.io :as io]
             [analyze-data.csv-to-map :refer [csv-to-map]]
             [analyze-data.create-sparse-matrix
@@ -6,7 +6,7 @@
             [analyze-data.serialize :refer [write-object!]]
             [analyze-data.tf-idf.core :refer [tf-idf to-terms]]))
 
-(defmulti corpus-to-dataset
+(defmulti create-dataset
   "Transform a corpus of documents into a dataset.
 
   dataset-type: specifies the type of features to extract to make the
@@ -25,8 +25,8 @@
   :extra     a map for type-specific extra data"
   (fn [dataset-type corpus] dataset-type))
 
-(defn csv-corpus-to-dataset-file!
-  "Transform a csv containing a corpus of documents into a dataset file.
+(defn create-dataset-file!
+  "Like create-dataset, but expects a file name for input and output.
 
   in: path to a csv file. It should contain the headers 'document-label' and
       'document-text'
@@ -37,7 +37,7 @@
   [in out dataset-type]
   (with-open [reader (io/reader in)]
     (let [corpus (csv-to-map reader)
-          dataset (corpus-to-dataset dataset-type corpus)]
+          dataset (create-dataset dataset-type corpus)]
       (write-object! out dataset))))
 
 (defn- get-y-and-labels
@@ -50,7 +50,7 @@
         y (mapv (partial lookup-label-index) document-labels)]
     {:y y :labels labels}))
 
-(defmethod corpus-to-dataset :tf-idf [dataset-type corpus]
+(defmethod create-dataset :tf-idf [dataset-type corpus]
   (let [{:keys [y labels]} (get-y-and-labels corpus)
         document-texts (map #(% "document-text") corpus)
         {:keys [all-terms tf-idf idf]} (tf-idf (map to-terms document-texts))]
