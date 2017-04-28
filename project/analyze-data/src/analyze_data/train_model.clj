@@ -14,7 +14,7 @@
   :dataset    the dataset the model was trained on"
   (fn [model-type dataset] model-type))
 
-(defn train-model-file
+(defn train-model-file!
   "Like train-model, but accepts a file name for input and output.
 
   model-type: type of model to create
