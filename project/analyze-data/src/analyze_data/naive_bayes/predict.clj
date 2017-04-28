@@ -1,13 +1,6 @@
 (ns analyze-data.naive-bayes.predict
-  (:require [clojure.core.matrix :as m]))
-
-(defn get-greater
-  "Given two vectors of the form [index value], return the one with the
-  greater value."
-  [a b]
-  (let [[a-index a-value] a
-        [b-index b-value] b]
-    (if (> a-value b-value) a b)))
+  (:require [clojure.core.matrix :as m]
+            [analyze-data.greatest :refer [greatest]]))
 
 (defn predict
   "model: map produced by analyze-data.naive-bayes.train/train
@@ -20,4 +13,4 @@
                        (map m/esum)
                        (m/add log-phi-y))
         indexed-log-probs (map-indexed #(vector %1 %2) log-probs)]
-    (reduce get-greater indexed-log-probs)))
+    (reduce greatest indexed-log-probs)))
