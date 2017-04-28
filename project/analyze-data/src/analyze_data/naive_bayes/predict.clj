@@ -3,12 +3,12 @@
             [analyze-data.greatest :refer [greatest]]))
 
 (defn predict
-  "model: map produced by analyze-data.naive-bayes.train/train
+  "parameters: map produced by analyze-data.naive-bayes.train/train
    x: vector of term weights representing a document
 
   Return a vector of [most-likely-label score]"
-  [model x]
-  (let [{:keys [log-phi log-phi-y]} model
+  [parameters x]
+  (let [{:keys [log-phi log-phi-y]} parameters
         log-probs (->> (m/mul log-phi x)
                        (map m/esum)
                        (m/add log-phi-y))
