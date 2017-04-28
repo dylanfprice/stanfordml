@@ -23,7 +23,7 @@
   :features  a vector of names for each feature column
   :labels    a vector of sorted distinct labels in the corpus
   :extra     a map for type-specific extra data"
-  (fn [corpus feature-type] feature-type))
+  (fn [corpus dataset-type] dataset-type))
 
 (defn csv-corpus-to-dataset-file!
   "Transform a csv containing a corpus of documents into a dataset file.
@@ -50,11 +50,11 @@
         y (mapv (partial lookup-label-index) document-labels)]
     {:y y :labels labels}))
 
-(defmethod corpus-to-dataset :tf-idf [corpus feature-type]
+(defmethod corpus-to-dataset :tf-idf [corpus dataset-type]
   (let [{:keys [y labels]} (get-y-and-labels corpus)
         document-texts (map #(% "document-text") corpus)
         {:keys [all-terms tf-idf idf]} (tf-idf (map to-terms document-texts))]
-    {:type feature-type
+    {:type dataset-type
      :X (create-sparse-matrix (count y) tf-idf)
      :y y
      :features all-terms
