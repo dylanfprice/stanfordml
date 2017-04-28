@@ -2,7 +2,7 @@
   (:require [clojure.core.matrix :as m]))
 
 (defn cosine-distance
-  "Calculate 1 - cos(theta) between each vector in X and y, where theta is the
+  "Calculate 1 - cos(theta) between each vector in X and z, where theta is the
   angle between the vectors.
 
   X is a matrix of the form
@@ -10,40 +10,40 @@
    [--x2--]
    ...]
 
-  y is a core.matrix vector
+  z is a core.matrix vector
 
   Return a sequence of [distance-from-x1 distance-from-x2 ...]."
-  [X y]
-  (let [dot-product (m/mmul X y)
-        product-of-norms (m/mul (map m/magnitude X) (m/magnitude y))
+  [X z]
+  (let [dot-product (m/mmul X z)
+        product-of-norms (m/mul (map m/magnitude X) (m/magnitude z))
         cosine-similarity (m/div dot-product product-of-norms)]
     (->> cosine-similarity
          (m/sub 1)
          (m/emap #(if (Double/isNaN %) 1.0 %)))))
 
 (defn euclidean-distance
-  "Euclidean distance between each vector in X and y.
+  "Euclidean distance between each vector in X and z.
 
   X is a matrix of the form
   [[--x1--]
    [--x2--]
    ...]
 
-  y is a core.matrix vector
+  z is a core.matrix vector
 
   Return a sequence of [distance-from-x1 distance-from-x2 ...]."
-  [X y]
-  (map (partial m/distance y) X))
+  [X z]
+  (map (partial m/distance z) X))
 
 (defn knn
-  "Find k nearest neighbors to y in X.
+  "Find k nearest neighbors to z in X.
 
   X is a matrix of the form
   [[--x1--]
    [--x2--]
    ...]
 
-  y is a core.matrix vector
+  z is a core.matrix vector
 
   Options
     :k (default 3)
@@ -53,10 +53,10 @@
   [[nearest-x-index distance]
    [next-nearest-x-index distance]
    ...]"
-  [X y & options]
+  [X z & options]
   (let [{:keys [k distance-fn]
          :or {k 3, distance-fn euclidean-distance}} options]
-    (->> (distance-fn X y)
+    (->> (distance-fn X z)
          (map-indexed #(vector %1 %2))
          (sort-by second)
          (take k))))

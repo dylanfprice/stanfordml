@@ -7,7 +7,7 @@
          (test-ns/euclidean-distance [[0]
                                       [2]]
                                      [1]))
-      "calculates distance between each vector in input matrix and y"))
+      "calculates distance between each vector in input matrix and z"))
 
 (deftest knn-test
   (let [X [[2]
