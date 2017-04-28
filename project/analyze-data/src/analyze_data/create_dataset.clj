@@ -28,13 +28,13 @@
 (defn create-dataset-file!
   "Like create-dataset, but expects a file name for input and output.
 
+  dataset-type: the type of dataset to create
   in: path to a csv file. It should contain the headers 'document-label' and
       'document-text'
   out: path where the dataset will be written as a serialized map.  You may
        read this data back in using analyze-data.serialize/read-object, make
-       sure you use the same core.matrix implementation on each end.
-  dataset-type: the type of dataset to create"
-  [in out dataset-type]
+       sure you use the same core.matrix implementation on each end."
+  [dataset-type in out]
   (with-open [reader (io/reader in)]
     (let [corpus (csv-to-map reader)
           dataset (create-dataset dataset-type corpus)]
