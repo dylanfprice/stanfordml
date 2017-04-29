@@ -7,9 +7,11 @@
 (defmulti predict
   "Predict a label for the given document.
 
-  options are specific to the model-type
+  model: previously trained model
+  document: string
+  options: specific to the model-type
 
-  TODO"
+  Return the predicted label."
   (fn [model document & options] (:type model)))
 
 (defmethod predict :knn [model document & options]

@@ -19,7 +19,8 @@
                                    {"bar" 1, "foo" 1}}}}
           document "foo bar"]
       (is (= "thing-one" (test-ns/predict model document))
-          "TODO")))
+          (str "predicts thing-one because 2/3 of the nearest docs are "
+               "labelled thing-one"))))
   (testing ":naive-bayes model"
     (let [model {:type :naive-bayes
                  :parameters {:log-phi (m/log [[1/2 2/3] [1/2 1/3]])
@@ -32,5 +33,4 @@
                            :extra {:inverse-document-frequencies
                                    {"bar" 1, "foo" 1}}}}
           document "foo bar"]
-      (is (= "thing-one" (test-ns/predict model document))
-          "TODO"))))
+      (is (= "thing-one" (test-ns/predict model document))))))
