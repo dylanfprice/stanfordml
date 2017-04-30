@@ -6,20 +6,28 @@
   1. If the fractions do not divide n into even portions, the leftovers will
   be placed in the last bucket.
 
-  E.g. => (split-n 100 [1/2 1/2])
+  E.g. => (split-n [1/2 1/2] 100)
        [50 50]"
-  [n fractions]
+  [fractions n]
   (let [nums-without-last (drop-last (map #(int (* n %))
                                                  fractions))
         num-leftover (- n (apply + nums-without-last))]
     (concat nums-without-last [num-leftover])))
 
+(defn- partition-by-counts
+  "Return a lazy sequence of lists where the first has (first counts)
+  elements, the second (second counts) elements and so on. If the sum of
+  counts is greater than (count coll), then after coll is exhausted the rest
+  of the lists will be empty."
+  [counts coll]
+  (lazy-seq
+    (when-let [n (first counts)]
+      (cons (take n coll)
+            (partition-by-counts (next counts) (drop n coll))))))
+
 (defn- create-split-dataset
-  [dataset indices num-to-drop num-to-take]
-  (let [{:keys [X y]} dataset
-        selection (->> indices
-                       (drop num-to-drop)
-                       (take num-to-take))]
+  [dataset selection]
+  (let [{:keys [X y]} dataset]
     (assoc dataset
            :X (m/select X selection :all)
            :y (m/select y selection :all))))
@@ -28,42 +36,24 @@
   "Randomly split a dataset into multiple datasets based on fractions.
   Fractions must add up to 1.
 
-  E.g. (split-dataset dataset 4/5 1/5) splits a dataset into two datasets, the
-  first with 4/5 of the samples and the second with 1/5.
+  E.g. (split-dataset [4/5 1/5] dataset) splits a dataset into two datasets,
+  the first with approximately 4/5 of the samples.
 
   Return a sequence of datasets."
-  [dataset & fractions]
-  (let [{:keys [X y]} dataset
-        num-samples (first (m/shape X))
+  [fractions dataset]
+  (let [num-samples (-> dataset :X m/shape first)
         indices (shuffle (range num-samples))
-        splits (split-n num-samples fractions)]
-    (loop [splits splits
-           num-taken 0
-           new-datasets []]
-      (if (some? splits)
-        (let [num-to-take (first splits)
-              new-dataset (create-split-dataset dataset
-                                                indices
-                                                num-taken
-                                                num-to-take)]
-          (recur (next splits)
-                 (+ num-taken num-to-take)
-                 (conj new-datasets new-dataset)))
-        new-datasets))))
+        counts (split-n fractions num-samples)
+        partitions (partition-by-counts counts indices)]
+    (map (partial create-split-dataset dataset) partitions)))
 
-; TODO: write partition-fractions function to replace split-n
-; TODO: write tests
 (defn partition-dataset
   "Randomly partition a dataset into a lazy sequence of k separate datasets.
-  Ensures that each partition has at least two samples, so may return less
-  than k datasets."
+  Tries to ensures that each partition has at least two samples, so may return
+  less than k datasets."
   [dataset k]
-  (let [{:keys [X y]} dataset
-        num-samples (first (m/shape X))
+  (let [num-samples (-> dataset :X m/shape first)
         partition-size (max (int (/ num-samples k)) 2)
         indices (shuffle (range num-samples))
         partitions (partition partition-size indices)]
-    (for [selection partitions]
-      (assoc dataset
-             :X (m/select X selection :all)
-             :y (m/select y selection :all)))))
+    (map (partial create-split-dataset dataset) partitions)))
