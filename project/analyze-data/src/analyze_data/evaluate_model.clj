@@ -63,9 +63,10 @@
   data.
 
   model-file: path to a file containing serialized model
-  test-file: path to a csv with 'document-label' and 'document-text' headers"
-  [model-file test-file]
+  test-file: path to a csv with 'document-label' and 'document-text' headers
+  options: as for evaluate-model"
+  [model-file test-file & options]
   (with-open [in (io/reader test-file)]
     (let [model (read-object model-file)
           test-corpus (csv-to-map in)]
-      (evaluate-model model test-corpus))))
+      (apply evaluate-model model test-corpus options))))
