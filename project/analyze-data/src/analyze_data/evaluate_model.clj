@@ -1,50 +1,71 @@
 (ns analyze-data.evaluate-model
   (:require [clojure.java.io :as io]
             [analyze-data.csv-to-map :refer [csv-to-map]]
-            [analyze-data.find-knn :refer [find-knn]]
+            [analyze-data.predict :refer [predict]]
             [analyze-data.serialize :refer [read-object]]))
 
 (defn get-predictions
-  "Make a prediction for each row of test-data using given model.
+  "Make a prediction for each row of test-corpus using given model.
 
-  tf-idf-data: map produced by corpus-to-tf-idf-data
-  test-data: sequence of maps with 'document-label' and 'document-text' keys
+  model: map produced by analyze-data.naive-bayes.train/train
+  test-corpus: sequence of maps with 'document-label' and 'document-text' keys
+  options: passed through to analyze-data/predict
 
   Return a sequence of the form:
-  [[test-label [predicted-label distance]]
+  [[label predicted-label]
     ...]"
-  [tf-idf-data test-data]
-  (let [test-corpus (map #(get % "document-text") test-data)
-        test-labels (map #(get % "document-label") test-data)
-        predictions (map (partial find-knn tf-idf-data) test-corpus)]
-    (map #(vector %1 (first %2)) test-labels predictions)))
+  [model test-corpus & options]
+  (let [document-texts (map #(get % "document-text") test-corpus)
+        labels (map #(get % "document-label") test-corpus)
+        predicted-labels (map #(apply predict model % options)
+                              document-texts)]
+    (map vector labels predicted-labels)))
 
-(defn- correct-prediction?
-  "Given a prediction of the form [test-label [predicted-label distance]],
-  return (= test-label predicted-label)."
-  [prediction]
-  (let [[test-label [predicted-label distance]] prediction]
-    (= test-label predicted-label)))
+(defn- empty-confusion-matrix
+  "Create confusion matrix with all 0 values.
+  For example, if classes = [:a :b], returns
+  {:a {:a 0
+       :b 0}
+   :b {:a 0
+       :b 0}}"
+  [classes]
+  (let [entries (zipmap classes (repeat 0))]
+    (zipmap classes (repeat entries))))
 
 (defn evaluate-model
-  "Make a prediction for each row of test-data using given model and return (#
-  correct predictions / # total predictions).
+  "Make a prediction for each row of test-corpus using given model and return
+  a confusion matrix.
 
-  tf-idf-data: map produced by corpus-to-tf-idf-data
-  test-data: sequence of maps with 'document-label' and 'document-text' keys"
-  [tf-idf-data test-data]
-  (let [predictions (get-predictions tf-idf-data test-data)
-        correct-predictions (filter correct-prediction? predictions)]
-    (float (/ (count correct-predictions) (count predictions)))))
+  model: model produced by train-model
+  test-corpus: sequence of maps with 'document-label' and 'document-text'
+               keys
+  options: passed through to analyze-data/predict
+
+  Return a confusion matrix as a nested map. For example, if the labels of
+  the model are :a and :b, returns
+  {:a {:a <number of documents classified as :a that were predicted :a>
+       :b <number of documents classified as :a that were predicted :b>}
+   :b {:a <number of documents classified as :b that were predicted :a>
+       :b <number of documents classified as :b that were predicted :b>}}
+
+  Note that if any counts are 0 then that entry will not exist."
+  [model test-corpus & options]
+  (let [predictions (apply get-predictions model test-corpus options)
+        classes (-> model :dataset :labels)
+        inc-prediction-count (fn [m [label predicted-label]]
+                               (update-in m [label predicted-label] inc))]
+    (reduce inc-prediction-count
+            (empty-confusion-matrix classes)
+            predictions)))
 
 (defn evaluate-model-file
   "Like evaluate-model, but take file path arguments for both model and test
   data.
 
-  tf-idf-data-file: path to a file containing serialized tf-idf-data
+  model-file: path to a file containing serialized model
   test-file: path to a csv with 'document-label' and 'document-text' headers"
-  [tf-idf-data-file test-file]
+  [model-file test-file]
   (with-open [in (io/reader test-file)]
-    (let [model (read-object tf-idf-data-file)
-          test-data (csv-to-map in)]
-      (evaluate-model model test-data))))
+    (let [model (read-object model-file)
+          test-corpus (csv-to-map in)]
+      (evaluate-model model test-corpus))))
