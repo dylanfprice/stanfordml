@@ -1,7 +1,7 @@
 (ns analyze-data.evaluate-model
   (:require [clojure.java.io :as io]
             [analyze-data.csv-to-map :refer [csv-to-map]]
-            [analyze-data.predict :refer [predict]]
+            [analyze-data.predict :refer [predict-document]]
             [analyze-data.serialize :refer [read-object]]))
 
 (defn get-predictions
@@ -17,7 +17,7 @@
   [model test-corpus & options]
   (let [document-texts (map #(get % "document-text") test-corpus)
         labels (map #(get % "document-label") test-corpus)
-        predicted-labels (map #(apply predict model % options)
+        predicted-labels (map #(apply predict-document model % options)
                               document-texts)]
     (map vector labels predicted-labels)))
 
