@@ -1,9 +1,8 @@
 (ns analyze-data.evaluate-model
-  (:require [clojure.core.matrix :as m]
-            [clojure.java.io :as io]
-            [analyze-data.csv-to-map :refer [csv-to-map]]
-            [analyze-data.predict :refer [predict predict-document]]
-            [analyze-data.serialize :refer [read-object]]))
+  (:require [analyze-data.csv-to-map :refer [csv-to-map]]
+            [analyze-data.dataset.derive :refer [partition-dataset-k-fold]]
+            [analyze-data.predict :refer [predict]]
+            [analyze-data.train-model :refer [train-model]]))
 
 (defn get-predictions
   "Make a prediction for each row of test-dataset using given model.
@@ -46,9 +45,7 @@
   {:a {:a <number of documents classified as :a that were predicted :a>
        :b <number of documents classified as :a that were predicted :b>}
    :b {:a <number of documents classified as :b that were predicted :a>
-       :b <number of documents classified as :b that were predicted :b>}}
-
-  Note that if any counts are 0 then that entry will not exist."
+       :b <number of documents classified as :b that were predicted :b>}}"
   [model test-dataset & options]
   (let [predictions (apply get-predictions model test-dataset options)
         classes (-> model :dataset :classes)
@@ -57,3 +54,33 @@
     (reduce inc-prediction-count
             (empty-confusion-matrix classes)
             predictions)))
+
+(defn train-and-evaluate
+  "Train a model using train-dataset and evaluate it using test-dataset.
+  Return a confusion matrix (see evaluate-model for details).
+
+  options are passed through to analyze-data.predict/predict"
+  [model-type train-dataset test-dataset & options]
+  (let [model (train-model model-type train-dataset)]
+    (apply evaluate-model model test-dataset options)))
+
+(defn k-fold-cross-validation
+  "Randomly partition dataset into k partitions, ensuring at least two samples
+  in each partition (note this may result in less than k partitions). Then
+  perform the following algorithm:
+    for each partition i
+      train model using everything but partition i as dataset
+      evaluate model using partition i as test corpus
+    return sum of all k confusion matrices
+
+  options are as for train-and-evaluate"
+  [k model-type dataset & options]
+  (let [partitions (partition-dataset-k-fold dataset k)
+        do-train-evaluate (fn [[train-dataset test-dataset]]
+                            (apply train-and-evaluate
+                                   model-type
+                                   train-dataset
+                                   test-dataset
+                                   options))
+        confusion-matrices (pmap do-train-evaluate partitions)]
+    (apply merge-with (partial merge-with +) confusion-matrices)))
