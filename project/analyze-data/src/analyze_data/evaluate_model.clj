@@ -36,7 +36,7 @@
 
   model: model produced by analyze-data.naive-bayes.train/train
   test-dataset: dataset produced by
-                analyze-data.create-dataset.core/create-dataset
+                analyze-data.dataset.create.core/create-dataset
                 Must have same :type :features and :classes as the dataset
                 the model was trained with.
   options: passed through to analyze-data.predict/predict

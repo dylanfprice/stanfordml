@@ -1,6 +1,6 @@
 (ns analyze-data.predict
   (:require [clojure.core.matrix :as m]
-            [analyze-data.create-dataset.core :refer [document-to-vector]]
+            [analyze-data.dataset.create.core :refer [document-to-vector]]
             [analyze-data.knn.core :as knn]
             [analyze-data.naive-bayes.predict :as naive-bayes]))
 
