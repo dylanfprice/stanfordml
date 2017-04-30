@@ -10,6 +10,8 @@
   model: previously trained model
   document: string
   options: specific to the model-type
+    :knn see analyze-data.knn.core/knn
+    :naive-bayes see analyze-data.naive-bayes.predict/predict
 
   Return the predicted label."
   (fn [model document & options] (:type model)))
