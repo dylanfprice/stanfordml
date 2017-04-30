@@ -16,21 +16,21 @@
              :extra {:inverse-document-frequencies
                      {"bar" 1, "foo" 1}}}})
 
-(def test-corpus
-  [{"document-label" "one", "document-text" "foo"}
-   {"document-label" "two", "document-text" "bar"}
-   {"document-label" "one", "document-text" "foo bar"}])
+(def test-dataset
+  (assoc (:dataset knn-model)
+         :X [[0.5 1] [1 2]]
+         :y [0 1]))
 
 (deftest get-predictions-test
-  (is (= [["one" "one"] ["two" "one"] ["one" "one"]]
-         (test-ns/get-predictions knn-model test-corpus))))
+  (is (= [["one" "one"] ["two" "one"]]
+         (test-ns/get-predictions knn-model test-dataset))))
 
 (deftest empty-confusion-matrix-test
   (is (= {:a {:a 0 :b 0} :b {:a 0 :b 0}}
          (#'test-ns/empty-confusion-matrix [:a :b]))))
 
 (deftest evaluate-model-test
-  (is (= {"one" {"one" 2, "two" 0}
+  (is (= {"one" {"one" 1, "two" 0}
           "two" {"one" 1, "two" 0}}
-         (test-ns/evaluate-model knn-model test-corpus))
+         (test-ns/evaluate-model knn-model test-dataset))
       "evaluates a model"))
