@@ -35,10 +35,10 @@
    :extra {:inverse-document-frequencies
            {"bar" 1, "foo" 1}}})
 
-(deftest create-split-dataset-test
+(deftest subset-dataset-test
   (testing (str "returns a new dataset with subset of X and y according to "
                 "selection")
-    (let [new-dataset (#'test-ns/create-split-dataset dataset [0 1])]
+    (let [new-dataset (#'test-ns/subset-dataset dataset [0 1])]
       (is (= [[1 1] [1 0.5]] (:X new-dataset)))
       (is (= [0 0] (:y new-dataset))))))
 
@@ -61,18 +61,18 @@
                         (-> new-datasets second :X))))
         "returned datasets have same data as original")))
 
-(deftest partition-dataset-test
-  (let [new-datasets (test-ns/partition-dataset dataset 2)]
-    (is (= 2 (count new-datasets))
-        "divides dataset into k new datasets")
+(deftest partition-dataset-k-fold-test
+  (let [partitions (test-ns/partition-dataset-k-fold dataset 2)]
+    (is (= 2 (count partitions))
+        "divides dataset into k partitions")
     (is (= (dissoc dataset :X :y)
-           (dissoc (first new-datasets) :X :y)
-           (dissoc (second new-datasets) :X :y))
+           (dissoc (ffirst partitions) :X :y))
         "new datasets only differ in X and y data")
     (is (= (set (:X dataset))
-           (set (concat (-> new-datasets first :X)
-                        (-> new-datasets second :X))))
-        "returned datasets have same data as original"))
-  (let [new-datasets (test-ns/partition-dataset dataset 4)]
-    (is (= 2 (count new-datasets))
-        "returns less than k datasets to ensure two samples per dataset")))
+           (set (mapcat :X (first partitions))))
+        "each partition is equal to original dataset")
+    (is (= 2 (-> partitions first second :y count))
+        "each test-dataset has 1/k (1/2 * 4) of the data"))
+  (let [partitions (test-ns/partition-dataset-k-fold dataset 4)]
+    (is (= 2 (count partitions))
+        "returns less than k partitions to ensure two samples per dataset")))

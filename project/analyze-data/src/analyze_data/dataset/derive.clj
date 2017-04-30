@@ -1,5 +1,6 @@
 (ns analyze-data.dataset.derive
-  (:require [clojure.core.matrix :as m]))
+  (:require [clojure.core.matrix :as m]
+            [clojure.set :refer [difference]]))
 
 (defn- split-n
   "Divide integer n into buckets according to fractions, which must add up to
@@ -25,7 +26,8 @@
       (cons (take n coll)
             (partition-by-counts (next counts) (drop n coll))))))
 
-(defn- create-split-dataset
+(defn- subset-dataset
+  "Return a dataset with only the samples indexed by selection."
   [dataset selection]
   (let [{:keys [X y]} dataset]
     (assoc dataset
@@ -45,15 +47,22 @@
         indices (shuffle (range num-samples))
         counts (split-n fractions num-samples)
         partitions (partition-by-counts counts indices)]
-    (map (partial create-split-dataset dataset) partitions)))
+    (map (partial subset-dataset dataset) partitions)))
 
-(defn partition-dataset
-  "Randomly partition a dataset into a lazy sequence of k separate datasets.
-  Tries to ensures that each partition has at least two samples, so may return
-  less than k datasets."
+(defn- create-partition
+  [dataset train-selection test-selection]
+  [(subset-dataset dataset train-selection)
+   (subset-dataset dataset test-selection)])
+
+(defn partition-dataset-k-fold
+  "Randomly partition a dataset into a sequence of k [train-dataset
+  test-dataset] vectors. Each test-dataset will have a different 1/k portion
+  of the original dataset. Tries to ensures that each dataset has at least two
+  samples, so may return less than k datasets."
   [dataset k]
   (let [num-samples (-> dataset :X m/shape first)
         partition-size (max (int (/ num-samples k)) 2)
-        indices (shuffle (range num-samples))
-        partitions (partition partition-size indices)]
-    (map (partial create-split-dataset dataset) partitions)))
+        indices (set (range num-samples))
+        test-selections (->> indices (shuffle) (partition partition-size))]
+    (map #(create-partition dataset (difference indices %) %)
+         test-selections)))
