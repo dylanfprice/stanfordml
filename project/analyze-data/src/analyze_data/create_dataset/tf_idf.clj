@@ -5,26 +5,26 @@
             [analyze-data.tf-idf.core
              :refer [tf-idf tf-idf-document to-terms]]))
 
-(defn- get-y-and-labels
+(defn- get-y-and-classes
   [corpus]
   (let [document-labels (mapv #(% "document-label") corpus)
-        labels (vec (sort (distinct document-labels)))
-        lookup-label-index (reduce-kv (fn [m k v] (assoc m v k))
+        classes (vec (sort (distinct document-labels)))
+        lookup-class-index (reduce-kv (fn [m k v] (assoc m v k))
                                       {}
-                                      labels)
-        y (mapv (partial lookup-label-index) document-labels)]
-    {:y y :labels labels}))
+                                      classes)
+        y (mapv (partial lookup-class-index) document-labels)]
+    {:y y :classes classes}))
 
 (defn create-dataset
   [dataset-type corpus]
-  (let [{:keys [y labels]} (get-y-and-labels corpus)
+  (let [{:keys [y classes]} (get-y-and-classes corpus)
         document-texts (map #(% "document-text") corpus)
         {:keys [all-terms tf-idf idf]} (tf-idf (map to-terms document-texts))]
     {:type dataset-type
      :X (create-sparse-matrix (count y) tf-idf)
      :y y
      :features all-terms
-     :labels labels
+     :classes classes
      :extra {:inverse-document-frequencies idf}}))
 
 (defn document-to-vector

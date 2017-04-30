@@ -11,7 +11,7 @@
                  :X (m/matrix [[1 0] [0 1]])
                  :y [0 1]
                  :features ["a" "b"]
-                 :labels ["one" "two"]
+                 :classes ["one" "two"]
                  :extra nil}
         model-types [:knn :naive-bayes]]
     (testing "for all model-types,"

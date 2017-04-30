@@ -18,7 +18,7 @@
                                            :X
                                            :y
                                            :features
-                                           :labels
+                                           :classes
                                            :extra])
             "returned map contains all specced keys")
         (is (= dataset-type (:type result)))
@@ -28,6 +28,6 @@
             "y has an entry for each document")
         (is (= [1 1 0] (:y result))
             "y contains label indexes for documents")
-        (is (= ["cat" "dog"] (:labels result))
-            "labels contains sorted distinct labels")
+        (is (= ["cat" "dog"] (:classes result))
+            "classes contains sorted distinct labels")
         (is (map? (:extra result)) "extra is a map")))))

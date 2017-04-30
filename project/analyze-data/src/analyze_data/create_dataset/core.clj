@@ -16,10 +16,10 @@
   :type      the type of the dataset
   :X         a core.matrix matrix of features where each row represents a
              document and each column a feature
-  :y         a vector of indexes into :labels. The first entry will represent
+  :y         a vector of indexes into :classes. The first entry will represent
              the label of the first document in :X, and so on.
   :features  a vector of names for each feature column
-  :labels    a vector of sorted distinct labels in the corpus
+  :classes   a vector of sorted distinct labels in the corpus
   :extra     a map for type-specific extra data"
   (fn [dataset-type corpus] dataset-type))
 

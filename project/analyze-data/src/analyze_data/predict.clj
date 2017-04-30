@@ -18,14 +18,14 @@
 
 (defmethod predict :knn [model document & options]
   (let [{dataset :dataset
-         {:keys [X y labels]} :dataset} model
+         {:keys [X y classes]} :dataset} model
         z (document-to-vector dataset document)
         prediction (apply knn/predict X y z options)]
-    (labels (first prediction))))
+    (classes (first prediction))))
 
 (defmethod predict :naive-bayes [model document & options]
   (let [{:keys [parameters dataset]
-         {:keys [labels]} :dataset} model
+         {:keys [classes]} :dataset} model
         z (document-to-vector dataset document)
         prediction (naive-bayes/predict parameters z)]
-    (labels (first prediction))))
+    (classes (first prediction))))

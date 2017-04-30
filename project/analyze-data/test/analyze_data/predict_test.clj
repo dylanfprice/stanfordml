@@ -14,7 +14,7 @@
                            :X [[1 1] [1 0.5] [1 0]]
                            :y [0 0 1]
                            :features ["bar" "foo"]
-                           :labels ["thing-one" "thing-two"]
+                           :classes ["thing-one" "thing-two"]
                            :extra {:inverse-document-frequencies
                                    {"bar" 1, "foo" 1}}}}
           document "foo bar"]
@@ -29,7 +29,7 @@
                            :X [[1 1] [1 0.5] [1 0]]
                            :y [0 0 1]
                            :features ["bar" "foo"]
-                           :labels ["thing-one" "thing-two"]
+                           :classes ["thing-one" "thing-two"]
                            :extra {:inverse-document-frequencies
                                    {"bar" 1, "foo" 1}}}}
           document "foo bar"]

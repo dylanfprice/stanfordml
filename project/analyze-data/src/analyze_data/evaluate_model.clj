@@ -41,8 +41,8 @@
                keys
   options: passed through to analyze-data/predict
 
-  Return a confusion matrix as a nested map. For example, if the labels of
-  the model are :a and :b, returns
+  Return a confusion matrix as a nested map. For example, if the classes of the
+  model are :a and :b, returns
   {:a {:a <number of documents classified as :a that were predicted :a>
        :b <number of documents classified as :a that were predicted :b>}
    :b {:a <number of documents classified as :b that were predicted :a>
@@ -51,7 +51,7 @@
   Note that if any counts are 0 then that entry will not exist."
   [model test-corpus & options]
   (let [predictions (apply get-predictions model test-corpus options)
-        classes (-> model :dataset :labels)
+        classes (-> model :dataset :classes)
         inc-prediction-count (fn [m [label predicted-label]]
                                (update-in m [label predicted-label] inc))]
     (reduce inc-prediction-count
