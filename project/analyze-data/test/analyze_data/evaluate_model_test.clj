@@ -32,4 +32,6 @@
 (deftest evaluate-model-test
   (is (= {"one" {"one" 2, "two" 0}
           "two" {"one" 1, "two" 0}}
-         (test-ns/evaluate-model knn-model test-corpus))))
+         (test-ns/evaluate-model knn-model test-corpus))
+      "evaluates a model"))
+
