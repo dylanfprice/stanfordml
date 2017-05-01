@@ -64,5 +64,5 @@
         partition-size (max (int (/ num-samples k)) 2)
         indices (set (range num-samples))
         test-selections (->> indices (shuffle) (partition partition-size))]
-    (map #(create-partition dataset (difference indices %) %)
+    (map #(create-partition dataset (vec (difference indices %)) %)
          test-selections)))
