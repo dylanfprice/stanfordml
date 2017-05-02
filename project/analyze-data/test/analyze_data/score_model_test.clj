@@ -42,3 +42,6 @@
 
 (deftest accuracy-test
   (is (= 35/48 (test-ns/accuracy confusion-matrix))))
+
+(deftest f1-score-test
+  (is (= 5/7 (test-ns/f1-score confusion-matrix :a))))
