@@ -18,14 +18,17 @@
   "X: design matrix
    label-indices: sorted map where key i looks up indices of samples labelled
                   i. It must be true that (= (keys label-indices) (range k))
-                  for some k.
+                  for some k, i.e. there must be at least one sample per class
+                  label.
 
   Return a core.matrix sparse matrix where the ith row is the sum of all
   samples labelled i."
   [X label-indices]
   ; preconditions
   (if-let [classes (keys label-indices)]
-    (assert (= classes (range (+ 1 (m/emax classes))))))
+    (let [expected-classes (range (+ 1 (m/emax classes)))]
+      (assert (= classes expected-classes)
+              "data needs at least one sample for each class label")))
   ; function
   (create-sparse-matrix
     (count label-indices)
@@ -37,7 +40,8 @@
   "X: design matrix
    label-indices: sorted map where key i looks up indices of samples labelled
                   i. It must be true that (= (keys label-indices) (range k))
-                  for some k.
+                  for some k, i.e. there must be at least one sample per class
+                  label.
 
   Return a k x n matrix 'phi' where k is the number of class labels and n is
   the number of terms. Each entry phi[i][j] represents prob(j|y=i)."
@@ -51,7 +55,8 @@
 (defn- calc-phi-y
   "label-indices: sorted map where key i looks up indices of samples labelled
                   i. It must be true that (= (keys label-indices) (range k))
-                  for some k.
+                  for some k, i.e. there must be at least one sample per class
+                  label.
    num-samples: number of samples
 
   Return a vector 'phi-y' of length k where k is the number of class labels.
