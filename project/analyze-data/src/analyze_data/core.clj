@@ -40,6 +40,9 @@
     (doseq [c classes]
       (let [class-count (count (filter (partial = (.indexOf classes c)) y))]
         (println "  " (str c ":") class-count)))
+    (println "Confusion matrix:")
+    (doseq [c classes]
+      (println "  " (str c ":") (confusion-matrix c)))
     (println "Accuracy:" (->> confusion-matrix accuracy float (format "%.2f")))
     (println "F1 Scores:")
     (let [f1-scores (map (partial f1-score confusion-matrix) classes)]
