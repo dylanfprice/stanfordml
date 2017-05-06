@@ -6,6 +6,10 @@
 (deftest predict-test
   (let [parameters {:log-phi (m/log [[1/2 1/4] [1/2 3/4]])
                     :log-phi-y (m/log [1/3 2/3])}
-        x [0 1]]
-    (is (= [1 (+ (Math/log 2/3) (Math/log 3/4))]
-           (test-ns/predict parameters x)))))
+        x [0 1]
+        prediction (test-ns/predict parameters x)
+        expected-class 1
+        expected-prob 6/7]
+    (is (= expected-class (first prediction)))
+    (is (= (format "%.2f" (float expected-prob))
+           (format "%.2f" (second prediction))))))
