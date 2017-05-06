@@ -77,15 +77,16 @@
       thus m is the number of samples and n is the number of terms
    y: m x 1 vector of class labels, which must be integers
 
-  Return a map with keys :phi and :phi-y.
-  :phi is a k x n matrix where k is the number of class labels and n is the
-       number of terms. Each (i,j) entry represents p(j|y=i), that is, the
-       conditional probability that term j appears in a document given its
-       class label i.
-  :phi-y is a length k vector where the ith entry represents p(y=i), that is,
-         the posterior probability that a document is in class i."
+  Return a map with keys :log-phi and :log-phi-y.
+  :log-phi is a k x n matrix where k is the number of class labels and n is
+    the number of terms. Each (i,j) entry represents log p(j|y=i), that is,
+    the log of the conditional probability that term j appears in a document
+    given its class label i.
+  :log-phi-y is a length k vector where the ith entry represents log p(y=i),
+    that is, the log of the posterior probability that a document is in class
+    i."
   [X y]
   (let [label-indices (group-indices-by-value y)
         num-samples (first (m/shape X))]
-    {:phi (calc-phi X label-indices)
-     :phi-y (calc-phi-y label-indices num-samples)}))
+    {:log-phi (m/log (calc-phi X label-indices))
+     :log-phi-y (m/log (calc-phi-y label-indices num-samples))}))

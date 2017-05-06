@@ -19,8 +19,8 @@
 
 (def naive-bayes-model
   {:type :naive-bayes
-   :parameters {:phi [[1/2 2/3] [1/2 1/3]]
-                :phi-y [2/3 1/3]}
+   :parameters {:log-phi (m/log [[1/2 2/3] [1/2 1/3]])
+                :log-phi-y (m/log [2/3 1/3])}
    :dataset {:type :tf-idf
              :X [[1 1] [1 0.5] [1 0]]
              :y [0 0 1]

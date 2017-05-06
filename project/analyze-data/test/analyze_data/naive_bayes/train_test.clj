@@ -55,9 +55,9 @@
 (deftest train-test
   (let [X [[1 0] [0 1] [1 1]]
         y [0 1 1]]
-    (is (= [:phi :phi-y] (keys (test-ns/train X y)))
+    (is (= [:log-phi :log-phi-y] (keys (test-ns/train X y)))
         "returns map with keys :phi and :phi-y")
-    (is (= {:phi (m/matrix [[1/2 1/4] [1/2 3/4]])
-            :phi-y [1/3 2/3]}
+    (is (= {:log-phi (m/log (m/matrix [[1/2 1/4] [1/2 3/4]]))
+            :log-phi-y (m/log [1/3 2/3])}
            (test-ns/train X y))
         "returns parameters phi and phi-y")))
