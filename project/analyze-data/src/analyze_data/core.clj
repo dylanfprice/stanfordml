@@ -7,10 +7,16 @@
             [analyze-data.score-model :refer [accuracy f1-score]]
             [analyze-data.serialize :refer [read-object]]))
 
+;TODO: make nice command-line wrapper
+
 (defn create-dataset
-  [f]
+  [f & options]
   (m/set-current-implementation :vectorz)
-  (create-dataset-file! :tf-idf f (string/replace f #"\.\w+$" ".dataset")))
+  (apply create-dataset-file!
+         :tf-idf
+         f
+         (string/replace f #"\.csv$" ".dataset")
+         options))
 
 (defn- get-options
   [model-type]
