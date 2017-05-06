@@ -8,9 +8,9 @@
 
   Return a vector of [most-likely-label score]"
   [parameters z]
-  (let [{:keys [log-phi log-phi-y]} parameters
-        log-probs (->> (m/mul log-phi z)
+  (let [{:keys [phi phi-y]} parameters
+        probs (->> (m/mul phi z)
                        (map m/esum)
-                       (m/add log-phi-y))
-        indexed-log-probs (map-indexed #(vector %1 %2) log-probs)]
-    (reduce greatest indexed-log-probs)))
+                       (m/add phi-y))
+        indexed-probs (map-indexed #(vector %1 %2) probs)]
+    (reduce greatest indexed-probs)))
