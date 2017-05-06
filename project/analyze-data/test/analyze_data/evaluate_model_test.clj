@@ -42,7 +42,6 @@
       "trains and evaluates a model"))
 
 (deftest k-fold-cross-validation-test
-  (is (= {"one" {"one" 1, "two" 2}
-          "two" {"one" 1, "two" 0}}
-         (test-ns/k-fold-cross-validation 2 :knn (:dataset knn-model)))
+  (is (= ["one" "two"]
+         (keys (test-ns/k-fold-cross-validation 2 :knn (:dataset knn-model))))
       "trains and evaluates k-fold"))
