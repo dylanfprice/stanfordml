@@ -11,6 +11,9 @@
                 dataset.  Currently the only type is :tf-idf.
   corpus: a sequence of maps containing keys 'document-label' and
           'document-text'
+  options:
+    :term-types (default [:words]) list of term types to extract from documents
+                valid term-types are :words, :bigrams, :trigrams
 
   Return a dataset, which is a map with the following keys:
   :type      the type of the dataset
@@ -21,10 +24,10 @@
   :features  a vector of names for each feature column
   :classes   a vector of sorted distinct labels in the corpus
   :extra     a map for type-specific extra data"
-  (fn [dataset-type corpus] dataset-type))
+  (fn [dataset-type corpus & options] dataset-type))
 
-(defmethod create-dataset :tf-idf [dataset-type corpus]
-  (tf-idf/create-dataset dataset-type corpus))
+(defmethod create-dataset :tf-idf [dataset-type corpus & options]
+  (apply tf-idf/create-dataset dataset-type corpus options))
 
 (defmulti document-to-vector
   "Turn a document into a core.matrix vector with the same type of features
@@ -42,9 +45,10 @@
       'document-text'
   out: path where the dataset will be written as a serialized map.  You may
        read this data back in using analyze-data.serialize/read-object, make
-       sure you use the same core.matrix implementation on each end."
-  [dataset-type in out]
+       sure you use the same core.matrix implementation on each end.
+  options: same as for create-dataset"
+  [dataset-type in out & options]
   (with-open [reader (io/reader in)]
     (let [corpus (csv-to-map reader)
-          dataset (create-dataset dataset-type corpus)]
+          dataset (apply create-dataset dataset-type corpus options)]
       (write-object! out dataset))))

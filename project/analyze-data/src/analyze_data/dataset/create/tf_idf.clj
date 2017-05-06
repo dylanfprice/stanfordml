@@ -16,22 +16,24 @@
     {:y y :classes classes}))
 
 (defn create-dataset
-  [dataset-type corpus]
-  (let [{:keys [y classes]} (get-y-and-classes corpus)
+  [dataset-type corpus & options]
+  (let [{:keys [term-types] :or {term-types [:words]}} options
+        {:keys [y classes]} (get-y-and-classes corpus)
         document-texts (map #(% "document-text") corpus)
-        {:keys [all-terms tf-idf idf]} (tf-idf (map to-terms document-texts))]
+        document-terms (map #(apply to-terms % term-types) document-texts)
+        {:keys [all-terms tf-idf idf]} (tf-idf document-terms)]
     {:type dataset-type
      :X (create-sparse-matrix (count y) tf-idf)
      :y y
      :features all-terms
      :classes classes
-     :extra {:inverse-document-frequencies idf}}))
+     :extra {:inverse-document-frequencies idf
+             :term-types term-types}}))
 
 (defn document-to-vector
   [dataset document]
   (let [{features :features
-         {idf :inverse-document-frequencies} :extra} dataset]
-    (->> document
-         (to-terms)
-         (tf-idf-document features idf)
+         {:keys [inverse-document-frequencies term-types]} :extra} dataset]
+    (->> (apply to-terms document term-types)
+         (tf-idf-document features inverse-document-frequencies)
          (m/sparse-array))))
