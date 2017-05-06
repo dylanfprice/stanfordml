@@ -24,11 +24,27 @@
     :knn {:k 3, :distance-fn cosine-distance}
     :naive-bayes {}))
 
+(defn analyze-confusion-matrix
+  [dataset confusion-matrix]
+  (let [{:keys [y classes]} dataset]
+    (with-out-str
+      (println "Classes:")
+      (doseq [c classes]
+        (let [class-count (count (filter (partial = (.indexOf classes c)) y))]
+          (println "  " (str c ":") class-count)))
+      (println "Confusion matrix:")
+      (doseq [c classes]
+        (println "  " (str c ":") (confusion-matrix c)))
+      (println "Accuracy:" (->> confusion-matrix accuracy float (format "%.2f")))
+      (println "F1 Scores:")
+      (let [f1-scores (map (partial f1-score confusion-matrix) classes)]
+        (doseq [[c f1] (zipmap classes f1-scores)]
+          (println "  " (str c ":") (->> f1 float (format "%.2f"))))))))
+
 (defn train
   [dataset-file model-type]
   (m/set-current-implementation :vectorz)
   (let [dataset (read-object dataset-file)
-        {:keys [y classes]} dataset
         k 10
         confusion-matrix (apply k-fold-cross-validation
                                 k
@@ -36,15 +52,4 @@
                                 dataset
                                 (get-options model-type))]
     (println (name model-type) (str k "-fold cross-validation on") dataset-file)
-    (println "Classes:")
-    (doseq [c classes]
-      (let [class-count (count (filter (partial = (.indexOf classes c)) y))]
-        (println "  " (str c ":") class-count)))
-    (println "Confusion matrix:")
-    (doseq [c classes]
-      (println "  " (str c ":") (confusion-matrix c)))
-    (println "Accuracy:" (->> confusion-matrix accuracy float (format "%.2f")))
-    (println "F1 Scores:")
-    (let [f1-scores (map (partial f1-score confusion-matrix) classes)]
-      (doseq [[c f1] (zipmap classes f1-scores)]
-        (println "  " (str c ":") (->> f1 float (format "%.2f")))))))
+    (println (analyze-confusion-matrix dataset confusion-matrix))))
