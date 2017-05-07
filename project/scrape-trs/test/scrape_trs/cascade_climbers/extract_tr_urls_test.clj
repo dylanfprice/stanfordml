@@ -1,6 +1,6 @@
-(ns scrape-trs.cascade-climbers.extract-tr-links-test
+(ns scrape-trs.cascade-climbers.extract-tr-urls-test
   (:require [clojure.test :refer [deftest is]]
-            [scrape-trs.cascade-climbers.extract-tr-links :as test-ns]))
+            [scrape-trs.cascade-climbers.extract-tr-urls :as test-ns]))
 
 (def page
   "<table class='t_inner'>
@@ -51,7 +51,7 @@
      </tbody>
    </table>")
 
-(deftest extract-tr-links-test
+(deftest extract-tr-urls-test
   (is (= ["http://cascadeclimbers.com/forum/ubbthreads.php?ubb=showflat&Number=1154575"
           "http://cascadeclimbers.com/forum/ubbthreads.php?ubb=showflat&Number=1154544"]
-         (test-ns/extract-tr-links page))))
+         (test-ns/extract-tr-urls page))))

@@ -1,11 +1,11 @@
-(ns scrape-trs.cascade-climbers.extract-tr-links
+(ns scrape-trs.cascade-climbers.extract-tr-urls
   (:require [clojure.string :as string]
             [reaver]
             [scrape-trs.ensure-sequence :refer [ensure-sequence]]))
 
-(defn extract-tr-links
+(defn extract-tr-urls
   "Given a string containing the trip reports page from cascade climbers,
-  return a sequence of links representing the trip reports on that page."
+  return a sequence of urls representing the trip reports on that page."
   [page]
   (->> (reaver/extract (reaver/parse page)
                        []
