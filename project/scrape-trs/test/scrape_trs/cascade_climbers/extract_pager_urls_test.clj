@@ -1,8 +1,8 @@
-(ns scrape-trs.cascade-climbers.extract-pager-links-test
+(ns scrape-trs.cascade-climbers.extract-pager-urls-test
   (:require [clojure.test :refer [deftest is]]
-            [scrape-trs.cascade-climbers.extract-pager-links :as test-ns]))
+            [scrape-trs.cascade-climbers.extract-pager-urls :as test-ns]))
 
-(deftest extract-pager-links-test
+(deftest extract-pager-urls-test
   (let [page
         "<table class='t_standard pagination'>
            <tbody>
@@ -21,11 +21,11 @@
             "/sb/13/sk/0/page/3"
             "/sb/13/sk/0/page/338"
             "/sb/13/sk/0/page/2"]
-           (#'test-ns/extract-pager-links page))
-        "extracts pager links"))
+           (#'test-ns/extract-pager-urls page))
+        "extracts pager urls"))
   (let [page "<table></table>"]
-    (is (= [] (#'test-ns/extract-pager-links page))
-        "returns empty sequence when there are no pager links")))
+    (is (= [] (#'test-ns/extract-pager-urls page))
+        "returns empty sequence when there are no pager urls")))
 
 (deftest extract-last-page-test
   (is (= 1
@@ -40,11 +40,11 @@
          (#'test-ns/extract-last-page ["/sb/13/sk/0/page/f"]))
       "fails on a non-integer value of page param"))
 
-(deftest extract-all-pager-links-test
+(deftest extract-all-pager-urls-test
   (let [page "<table></table>"]
     (is (= nil
-           (test-ns/extract-all-pager-links page))
-        "returns nil when there are no pager links"))
+           (test-ns/extract-all-pager-urls page))
+        "returns nil when there are no pager urls"))
   (let [page
         "<table class='t_standard pagination'>
            <tbody>
@@ -61,5 +61,5 @@
     (is (= ["/sb/13/sk/0/page/1", "/sb/13/sk/0/page/2"
             "/sb/13/sk/0/page/3", "/sb/13/sk/0/page/4"
             "/sb/13/sk/0/page/5"]
-           (test-ns/extract-all-pager-links page))
-        "extracts entire range of links")))
+           (test-ns/extract-all-pager-urls page))
+        "extracts entire range of urls")))
