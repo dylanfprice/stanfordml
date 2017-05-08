@@ -8,7 +8,7 @@
 (defn extract-trip-report
   "Given a trip report page from cascade climbers (as a string), return a
   TripReport record parsed from the page."
-  [trip-report-page]
+  [trip-report-url trip-report-page]
   (let [body (reaver/extract (reaver/parse trip-report-page)
                              []
                              "#body0" reaver/text)
@@ -16,6 +16,7 @@
         date-string (second (re-find #"Date: ([\d/]+) Trip Report:" body))
         date (.parse date-in-format date-string)
         text (second (re-find #"Trip Report: (.*)" body))]
-    (map->TripReport {:title title
+    (map->TripReport {:url trip-report-url
+                      :title title
                       :date (.format trip-report-date-format date)
                       :text text})))

@@ -1,7 +1,7 @@
 (ns scrape-trs.protocol
   (:import java.text.SimpleDateFormat))
 
-(defrecord TripReport [title date text])
+(defrecord TripReport [url title date text])
 
 (def trip-report-date-format (SimpleDateFormat. "yyyy-MM-dd"))
 
@@ -17,7 +17,6 @@
     "Given a page (as a string) that lists links to trip reports, return a
     sequence of urls to all trip reports listed on the page.")
   (extract-trip-report
-    [this trip-report-page]
-    "Given a page (as a string) that contains a trip report, return a
-    TripReport record.") )
-
+    [this trip-report-url trip-report-page]
+    "Given a trip report url and a page (as a string) that contains a trip
+    report, return a TripReport record.") )

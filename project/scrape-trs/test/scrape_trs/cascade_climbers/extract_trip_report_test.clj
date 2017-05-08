@@ -12,8 +12,10 @@
 
 (deftest extract-trip-report-test
   (is (= (map->TripReport
-           {:title "Dragontail - Triple Couloirs"
+           {:url "http://example.com/trip-reports/1234"
+            :title "Dragontail - Triple Couloirs"
             :date "2017-04-23"
             :text "This is a trip report."})
-         (test-ns/extract-trip-report trip-report-page))
+         (test-ns/extract-trip-report "http://example.com/trip-reports/1234"
+                                      trip-report-page))
       "extracts trip report"))
