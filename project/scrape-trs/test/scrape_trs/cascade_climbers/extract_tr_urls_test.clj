@@ -37,7 +37,7 @@
              </a>
            </td>
            <td class='{class}'>
-             {region}
+             Alpine Lakes
            </td>
            <td class='{class}'>
              <a href='http://some-user-url.com'>
@@ -50,12 +50,11 @@
    </table>")
 
 (defn make-test-page
-  [url & {:keys [css-class region]
-          :or {css-class "alt-1" region "Alpine Lakes"}}]
+  [url & {:keys [css-class]
+          :or {css-class "alt-1"}}]
   (-> page-template
       (string/replace "{url}" url)
-      (string/replace "{class}" css-class)
-      (string/replace "{region}" region)))
+      (string/replace "{class}" css-class)))
 
 (deftest extract-tr-urls-test
   (let [page (make-test-page "http://example.com/trip-reports/1234")]
@@ -66,9 +65,4 @@
                              :css-class "alt-2")]
     (is (= ["http://example.com/trip-reports/1234"]
            (test-ns/extract-tr-urls page))
-        "extracts trip report urls from alt-2 table rows"))
-  (let [page (make-test-page "http://example.com/trip-reports/1234"
-                             :region "California")]
-    (is (= []
-           (test-ns/extract-tr-urls page))
-        "ignores trip reports outside of Washington")))
+        "extracts trip report urls from alt-2 table rows")))
