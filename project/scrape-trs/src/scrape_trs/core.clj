@@ -29,8 +29,8 @@
 (defn get-implementation
   [url]
   (let [base-url (re-find #"https?://.*?/" url)]
-    (case base-url
-      "http://cascadeclimbers.com/" (cc/->CCScrapeTripReport))))
+    (condp = base-url
+      cc/base-url (cc/->CCScrapeTripReport))))
 
 (defn get-trip-reports
   ""
