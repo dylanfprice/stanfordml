@@ -10,8 +10,8 @@
   (extract-pager-urls
     [this list-page]
     "Given a page (as a string) that lists links to trip reports and may have
-    pagination, return a sequence of urls to all pages in the pagination, or a
-    one item sequence containing list-page if there is no pagination.")
+    pagination, return a sequence of urls to all pages in the pagination, or
+    nil if there is no pagination.")
   (extract-trip-report-urls
     [this list-page]
     "Given a page (as a string) that lists links to trip reports, return a
