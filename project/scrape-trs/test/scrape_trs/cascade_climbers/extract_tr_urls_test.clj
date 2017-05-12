@@ -19,7 +19,7 @@
        <tbody>
          <tr>
            <td class='tdheader'>
-             <a href='http://some-header-url.com'>
+             <a href='/some-header-link'>
              Date
              </a>
            </td>
@@ -33,14 +33,14 @@
              Alpine
            </td>
            <td class='{class}'>
-             <a href='{url}'>
+             <a href='{link}'>
              </a>
            </td>
            <td class='{class}'>
              Alpine Lakes
            </td>
            <td class='{class}'>
-             <a href='http://some-user-url.com'>
+             <a href='/some-user-link'>
              </a>
            </td>
          </tr>
@@ -50,19 +50,19 @@
    </table>")
 
 (defn make-test-page
-  [url & {:keys [css-class]
+  [link & {:keys [css-class]
           :or {css-class "alt-1"}}]
   (-> page-template
-      (string/replace "{url}" url)
+      (string/replace "{link}" link)
       (string/replace "{class}" css-class)))
 
 (deftest extract-tr-urls-test
-  (let [page (make-test-page "http://example.com/trip-reports/1234")]
+  (let [page (make-test-page "/trip-reports/1234")]
     (is (= ["http://example.com/trip-reports/1234"]
-           (test-ns/extract-tr-urls page))
+           (test-ns/extract-tr-urls "http://example.com" page))
         "extracts only trip report urls"))
-  (let [page (make-test-page "http://example.com/trip-reports/1234"
+  (let [page (make-test-page "/trip-reports/1234"
                              :css-class "alt-2")]
     (is (= ["http://example.com/trip-reports/1234"]
-           (test-ns/extract-tr-urls page))
+           (test-ns/extract-tr-urls "http://example.com" page))
         "extracts trip report urls from alt-2 table rows")))

@@ -17,7 +17,7 @@
 
   (extract-trip-report-urls
     [this list-page]
-    (extract-tr-urls list-page))
+    (extract-tr-urls base-url list-page))
 
   (extract-trip-report
     [this trip-report-url trip-report-page]
