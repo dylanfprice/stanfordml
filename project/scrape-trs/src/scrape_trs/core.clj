@@ -36,7 +36,7 @@
   ""
   [implementation list-page]
   (let [pager-urls (.extract-pager-urls implementation list-page)
-        list-pages (map slurp pager-urls)
+        list-pages (if pager-urls (map slurp pager-urls) [list-page])
         trip-report-urls (mapcat #(.extract-trip-report-urls implementation %)
                                  list-pages)
         trip-reports (map #(.extract-trip-report implementation %1 %2)
