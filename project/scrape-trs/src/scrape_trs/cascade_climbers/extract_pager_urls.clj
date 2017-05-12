@@ -20,7 +20,7 @@
        (map (partial re-find #"/page/(\d+)"))
        (map #(nth % 1))
        (map #(Integer/parseInt %))
-       (apply max)))
+       (reduce max)))
 
 (defn extract-all-pager-urls
   "Given a string containing a the trip reports forum page from cascade
