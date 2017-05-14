@@ -1,36 +1,13 @@
 (ns scrape-trs.core
-  (:require [scrape-trs.cascade-climbers.core :as cc]))
-
-(comment
-  "TODO:
-   - add SPScrapeTripReport
-   - upgrade get-trip-reports to return [errors, trip-reports]
-     based on try-slurp that returns [error, contents]
-   - add docs and tests for get-trip-reports
-   - implement save-trip-reports!
-   - make scrape-wa-trs project that
-       retrieves cc.com tr list pages for each region in WA (POST)
-       retrieves sp.com tr list page for WA
-       get-trip-reports on each page and concat all together
-       save to csv"
-
-  (def cascade-climbers-washington-regions
-    #{"Alpine Lakes"
-      "Central/Eastern  Washington"
-      "Columbia River Gorge"
-      "Ice Climbing Forum"
-      "Mount Rainier NP"
-      "North Cascades"
-      "Olympic Peninsula"
-      "Rock Climbing Forum"
-      "Southern WA Cascades"
-      "the *freshiezone*"}))
+  (:require [scrape-trs.cascade-climbers.core :as cc]
+            [scrape-trs.summitpost.core :as sp]))
 
 (defn get-implementation
   [url]
   (let [base-url (re-find #"https?://.*?/" url)]
     (condp = base-url
-      cc/base-url (cc/->CCScrapeTripReport))))
+      cc/base-url (cc/->CCScrapeTripReport)
+      sp/base-url (sp/->SPScrapeTripReport))))
 
 (defn get-trip-reports
   ""
