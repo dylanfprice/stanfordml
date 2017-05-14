@@ -11,10 +11,9 @@
 (task-options!
     aot {:all true}
     pom {:project 'scrape-trs
-         :version "0.0.0"}
-    jar {:main 'scrape-trs.core})
+         :version "0.0.0"})
 
 (deftask build
-  "Build scrape-trs uberjar."
+  "Build scrape-trs jar and install to local maven repo."
   []
-  (comp (aot) (pom) (uber) (jar) (target)))
+  (comp (aot) (pom) (jar) (install)))
