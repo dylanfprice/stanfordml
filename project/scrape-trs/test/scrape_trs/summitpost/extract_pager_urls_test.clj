@@ -7,14 +7,14 @@
               <a href='/test?foo=bar&page=1' class='pagertext'></a>
               </td>"]
     (is (= ["/test?foo=bar&page=1"]
-           (test-ns/extract-pager-links page))
+           (#'test-ns/extract-pager-links page))
         "extracts pager link"))
   (let [page "<td>
               <a href='/test?foo=bar&page=1' class='pagertext'></a>
               <a href='/test?foo=bar' class='pagertext'></a>
               </td>"]
     (is (= ["/test?foo=bar&page=1"]
-           (test-ns/extract-pager-links page))
+           (#'test-ns/extract-pager-links page))
         "ignores links without page param")))
 
 (deftest extract-last-page-test
@@ -33,7 +33,7 @@
 (deftest extract-all-pager-urls-test
   (let [page "<td></td>"]
     (is (= nil
-           (#'test-ns/extract-all-pager-urls "http://example.org" page))
+           (test-ns/extract-all-pager-urls "http://example.org" page))
         "returns nil when there are no pager urls"))
   (let [page "<td>
               <a href='/test?page=1' class='pagertext'></a>
@@ -46,5 +46,5 @@
             "http://example.org/test?page=4"
             "http://example.org/test?page=5"
             "http://example.org/test?page=6"]
-           (#'test-ns/extract-all-pager-urls"http://example.org" page))
+           (test-ns/extract-all-pager-urls"http://example.org" page))
         "extracts entire range of urls")))

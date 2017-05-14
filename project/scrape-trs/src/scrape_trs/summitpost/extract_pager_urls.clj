@@ -2,7 +2,7 @@
   (:require [reaver]
             [scrape-trs.ensure-sequence :refer [ensure-sequence]]))
 
-(defn extract-pager-links
+(defn- extract-pager-links
   "Given a string containing a search results page from summitpost,
   return a sequence of pager links with page=\\d+ query params."
   [page]
@@ -22,7 +22,7 @@
        (map #(Integer/parseInt %))
        (apply max)))
 
-(defn- extract-all-pager-urls
+(defn extract-all-pager-urls
   "Given a string containing a search results page from summitpost, return a
   sequence of urls to all pages of search results. If there is no pagination,
   return nil."
