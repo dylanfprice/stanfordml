@@ -24,7 +24,3 @@
                           trip-report-urls
                           (map slurp trip-report-urls))]
     trip-reports))
-
-(defn save-trip-reports!
-  ""
-  [f trip-reports])
