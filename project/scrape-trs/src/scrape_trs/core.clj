@@ -21,7 +21,7 @@
 (defn get-trip-reports
   "
   url: url of list-page or the site it was retrieved from. Must correspond to
-       a supported url in (list-implementation-urls).
+       a supported url in (list-supported-urls).
   list-page: page (as a string) that lists trip reports
 
   Scrape all trip reports from the list-page, paging through pagination if
