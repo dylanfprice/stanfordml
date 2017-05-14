@@ -5,7 +5,7 @@
              [extract-trip-report :refer [extract-trip-report]]])
   (:import scrape_trs.protocol.ScrapeTripReport))
 
-(def base-url "http://cascadeclimbers.com/")
+(def base-url "http://cascadeclimbers.com")
 
 (deftype CCScrapeTripReport []
 
