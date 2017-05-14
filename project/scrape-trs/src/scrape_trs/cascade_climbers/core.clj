@@ -7,7 +7,7 @@
 
 (def base-url "http://cascadeclimbers.com/")
 
-(defrecord CCScrapeTripReport []
+(deftype CCScrapeTripReport []
 
   ScrapeTripReport
 
