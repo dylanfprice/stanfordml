@@ -30,4 +30,6 @@
     (is (= [0 2] (test-ns/predict X y z))
         "returns most likely label and number of votes.")
     (is (= [0 1] (test-ns/predict X y z :k 1))
-        "number of votes is 1 when :k is restricted to 1")))
+        "number of votes is 1 when :k is restricted to 1")
+    (is (= [nil nil] (test-ns/predict X y z, :threshold 3))
+        "returns [nil nil] when number of votes does not exceed :threshold")))

@@ -75,11 +75,20 @@
 
   z is a core.matrix vector
 
-  options are passed through to knn
+  Options
+    :k (default 3)
+    :distance-fn (default euclidean-distance)
+    :threshold (default 0) how many votes must be exceeded to make a
+               prediction
 
-  Return a vector of [most-likely-label num-votes]."
+  Return a vector of [most-likely-label num-votes] or [nil nil] if the number
+  of votes for the most likely label does not exceed :threshold."
   [X y z & options]
-  (let [nearest-neighbors (apply knn X z options)
+  (let [{:keys [threshold] :or {threshold 0}} options
+        nearest-neighbors (apply knn X z options)
         nearest-labels (->> nearest-neighbors (map first) (map #(y %)))
-        neighbor-frequencies (frequencies nearest-labels)]
-    (reduce greatest neighbor-frequencies)))
+        neighbor-frequencies (frequencies nearest-labels)
+        [most-likely-label num-votes] (reduce greatest neighbor-frequencies)]
+    (if (> num-votes threshold)
+      [most-likely-label num-votes]
+      [nil nil])))
