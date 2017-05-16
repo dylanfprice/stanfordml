@@ -37,5 +37,5 @@
 (defmethod predict :naive-bayes [model z & options]
   (let [{:keys [parameters]
          {:keys [classes]} :dataset} model
-        prediction (naive-bayes/predict parameters z)]
+        prediction (apply naive-bayes/predict parameters z options)]
     (classes (first prediction))))
