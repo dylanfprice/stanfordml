@@ -10,7 +10,7 @@
   model: previously trained model
   z: feature vector
   options: specific to the model-type
-    :knn see analyze-data.knn.core/knn
+    :knn see analyze-data.knn.core/predict
     :naive-bayes see analyze-data.naive-bayes.predict/predict
 
   Return the predicted label."
