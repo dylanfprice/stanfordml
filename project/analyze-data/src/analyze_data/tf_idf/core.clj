@@ -55,8 +55,9 @@
                trigram, etc. Each term sequence should represent a single
                document in the corpus.
   options:
-    :remove-singleton-terms? (default false) if true, remove all terms that
-                             occur in only one document
+    :df-threshold (default 0) how many documents a term must appear in
+                  (\"document frequency\") before it is included in
+                  :all-terms
 
   Return a map of the form:
   {:all-terms [term1 term2 ...]

@@ -16,12 +16,12 @@
   [num-documents num-documents-with-term]
   (Math/log (/ num-documents num-documents-with-term)))
 
-(defn singleton-terms
+(defn terms-with-frequency-less-than
   "Given map from term to number of documents it appears in, return terms
-  whose document frequency is 1."
-  [document-frequencies]
+  whose document frequency is less than n."
+  [n document-frequencies]
   (->> document-frequencies
-       (filter #(= 1 (val %)))
+       (filter #(< (val %) n))
        (map key)))
 
 (defn inverse-document-frequency
@@ -30,21 +30,20 @@
                trigram, etc. Each term sequence should represent a single
                document in the corpus.
   options:
-    :remove-singleton-terms? (default false) if true, remove all terms that
-                             occur in only one document
+    :df-threshold (default 0) how many documents a term must appear in before
+                  it is included in the returned map
 
   Return a map from term to its inverse document frequency (as defined at
   https://en.wikipedia.org/wiki/Tf–idf#Inverse_document_frequency_2)."
   [term-corpus & options]
-  (let [{:keys [remove-singleton-terms?]
-         :or [remove-singleton-terms? false]} options
+  (let [{:keys [df-threshold] :or {df-threshold 0}} options
         num-documents (count term-corpus)
         document-frequencies (document-frequency term-corpus)
-        document-frequencies (if remove-singleton-terms?
-                               (apply dissoc
-                                      document-frequencies
-                                      (singleton-terms document-frequencies))
-                               document-frequencies)
+        document-frequencies (apply dissoc
+                                    document-frequencies
+                                    (terms-with-frequency-less-than
+                                      df-threshold
+                                      document-frequencies))
         assoc-idf (fn [m term num-documents-with-term]
                     (assoc m
                            term

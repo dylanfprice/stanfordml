@@ -62,7 +62,7 @@
       (is (every? #(= java.lang.Double (type %))
                   (->> result :tf-idf (apply concat)))
           ":tf-idf sequences contain doubles"))
-    (testing "remove-singleton-terms option"
-      (let [result (test-ns/tf-idf term-corpus, :remove-singleton-terms? true)]
+    (testing ":df-threshold option"
+      (let [result (test-ns/tf-idf term-corpus, :df-threshold 2)]
         (is (= ["a" "b"] (:all-terms result))
             "removes terms that occur in only one document")))))

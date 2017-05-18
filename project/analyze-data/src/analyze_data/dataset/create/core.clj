@@ -14,9 +14,9 @@
   options: depend on dataset-type
     :tf-idf,
       :term-types (default [:words]) list of term types to extract from
-                  documents valid term-types are :words, :bigrams, :trigrams
-      :remove-singleton-terms? (default false) if true, remove terms that
-                               occur in only one document
+                  documents. Valid term-types are :words, :bigrams, :trigrams.
+      :df-threshold (default 0) how many documents a term must appear in
+                    before it is included as a feature in the dataset
 
   Return a dataset, which is a map with the following keys:
   :type      the type of the dataset

@@ -17,14 +17,13 @@
 
 (defn create-dataset
   [dataset-type corpus & options]
-  (let [{:keys [term-types remove-singleton-terms?]
-         :or {term-types [:words], remove-singleton-terms? false}} options
+  (let [{:keys [term-types df-threshold]
+         :or {term-types [:words], df-threshold 0}} options
         {:keys [y classes]} (get-y-and-classes corpus)
         document-texts (map #(% "document-text") corpus)
         document-terms (map #(apply to-terms % term-types) document-texts)
         {:keys [all-terms tf-idf idf]} (tf-idf document-terms
-                                               :remove-singleton-terms?
-                                               remove-singleton-terms?)]
+                                               :df-threshold df-threshold)]
     {:type dataset-type
      :X (create-sparse-matrix (count y) tf-idf)
      :y y
