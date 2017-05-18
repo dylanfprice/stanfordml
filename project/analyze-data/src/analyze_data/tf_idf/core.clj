@@ -54,6 +54,9 @@
   term-corpus: a sequence of term sequences. A term is a word, or bigram, or
                trigram, etc. Each term sequence should represent a single
                document in the corpus.
+  options:
+    :remove-singleton-terms? (default false) if true, remove all terms that
+                             occur in only one document
 
   Return a map of the form:
   {:all-terms [term1 term2 ...]
@@ -68,8 +71,8 @@
   :idf is a map from term to its inverse document frequency.
   :tf-idf is a lazy sequence of core.matrix sparse arrays which contain the
           tf-idf values for each document in term-corpus."
-  [term-corpus]
-  (let [idf (inverse-document-frequency term-corpus)
+  [term-corpus & options]
+  (let [idf (apply inverse-document-frequency term-corpus options)
         all-terms (sort (keys idf))
         tf-idf-values (map (partial tf-idf-document all-terms idf)
                            term-corpus)]

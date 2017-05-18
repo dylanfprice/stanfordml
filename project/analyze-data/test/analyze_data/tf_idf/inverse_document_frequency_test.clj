@@ -20,6 +20,11 @@
   (is (= (Math/log 5)
          (test-ns/calc-inverse-document-frequency 5 1))))
 
+(deftest singleton-terms-test
+  (is (= ["b"]
+         (test-ns/singleton-terms {"a" 2 "b" 1}))
+      "returns terms whose document frequency is 1"))
+
 (deftest inverse-document-frequency-test
   (is (= {}
          (test-ns/inverse-document-frequency []))
@@ -32,4 +37,9 @@
       "log(2) when two documents and only one contains term")
   (is (= {"a" (Math/log 2) "b" 0.0}
          (test-ns/inverse-document-frequency [["a" "b"] ["b"]]))
-      "handles multiple terms"))
+      "handles multiple terms")
+  (is (= {"b" 0.0}
+         (test-ns/inverse-document-frequency [["a" "b"] ["b"]]
+                                             :remove-singleton-terms? true))
+      (str "when remove-singleton-terms is true, removes terms that occur in "
+           "only one document")))

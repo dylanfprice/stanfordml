@@ -1,5 +1,5 @@
 (ns analyze-data.tf-idf.core-test
-  (:require [clojure.test :refer [deftest is use-fixtures]]
+  (:require [clojure.test :refer [deftest is testing use-fixtures]]
             [analyze-data.test-fixtures :refer [use-vectorz]]
             [analyze-data.tf-idf.core :as test-ns]))
 
@@ -51,14 +51,18 @@
       "matches the order of all-terms"))
 
 (deftest tf-idf
-  (let [term-corpus [["a" "b"] ["a" "c"] ["b" "a"]]
-        result (test-ns/tf-idf term-corpus)]
-    (is (= ["a" "b" "c"]
-           (:all-terms result))
-        ":all-terms is a sorted sequence of terms")
-    (is (every? (partial contains? (:idf result))
-                ["a" "b" "c"])
-        ":idf contains a key for every term")
-    (is (every? #(= java.lang.Double (type %))
-                (->> result :tf-idf (apply concat)))
-        ":tf-idf sequences contain doubles")))
+  (let [term-corpus [["a" "b"] ["a" "c"] ["b" "a"]]]
+    (let [result (test-ns/tf-idf term-corpus)]
+      (is (= ["a" "b" "c"]
+             (:all-terms result))
+          ":all-terms is a sorted sequence of terms")
+      (is (every? (partial contains? (:idf result))
+                  ["a" "b" "c"])
+          ":idf contains a key for every term")
+      (is (every? #(= java.lang.Double (type %))
+                  (->> result :tf-idf (apply concat)))
+          ":tf-idf sequences contain doubles"))
+    (testing "remove-singleton-terms option"
+      (let [result (test-ns/tf-idf term-corpus, :remove-singleton-terms? true)]
+        (is (= ["a" "b"] (:all-terms result))
+            "removes terms that occur in only one document")))))

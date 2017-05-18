@@ -16,17 +16,35 @@
   [num-documents num-documents-with-term]
   (Math/log (/ num-documents num-documents-with-term)))
 
+(defn singleton-terms
+  "Given map from term to number of documents it appears in, return terms
+  whose document frequency is 1."
+  [document-frequencies]
+  (->> document-frequencies
+       (filter #(= 1 (val %)))
+       (map key)))
+
 (defn inverse-document-frequency
   "Given
   term-corpus: a sequence of term sequences. A term is a word, or bigram, or
                trigram, etc. Each term sequence should represent a single
                document in the corpus.
+  options:
+    :remove-singleton-terms? (default false) if true, remove all terms that
+                             occur in only one document
 
   Return a map from term to its inverse document frequency (as defined at
   https://en.wikipedia.org/wiki/Tf–idf#Inverse_document_frequency_2)."
-  [term-corpus]
-  (let [num-documents (count term-corpus)
+  [term-corpus & options]
+  (let [{:keys [remove-singleton-terms?]
+         :or [remove-singleton-terms? false]} options
+        num-documents (count term-corpus)
         document-frequencies (document-frequency term-corpus)
+        document-frequencies (if remove-singleton-terms?
+                               (apply dissoc
+                                      document-frequencies
+                                      (singleton-terms document-frequencies))
+                               document-frequencies)
         assoc-idf (fn [m term num-documents-with-term]
                     (assoc m
                            term
