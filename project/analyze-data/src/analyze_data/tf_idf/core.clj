@@ -69,8 +69,8 @@
   :tf-idf is a lazy sequence of core.matrix sparse arrays which contain the
           tf-idf values for each document in term-corpus."
   [term-corpus]
-  (let [all-terms (->> term-corpus (apply concat) (distinct) (sort))
-        idf (inverse-document-frequency term-corpus)
+  (let [idf (inverse-document-frequency term-corpus)
+        all-terms (sort (keys idf))
         tf-idf-values (map (partial tf-idf-document all-terms idf)
                            term-corpus)]
     {:all-terms all-terms
