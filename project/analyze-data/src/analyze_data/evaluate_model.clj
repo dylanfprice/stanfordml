@@ -70,7 +70,7 @@
   perform the following algorithm:
     for each partition i
       train model using everything but partition i as dataset
-      evaluate model using partition i as test corpus
+      evaluate model using partition i as test dataset
     return sum of all k confusion matrices
 
   options are as for train-and-evaluate"
