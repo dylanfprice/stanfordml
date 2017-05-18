@@ -11,9 +11,10 @@
                 dataset.  Currently the only type is :tf-idf.
   corpus: a sequence of maps containing keys 'document-label' and
           'document-text'
-  options:
-    :term-types (default [:words]) list of term types to extract from documents
-                valid term-types are :words, :bigrams, :trigrams
+  options: depend on dataset-type
+    :tf-idf,
+      :term-types (default [:words]) list of term types to extract from
+                  documents valid term-types are :words, :bigrams, :trigrams
 
   Return a dataset, which is a map with the following keys:
   :type      the type of the dataset
