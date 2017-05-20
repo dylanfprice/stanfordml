@@ -30,12 +30,13 @@
 
 (defn create-corpus!
   "in: path to csv file of trip reports with headers label, title, text
-  out: path to file where csv will be written with headers document-label document-text"
-  [in out]
+  out: path to file where csv will be written with headers document-label document-text
+  labels: set of labels representing which trip reports to include (case-insensitive)"
+  [in out labels]
   (with-open [reader (io/reader in)
               writer (io/writer out)]
     (let [trip-reports (csv-to-map reader)
-          corpus (create-corpus trip-reports)
+          corpus (create-corpus trip-reports labels)
           data (for [document corpus]
                  (let [{:strs [document-label document-text]} document]
                    [document-label document-text]))]
