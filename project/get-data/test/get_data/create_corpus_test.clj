@@ -3,7 +3,7 @@
             [get-data.create-corpus :as test-ns]))
 
 (deftest create-corpus-test
-  (let [trip-reports [{"label" "A"
+  (let [trip-reports [{"label" "a"
                        "title" "a trip report"
                        "text" "Sentence one. Sentence two. Sentence three."}]
         labels #{"a"}
@@ -12,11 +12,18 @@
            (-> result first keys set))
         "returned maps have correct keys")
     (is (= "a" ((first result) "document-label"))
-        "document-label in returned map is lowercased label")
+        "document-label in returned map is label")
     (is (= "a trip report\nSentence one. Sentence two."
            ((first result) "document-text"))
         "document-text is title + first two sentences of text"))
-  (let [trip-reports [{"label" "A"
+  (let [trip-reports [{"label" "  a  "
+                       "title" "a trip report"
+                       "text" "Sentence one."}]
+        labels #{"a"}
+        result (test-ns/create-corpus trip-reports labels)]
+    (is (= "a" ((first result) "document-label"))
+        "lowercases and trims label of whitespace"))
+  (let [trip-reports [{"label" "a"
                        "title" "a trip report"
                        "text" "Sentence one."}]
         labels #{"a"}
@@ -24,7 +31,7 @@
     (is (= "a trip report\nSentence one."
            ((first result) "document-text"))
         "includes just first sentence if there is only one"))
-  (let [trip-reports [{"label" "B"
+  (let [trip-reports [{"label" "b"
                        "title" "b trip report"
                        "text" "Sentence one."}]
         labels #{"a"}
