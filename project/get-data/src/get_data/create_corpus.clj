@@ -12,15 +12,17 @@
 
   trip-reports: a sequence of maps with keys \"label\", \"title\", \"text\"
 
-  Return a sequence of maps with keys \"document-label\" and \"document-text\"
-  where \"document-label\" is the same as \"label\" in the source data, and
-  \"document-text\" is \"title\" concatenated with the first two sentences of
-  \"text\". Filter out trip reports for which \"label\" is blank."
+  Return a sequence of maps with keys \"document-label\" and \"document-text\".
+  \"document-label\" is lowercased \"label\" from the source data.
+  \"document-text\" is \"title\" and the first two sentences of \"text\"
+                    joined by a newline.
+
+  Filter out trip reports for which \"label\" is blank.  "
   [trip-reports]
   (for [trip-report trip-reports
         :let [{:strs [label title text]} trip-report]
         :when (not (string/blank? label))]
-    {"document-label" label
+    {"document-label" (string/lower-case label)
      "document-text" (str title
                           "\n"
                           (first (re-find first-two-sentences text)))}))

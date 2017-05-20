@@ -29,4 +29,10 @@
                        "text" "Sentence one."}]
         result (test-ns/create-corpus trip-reports)]
     (is (= [] result)
-        "filters out trip reports which aren't labelled")))
+        "filters out trip reports which aren't labelled"))
+  (let [trip-reports [{"label" "A"
+                       "title" "a trip report"
+                       "text" "Sentence one."}]
+        result (test-ns/create-corpus trip-reports)]
+    (is (= "a" ((first result) "document-label"))
+        "lowercases label")))
