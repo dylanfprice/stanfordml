@@ -3,7 +3,7 @@
             [clojure.data.csv :as csv]
             [get-data.csv-to-map :refer [csv-to-map]]))
 
-(def ^:private first-two-sentences #"[^.]+\.[^.]+\.")
+(def ^:private first-two-sentences #"([^.]+\.){1,2}")
 
 (defn create-corpus
   "Given a sequence of trip reports, transform it into a sequence of maps ready
@@ -19,7 +19,9 @@
   (for [trip-report trip-reports]
     (let [{:strs [label title text]} trip-report]
       {"document-label" label
-       "document-text" (str title " " (re-find first-two-sentences text))})))
+       "document-text" (str title
+                            " "
+                            (first (re-find first-two-sentences text)))})))
 
 (defn create-corpus!
   "in: path to csv file of trip reports with headers label, title, text
