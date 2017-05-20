@@ -1,6 +1,7 @@
 (ns get-data.create-corpus
   (:require [clojure.java.io :as io]
             [clojure.data.csv :as csv]
+            [clojure.string :as string]
             [get-data.csv-to-map :refer [csv-to-map]]))
 
 (def ^:private first-two-sentences #"([^.]+\.){1,2}")
@@ -14,14 +15,15 @@
   Return a sequence of maps with keys \"document-label\" and \"document-text\"
   where \"document-label\" is the same as \"label\" in the source data, and
   \"document-text\" is \"title\" concatenated with the first two sentences of
-  \"text\"."
+  \"text\". Filter out trip reports for which \"label\" is blank."
   [trip-reports]
-  (for [trip-report trip-reports]
-    (let [{:strs [label title text]} trip-report]
-      {"document-label" label
-       "document-text" (str title
-                            " "
-                            (first (re-find first-two-sentences text)))})))
+  (for [trip-report trip-reports
+        :let [{:strs [label title text]} trip-report]
+        :when (not (string/blank? label))]
+    {"document-label" label
+     "document-text" (str title
+                          "\n"
+                          (first (re-find first-two-sentences text)))}))
 
 (defn create-corpus!
   "in: path to csv file of trip reports with headers label, title, text
