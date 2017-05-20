@@ -11,17 +11,18 @@
   to be turned into a dataset.
 
   trip-reports: a sequence of maps with keys \"label\", \"title\", \"text\"
+  labels: a set of labels representing which items from trip-reports to include
+          (case-insensitive)
 
   Return a sequence of maps with keys \"document-label\" and \"document-text\".
   \"document-label\" is lowercased \"label\" from the source data.
   \"document-text\" is \"title\" and the first two sentences of \"text\"
-                    joined by a newline.
-
-  Filter out trip reports for which \"label\" is blank.  "
-  [trip-reports]
+                    joined by a newline."
+  [trip-reports labels]
   (for [trip-report trip-reports
-        :let [{:strs [label title text]} trip-report]
-        :when (not (string/blank? label))]
+        :let [{:strs [label title text]} trip-report
+              lower-label (string/lower-case label)]
+        :when (labels lower-label)]
     {"document-label" (string/lower-case label)
      "document-text" (str title
                           "\n"
