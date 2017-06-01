@@ -25,7 +25,7 @@
   list-page: page (as a string) that lists trip reports
 
   Scrape all trip reports from the list-page, paging through pagination if
-  necessary, and return a sequence of scrape-trs.protocol/TripReport
+  necessary, and return a lazy sequence of scrape-trs.protocol/TripReport
   instances."
   [url list-page]
   (let [implementation (get-implementation url)
