@@ -1,4 +1,4 @@
-.nrepl*
-target/
+.cpcache
 *.csv
 *.dataset
+.nrepl*
