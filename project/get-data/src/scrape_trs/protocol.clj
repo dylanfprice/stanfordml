@@ -6,7 +6,6 @@
 (def trip-report-date-format (SimpleDateFormat. "yyyy-MM-dd"))
 
 (defprotocol ScrapeTripReport
-  ""
   (extract-pager-urls
     [this list-page]
     "Given a page (as a string) that lists links to trip reports and may have
@@ -19,4 +18,4 @@
   (extract-trip-report
     [this trip-report-url trip-report-page]
     "Given a trip report url and a page (as a string) that contains a trip
-    report, return a TripReport record.") )
+    report, return a TripReport record."))

@@ -5,18 +5,23 @@
 
 (defn- make-test-page
   [urls]
-  (let [header "<table class='srch_results'>
-                  <tbody>"
-        row-template "<tr>
-                        <td class='srch_results_lft'></td>
-                        <td class='srch_results_rht'>
-                          <a href='{}'></a>
-                        </td>
-                      </tr>"
-        footer "  </tbody>
-                </table>"
+  (let [header "<div id='results'>
+                  <div>"
+        row-template "<div>
+                        <div>
+                          <div class='cci-author'></div>
+                          <div class='card-header'>
+                            <p class='cci-title'>
+                              <a href='{}'>Title</a>
+                            </p>
+                          </div>
+                          <div class='cci-details'></div>
+                        </div>
+                      </div>"
+        footer "  </div>
+                </div>"
         rows (mapv #(string/replace row-template "{}" %) urls)
-        page (conj (cons header rows) footer)]
+        page (concat (cons header rows) (list footer))]
     (apply str page)))
 
 (deftest extract-result-urls-test

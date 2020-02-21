@@ -7,9 +7,9 @@
   sequence of urls representing the results on that page."
   [base-url page]
   (map (partial str base-url)
-    (ensure-sequence
-      (reaver/extract
-        (reaver/parse page)
-        []
-        ".srch_results .srch_results_lft + .srch_results_rht > a"
-        (reaver/attr :href)))))
+       (ensure-sequence
+        (reaver/extract
+         (reaver/parse page)
+         nil
+         "#results .card-header .cci-title a"
+         (reaver/attr :href)))))

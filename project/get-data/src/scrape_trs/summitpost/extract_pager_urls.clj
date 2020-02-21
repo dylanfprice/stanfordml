@@ -1,12 +1,13 @@
 (ns scrape-trs.summitpost.extract-pager-urls
-  (:require [reaver]
+  (:require [clojure.string :as string]
+            [reaver]
             [scrape-trs.ensure-sequence :refer [ensure-sequence]]))
 
 (defn- extract-pager-links
   "Given a string containing a search results page from summitpost,
   return a sequence of pager links with page=\\d+ query params."
   [page]
-  (->> (reaver/extract (reaver/parse page) [] ".pagertext" (reaver/attr :href))
+  (->> (reaver/extract (reaver/parse page) nil ".pager a" (reaver/attr :href))
        (ensure-sequence)
        (remove nil?)
        (map (partial re-find #".*page=\d+"))
@@ -31,9 +32,9 @@
     (let [last-page (extract-last-page pager-links)
           template (first pager-links)
           page-numbers (range 1 (+ 1 last-page))
-          make-pager-link #(clojure.string/replace
-                             template
-                             #"page=\d+"
-                             (str "page=" %))
+          make-pager-link #(string/replace
+                            template
+                            #"page=\d+"
+                            (str "page=" %))
           all-pager-links (map make-pager-link page-numbers)]
       (map (partial str base-url) all-pager-links))))

@@ -6,6 +6,8 @@
   (:import scrape_trs.protocol.ScrapeTripReport))
 
 (def base-url "http://cascadeclimbers.com")
+(def usage-notes
+  (str "TODO"))
 
 (deftype CCScrapeTripReport []
 
