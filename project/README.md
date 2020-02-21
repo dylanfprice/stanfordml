@@ -16,7 +16,7 @@ clj -A:test
 
 This directory holds data files for trip report classification project.
 
--`trip-reports`/
+- `trip-reports`/
     - csv files with headers "url", "title", "date", "text"
     - produced by `get-data.scrape-trs.core/get-trip-reports!`
 - `labelled-trip-reports`/
