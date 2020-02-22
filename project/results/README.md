@@ -9,6 +9,10 @@ classify trip reports as being either single day or multi-day trips since it
 seemed a simple enough problem that the probability of being able to get good
 results was high.
 
+Unfortunately I ran out of time to do more than a simple investigation of the
+data--my ulterior motive was to gain experience writing and working with
+Clojure.
+
 ## Method
 
 To turn a trip report into a feature vector I created roughly the following
