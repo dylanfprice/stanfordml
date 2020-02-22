@@ -1,6 +1,7 @@
 (ns analyze-data.evaluate-model
-  (:require [analyze-data.csv-to-map :refer [csv-to-map]]
-            [analyze-data.dataset.derive :refer [partition-dataset-k-fold]]
+  (:require [clojure.core.matrix :as m]
+            [analyze-data.dataset.derive
+             :refer [partition-dataset-k-fold split-dataset]]
             [analyze-data.predict :refer [predict]]
             [analyze-data.train-model :refer [train-model]]))
 
@@ -84,3 +85,27 @@
                                    options))
         confusion-matrices (pmap do-train-evaluate partitions)]
     (apply merge-with (partial merge-with +) confusion-matrices)))
+
+(defn progressively-train-and-evaluate
+  "Evaluate a model against both training and test sets as the size of both
+  grows. Starting with 1/k sized sets, work up to approximately 1/2 via
+  increments of the numerator. Return a sequence of maps with keys
+  :num-samples, :test-confusion-matrix, :train-confusion-matrix."
+  [k model-type dataset & options]
+  (let [half-k-plus-one (-> k (/ 2) Math/floor int (+ 1))
+        fractions (map #(/ % k) (range 1 half-k-plus-one))]
+    (for [fraction fractions]
+      (let [splits [fraction fraction]
+            splits (if (< (apply + splits) 1)
+                     (conj splits (- 1 (* 2 fraction)))
+                     splits)
+            [train-dataset test-dataset _] (split-dataset splits dataset)
+            num-samples (-> train-dataset :X m/shape first)
+            model (train-model model-type train-dataset)
+            test-confusion-matrix
+            (apply evaluate-model model test-dataset options)
+            train-confusion-matrix
+            (apply evaluate-model model train-dataset options)]
+        {:num-samples num-samples
+         :test-confusion-matrix test-confusion-matrix
+         :train-confusion-matrix train-confusion-matrix}))))

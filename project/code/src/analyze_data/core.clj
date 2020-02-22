@@ -2,7 +2,9 @@
   (:require [clojure.core.matrix :as m]
             [clojure.string :as string]
             [analyze-data.dataset.create.core :refer [create-dataset-file!]]
-            [analyze-data.evaluate-model :refer [k-fold-cross-validation]]
+            [analyze-data.evaluate-model
+             :refer [k-fold-cross-validation
+                     progressively-train-and-evaluate]]
             [analyze-data.knn.core :refer [cosine-distance]]
             [analyze-data.score-model :refer [accuracy f1-score]]
             [analyze-data.serialize :refer [read-object]]))
@@ -14,7 +16,7 @@
    :tf-idf
    f
    (string/replace f #"\.csv$" ".dataset")
-   :term-types [:words :bigrams]
+   :term-types [:words]
    :df-threshold 0))
 
 (defn- get-options
@@ -52,3 +54,17 @@
                                 (get-options model-type))]
     (println (name model-type) (str k "-fold cross-validation on") dataset-file)
     (println (analyze-confusion-matrix! dataset confusion-matrix))))
+
+(defn progressively-evaluate-dataset!
+  [dataset-file model-type]
+  (m/set-current-implementation :vectorz)
+  (let [dataset (read-object dataset-file)
+        k 10]
+    (doseq [{:keys [num-samples test-confusion-matrix train-confusion-matrix]}
+            (apply progressively-train-and-evaluate
+                   k model-type dataset (get-options model-type))]
+      (println "Number of Samples: " num-samples)
+      (println "Test Accuracy:"
+               (->> test-confusion-matrix accuracy float (format "%.2f")))
+      (println "Train Accuracy:"
+               (->> train-confusion-matrix accuracy float (format "%.2f"))))))

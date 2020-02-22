@@ -11,7 +11,7 @@
        [50 50]"
   [fractions n]
   (let [nums-without-last (drop-last (map #(int (* n %))
-                                                 fractions))
+                                          fractions))
         num-leftover (- n (apply + nums-without-last))]
     (concat nums-without-last [num-leftover])))
 
@@ -22,9 +22,9 @@
   of the lists will be empty."
   [counts coll]
   (lazy-seq
-    (when-let [n (first counts)]
-      (cons (take n coll)
-            (partition-by-counts (next counts) (drop n coll))))))
+   (when-let [n (first counts)]
+     (cons (take n coll)
+           (partition-by-counts (next counts) (drop n coll))))))
 
 (defn- subset-dataset
   "Return a dataset with only the samples indexed by selection."
