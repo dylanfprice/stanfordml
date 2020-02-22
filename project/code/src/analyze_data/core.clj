@@ -59,12 +59,11 @@
   [dataset-file model-type]
   (m/set-current-implementation :vectorz)
   (let [dataset (read-object dataset-file)
-        k 10]
+        k 30]
+    (println "num samples," "test accuracy," "train accuracy")
     (doseq [{:keys [num-samples test-confusion-matrix train-confusion-matrix]}
             (apply progressively-train-and-evaluate
                    k model-type dataset (get-options model-type))]
-      (println "Number of Samples: " num-samples)
-      (println "Test Accuracy:"
-               (->> test-confusion-matrix accuracy float (format "%.2f")))
-      (println "Train Accuracy:"
-               (->> train-confusion-matrix accuracy float (format "%.2f"))))))
+      (print num-samples ", ")
+      (print (->> test-confusion-matrix accuracy float (format "%.2f")) ", ")
+      (println (->> train-confusion-matrix accuracy float (format "%.2f"))))))
