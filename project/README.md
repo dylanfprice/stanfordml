@@ -1,5 +1,9 @@
 Classifying trip report text using k-nearest neighbors and naive bayes.
 
+## Results
+
+See [results](results/).
+
 ## Running code and tests
 
 ```bash
